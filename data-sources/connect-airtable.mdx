@@ -1,0 +1,67 @@
+---
+title: "Connect Airtable"
+description: "Authorize Synclify to read your Airtable bases and tables."
+icon: "table"
+---
+
+Airtable is the source side of a Synclify connection. Rows become Webflow CMS items; columns become Webflow fields.
+
+## Connect the account
+
+<Steps>
+  <Step title="Open Data Sources">
+    Click **Data Sources** in the sidebar. (It also lives at `/sites`.)
+  </Step>
+  <Step title="Add data source">
+    Click **Add data source** and pick **Airtable**.
+  </Step>
+  <Step title="Authorize">
+    Airtable asks which bases to grant access to. Synclify reads the bases, tables, columns, and rows you grant.
+  </Step>
+</Steps>
+
+Once authorized, Synclify discovers your bases and tables. They appear in the source step whenever you create a connection.
+
+## Preparing a table
+
+Synclify syncs what it finds, but a little structure up front prevents most problems.
+
+<Steps>
+  <Step title="Give it a unique identifier column">
+    One column whose value is unique per row and doesn't change: a `Slug`, a `Name`, or a dedicated ID column. This becomes the [identity field](/how-synclify-works#the-identity-field).
+  </Step>
+  <Step title="Match column types to Webflow field types">
+    Synclify groups types into four families — **text**, **number**, **boolean**, and **date/time** — and refuses to map across families. A text column cannot feed a Webflow number field.
+  </Step>
+  <Step title="Name columns like the Webflow fields">
+    Auto-mapping matches on name. `Article Title` → `Article Title` maps itself. Anything unmatched, you map by hand.
+  </Step>
+  <Step title="Fill the required fields">
+    Rows missing a value for a required Webflow field will fail on write. Webflow's required fields are shown in the mapping step and cannot be unmapped.
+  </Step>
+</Steps>
+
+<Tip>
+Adding a column to Airtable does not add it to a live connection. Mappings are fixed when the connection is created. To pick up a new column, [create an editable draft](/connections/edit-a-connection).
+</Tip>
+
+## Which bases Synclify can see
+
+Only the ones you granted during authorization. If a base is missing from the source picker, reconnect the Airtable account from **Data Sources** and widen the grant.
+
+## Account statuses
+
+The Data Sources page shows a status per connected account:
+
+| Status | Colour | What it means |
+| --- | --- | --- |
+| `active` | Green | Working. |
+| `degraded` | Amber | Reachable but unhealthy — often rate limits or webhook delivery problems. |
+| `reauth required` | Red | Token expired or revoked. Reconnect. Syncs are stopped. |
+| `disconnected` | Grey | Not connected. |
+
+## Other sources
+
+<Note>
+Airtable is the supported source today. [Google Sheets](/data-sources/connect-google-sheets) and [Notion](/data-sources/connect-notion) are on the roadmap.
+</Note>

@@ -1,0 +1,128 @@
+---
+title: "How Synclify works"
+description: "Connections, identity fields, sync direction, and field ownership."
+icon: "book-open"
+---
+
+Four ideas explain almost everything Synclify does. Understanding them up front saves you from most of the surprises later.
+
+## Connections
+
+A **connection** binds exactly one source resource — an Airtable table — to exactly one Webflow CMS collection.
+
+A connection carries:
+
+- a **field mapping** (which source column feeds which Webflow field)
+- an **identity field** (how records are matched)
+- a **sync direction** (who is allowed to write)
+- a **cadence** (when syncs run)
+- policies for **publishing** and **deletion**
+
+A Webflow collection can back only one live connection at a time. Two connections writing into the same collection would fight each other, so Synclify refuses to create the second one.
+
+## The identity field
+
+Synclify has to answer one question on every sync: *is this Airtable row the same thing as that Webflow item?*
+
+The **identity field** — labelled **ID field** or **Use as ID field** in the mapping step — is the mapped pair used to answer it. Synclify matches records by comparing the value of the source column against the value of the destination field.
+
+<Warning>
+A connection cannot be created without an identity field. If none is set you'll see: *"Identity strategy is required — Map at least one matching field, such as slug or name, before creating the connection."*
+</Warning>
+
+Choose a column that is **unique** and **stable**:
+
+| Good identity field | Why |
+| --- | --- |
+| `Slug` | Unique by definition in Webflow; rarely changes. |
+| `Name` / `Title` | Usually unique; readable in logs and previews. |
+| An explicit ID column | Never changes even when the title is rewritten. |
+
+Bad choices are anything duplicated (`Category`, `Author`) or anything people rewrite casually. **If you change an identity value in the source, Synclify sees a brand-new record** — it will not recognize the old Webflow item, and depending on your delete policy it may create a duplicate.
+
+Synclify preselects `slug`, `name`, or `title` when it finds one. Identity-mapped fields cannot have their direction changed.
+
+## Sync direction
+
+Set per connection, in the Settings step.
+
+<Tabs>
+  <Tab title="One-way">
+    **Source updates Webflow.**
+
+    Airtable is the source of truth. Every sync pushes source values into Webflow. Anything a person types into the Webflow Designer on a mapped field gets overwritten on the next sync.
+
+    Use this when content is authored outside Webflow and Webflow only renders it.
+  </Tab>
+  <Tab title="Two-way">
+    **Shared fields can update both sides.**
+
+    Edits flow in either direction. When both sides changed the same record since the last sync, Synclify raises a [conflict](/syncing/conflicts) rather than guessing.
+
+    Two-way unlocks **per-field ownership** — the real control surface. See below.
+  </Tab>
+</Tabs>
+
+## Per-field ownership
+
+On a two-way connection, each mapped field carries its own direction. Click the direction toggle next to a field to cycle it:
+
+<AccordionGroup>
+  <Accordion title="Airtable owns" icon="arrow-right">
+    Only the source can change this field. Webflow edits to it are discarded on the next sync. This is one-way behavior, scoped to a single field.
+  </Accordion>
+  <Accordion title="Webflow owns" icon="arrow-left">
+    Only Webflow can change this field. The source column is read but never applied. Useful for fields designers own — hero images, layout flags, SEO overrides.
+  </Accordion>
+  <Accordion title="Two Way" icon="arrows-left-right">
+    Either side can change it. Simultaneous edits raise a conflict.
+  </Accordion>
+</AccordionGroup>
+
+Two fields are locked and cannot be changed:
+
+- The **`slug` field** is always *Airtable owns*. Webflow generates and validates slugs; letting both sides write them produces broken URLs.
+- The **identity field** cannot have its direction changed, because a record that renames itself on both sides can no longer be matched.
+
+<Tip>
+The most common production setup is a two-way connection where most fields are *Airtable owns* and a handful of visual fields are *Webflow owns*. You get one-way discipline on copy without locking designers out of the site.
+</Tip>
+
+## Syncs
+
+A **sync** is one run of a connection. Three things trigger one:
+
+| Trigger | When |
+| --- | --- |
+| **Webhook** (realtime) | Synclify detects a change in the source and runs immediately. Included on every plan. |
+| **Scheduled** (polling) | A fallback scan at a fixed interval, catching anything webhooks missed. Minimum 5 minutes. |
+| **Manual** | You click **Sync now**. Only available while the connection is `active`. |
+
+Every run moves through the same five phases:
+
+<Steps>
+  <Step title="Fetch source">Read the current state of the source table.</Step>
+  <Step title="Diff records">Compare against the last known state and against Webflow. Decide what to create, update, delete, or skip.</Step>
+  <Step title="Write to Webflow">Apply the changes to CMS items.</Step>
+  <Step title="Publish">If auto-publish is on, push the items live. Otherwise they stay as staged changes.</Step>
+  <Step title="Done">Record counts and any failures in the run history.</Step>
+</Steps>
+
+## Connection states
+
+The ones you will actually see:
+
+| State | Meaning |
+| --- | --- |
+| `draft` | Editable, not syncing. Every connection starts here. |
+| `awaiting_approval` | A preview is waiting for you to approve it. |
+| `active` | Live. Syncs on its triggers. |
+| `running` | A sync is in progress right now. |
+| `paused` | Not syncing. **Not editable** — create a draft instead. |
+| `partial` / `partially_succeeded` | The run finished, but some records failed. |
+| `failed` / `error` | The run did not complete. |
+| `archived` | Retired but retained. |
+
+<Warning>
+Pausing is **not** how you edit a connection. Paused connections reject edits. To change a live connection, create an editable draft — see [Editing a connection](/connections/edit-a-connection).
+</Warning>

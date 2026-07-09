@@ -1,0 +1,75 @@
+---
+title: "Sync history"
+description: "Review past runs and inspect what a sync actually did."
+icon: "clock-rotate-left"
+---
+
+Every run of a connection is recorded. Open a connection and switch to its history tab.
+
+## The run list
+
+Ten runs per page, newest first:
+
+| Column | What it tells you |
+| --- | --- |
+| **Time** | When the run started. |
+| **Status** | How it ended. |
+| **Direction** | Source → Webflow, or bidirectional. |
+| **Actions** | Records created, updated, deleted, skipped, failed. |
+| **Duration** | How long it took. |
+
+While the tab is open the list refreshes every few seconds, so an in-progress run updates in place.
+
+## Reading a status
+
+| Status | Meaning | Action |
+| --- | --- | --- |
+| `succeeded` | Everything applied. | None. |
+| `running` / `queued` | In progress. | Wait. |
+| `partial` / `partially_succeeded` | Some records applied, some failed. | **Open the run.** Something is wrong with specific records. |
+| `failed` / `error` | The run did not complete. | Open the run; check the source and destination account health. |
+| `cancelled` | Someone stopped it. | Records already written stayed written. |
+
+<Warning>
+`partially_succeeded` is the status people ignore and shouldn't. The sync "worked" — but some rows silently didn't make it into Webflow. Open the run and find out which.
+</Warning>
+
+## Run detail
+
+Click any run to see what it did record by record: what was created, updated, deleted, or skipped, and which records failed and why.
+
+<Note>
+**"Item-level details are not available for this run."**
+
+Some runs don't retain per-record detail. The summary counts are still accurate. If you need to know which records failed, run the sync again and inspect the fresh run.
+</Note>
+
+## Common failure causes
+
+<AccordionGroup>
+  <Accordion title="A required Webflow field was empty">
+    Webflow rejects items missing a required field value. Fill the source column for those rows, or make the field optional in Webflow.
+  </Accordion>
+  <Accordion title="A value didn't fit the field type">
+    Field-type checks catch most of this at mapping time, but a value can still be rejected at write time — a number out of range, a malformed URL, an option that isn't in Webflow's allowed set.
+  </Accordion>
+  <Accordion title="Duplicate identity values">
+    Two source rows with the same identity value can't both own the same Webflow item. Deduplicate in Airtable.
+  </Accordion>
+  <Accordion title="Rate limits">
+    Heavy polling or a large first sync can hit Airtable or Webflow API limits, which surfaces as a `degraded` account. Widen your polling interval.
+  </Accordion>
+  <Accordion title="The provider account needs reauth">
+    Check [Data Sources](/data-sources/manage-data-sources). A `reauth required` account stops syncs.
+  </Accordion>
+</AccordionGroup>
+
+## Counting runs against your plan
+
+Your plan caps sync runs per month. **Settings → Billing** shows the count for the current calendar month, in UTC, with a progress bar.
+
+Realtime runs count. If a chatty source table is burning through your allowance, widen what triggers a sync — sync fewer columns, or split the table.
+
+## If a run won't load
+
+*"Sync run unavailable"* means Synclify couldn't fetch it. Retry. If it persists, accept the support report prompt — it attaches the failing request details automatically.

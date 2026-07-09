@@ -1,62 +1,50 @@
 ---
-title: "Synclify Security: Encryption, Access, and Data Handling"
-sidebarTitle: "Security"
-description: "Synclify encrypts OAuth tokens with AES-256-GCM, uses TLS 1.3 for all traffic, and never stores your source data. Here's what that means for you."
+title: "Security"
+description: "How Synclify authorizes, stores credentials, and protects your data."
+icon: "shield-halved"
 ---
 
-Synclify is built around a simple security principle: access only what is needed, store only what is necessary, and protect everything in between. Every connection you make — to Google Sheets, Airtable, Notion, or Webflow — uses industry-standard OAuth authentication, your data in transit is protected by TLS 1.3, and your source data is never retained in Synclify's systems after a sync completes.
+## Connecting accounts
 
-## Authentication & credentials
+Synclify connects to Webflow and Airtable over **OAuth**. You authorize on the provider's own site — Synclify never sees or stores your provider password.
 
-All source connections in Synclify — Google Sheets, Airtable, Notion, and Webflow — authenticate exclusively through OAuth. You authorize Synclify via each service's own login flow; Synclify never asks for, receives, or stores your passwords.
+**Webflow scopes.** Synclify requests `cms:read` and `cms:write`. That's read and write access to CMS collections and items. It does **not** request access to your Designer layouts, pages, site settings, billing, or account.
 
-Once you complete an OAuth authorization, Synclify stores the resulting access token so it can authenticate future sync requests on your behalf. Every token is:
+**Revoking access.** Revoke Synclify from your Webflow or Airtable account settings at any time. The connected account then shows `reauth required` in Synclify and syncs stop until you reconnect.
 
-- **Encrypted at rest using AES-256-GCM** — a symmetric encryption standard used across the financial and healthcare industries
-- **Stored per-connection** — each source or Webflow site you connect has its own isolated token
-- **Used only for sync requests** — tokens are never shared between connections or used for any purpose other than performing the sync you configured
+## OAuth integrity
 
-## Data in transit
+Every OAuth handshake carries a one-time random `state` value that Synclify generates and verifies on return. If the value coming back doesn't match the one sent, Synclify rejects it:
 
-Every request Synclify makes — reading from your sources and writing to Webflow — travels over **TLS 1.3**, the latest version of the Transport Layer Security protocol. TLS 1.3 provides stronger encryption and faster handshakes than its predecessors, and it eliminates legacy cipher suites that are vulnerable to downgrade attacks.
+> Invalid OAuth state. Please try again.
 
-This applies to all traffic: reading from Google Sheets, Airtable, or Notion; writing to your Webflow CMS Collections; and any communication between your browser and the Synclify dashboard.
+This prevents an attacker from tricking your browser into completing an authorization Synclify didn't initiate (CSRF).
 
-## Your source data
+Redirects after sign-in are validated too — Synclify only follows relative paths inside the app, never an external URL smuggled into a redirect parameter.
 
-Synclify reads your source data — rows from Google Sheets, records from Airtable, entries from Notion — **only at the moment a sync runs**. That data is immediately written to your Webflow CMS Collections and is not retained, cached, or logged in Synclify's systems afterward.
+## Your account
 
-Your spreadsheets and databases remain entirely your own. Synclify does not copy them, index them, or use them for any purpose beyond fulfilling the sync you configured.
+- Sign in with email and password (**minimum 8 characters**) or Google OAuth.
+- Your session token is held in your browser. Signing out clears it.
+- If a request ever comes back unauthorized, Synclify clears your session immediately and returns you to sign-in.
 
-## Access scopes
+## Data handling
 
-When you connect each service, Synclify requests the minimum OAuth scopes required to perform syncs:
+- **Airtable** — Synclify reads the bases and tables you grant, at sync time. It reads row values to push them to Webflow (and, on two-way connections, writes values back).
+- **Webflow** — Synclify reads your collection schemas and reads/writes CMS items.
+- Synclify syncs the fields you map. Unmapped columns are not read into Webflow.
 
-| Service | Access requested |
-|---|---|
-| **Google Sheets** | Read-only access to the spreadsheets you select |
-| **Airtable** | Read-only access to the bases you authorize |
-| **Notion** | Read-only access to the databases you share |
-| **Webflow** | Write access to CMS Collections (required to create and update items) |
+## Safe writes
 
-<Note>
-  Synclify requests the minimum permissions needed to perform syncs. It never writes to Google Sheets, Airtable, or Notion — those connections are strictly read-only.
-</Note>
+- **Nothing is written without a preview.** A new connection stays an inert draft until you approve a full preview of the first sync. See [Guided setup](/connections/guided-setup).
+- **Deletes are opt-in.** Removing a source row deletes the Webflow item only if you turned on **Delete orphaned records** — off by default. See [Sync settings](/connections/sync-settings).
+- **Idempotency.** Every change Synclify sends carries an idempotency key, so a retried request can't accidentally apply the same change twice.
+- **Destructive actions are gated.** Deleting a connection requires typing its exact name plus a written reason.
 
-## Revoking access
+## Team access
 
-You can disconnect any source or Webflow site at any time from the **Connections** section of your Synclify settings. Disconnecting a source immediately revokes Synclify's OAuth token for that service — Synclify can no longer read from it or write to it until you reconnect.
+Roles scope what teammates can do — **Owner** (full, including billing), **Member** (manage connections and syncs), **Client** (read-only). See [Team](/account/team).
 
-<Tip>
-  You can also revoke Synclify's access directly from the connected apps settings in Google, Airtable, Notion, or Webflow. This is useful if you want to confirm revocation at the source level, independent of Synclify's dashboard.
-</Tip>
+## Reporting a problem
 
-## Client portal security
-
-When you invite a client to their site's portal, that login is scoped to a **single Webflow site**. Client portal users:
-
-- Cannot view or access any other client's site or data
-- Cannot see your agency credentials or account settings
-- Cannot connect new sources or modify sync configurations — they can trigger manual syncs and view sync logs only
-
-This means you can give clients visibility into their own syncs without exposing your agency dashboard or other clients' workspaces.
+If Synclify hits a server error it offers to send a support report, pre-filled with the failing request's details. For anything security-sensitive, email [support@syncwebflow.com](mailto:support@syncwebflow.com) directly.

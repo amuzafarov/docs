@@ -1,0 +1,34 @@
+---
+title: "Connect Google Sheets"
+sidebarTitle: "Google Sheets"
+description: "Google Sheets as a Synclify source is in development."
+icon: "clock"
+---
+
+<Note>
+**Coming soon.** Google Sheets appears in the connection wizard's source picker marked **Coming soon** and can't be selected yet. Airtable is the supported source today — see [Connect Airtable](/data-sources/connect-airtable).
+</Note>
+
+We're building Google Sheets support so you can turn any spreadsheet into a live Webflow CMS collection — rows become CMS items, columns become fields.
+
+## What to expect
+
+When it ships, a well-formed sheet will connect like any other source:
+
+<Steps>
+  <Step title="Header row as field names">
+    Row 1 holds column names. Synclify uses them as field labels in the mapper.
+  </Step>
+  <Step title="One column as the identity field">
+    A unique, stable column — a slug or ID — to match rows to CMS items. See [Identity field](/how-synclify-works#the-identity-field).
+  </Step>
+  <Step title="Map and activate">
+    [Map fields](/connections/field-mapping) and let [guided setup](/connections/guided-setup) handle existing records.
+  </Step>
+</Steps>
+
+## In the meantime
+
+Airtable covers the same use cases today and imports from a spreadsheet in a couple of clicks. [Connect Airtable](/data-sources/connect-airtable) to get syncing now.
+
+Want Sheets sooner? Tell us at [support@syncwebflow.com](mailto:support@syncwebflow.com).

@@ -1,0 +1,99 @@
+---
+title: "Sync settings"
+description: "Cadence, publishing, and deletion policies."
+icon: "sliders"
+---
+
+Four settings decide when a connection runs and what it's allowed to do. They're set in the wizard's final step, and changed later through [an editable draft](/connections/edit-a-connection).
+
+## Sync direction
+
+**One-way** (`source_of_truth`) — Airtable updates Webflow. Webflow edits to mapped fields are overwritten on the next sync.
+
+**Two-way** (`constrained_two_way`) — shared fields can update both sides, and each field gets [its own direction](/how-synclify-works#per-field-ownership).
+
+## Sync cadence
+
+Two options, shown in the connection settings as **Fallback scan**: *"Keep manual syncs only or add a polling backup for missed webhooks."*
+
+<Tabs>
+  <Tab title="Manual">
+    Syncs run only when you click **Sync now**, or when realtime detects a source change.
+  </Tab>
+  <Tab title="Polling">
+    Adds a scheduled scan every N minutes, hours, or days, on top of realtime.
+
+    This is a **backup**, not the primary mechanism. Webhooks already deliver changes within seconds. Polling catches what they miss — a webhook that failed to deliver, a change made while your source account was `degraded`.
+  </Tab>
+</Tabs>
+
+<Warning>
+**Minimum poll interval: 5 minutes.** *"Minimum poll interval is 5 minutes to avoid rate-limit issues."*
+
+Polling harder does not make syncs faster. It burns Airtable and Webflow API quota, which makes every sync — including the realtime ones — slower and more likely to fail. If you want sub-minute latency, you already have it: realtime is included on every plan.
+</Warning>
+
+A sensible polling interval is measured in hours, not minutes. It exists to catch the rare miss, not to carry the load.
+
+## Auto-publish after sync
+
+Default: **on**.
+
+<Tabs>
+  <Tab title="On">
+    `publish_on_create`. Items written by a sync are published to the live site.
+
+    Right when the source table is the editorial system of record and content is ready when it lands there.
+  </Tab>
+  <Tab title="Off">
+    `manual_only`. Items are written to Webflow but left as **staged changes**. Someone publishes the site to make them live.
+
+    Right when you want a human to review before content goes public, or when publishing is batched with design changes.
+  </Tab>
+</Tabs>
+
+## Delete orphaned records
+
+Default: **off**.
+
+Controls what happens when a Webflow item's source row disappears.
+
+<Tabs>
+  <Tab title="Off (ignore)">
+    The Webflow item stays. Synclify stops managing it.
+
+    Safe. Costs you stale items that need occasional manual cleanup.
+  </Tab>
+  <Tab title="On (hard delete)">
+    The Webflow item is **permanently deleted**.
+  </Tab>
+</Tabs>
+
+<Warning>
+**Turning this on makes source deletions irreversible in Webflow.**
+
+Two ways it bites people who didn't expect it:
+
+1. Someone deletes an Airtable row to "clean up" — the published page disappears.
+2. Someone **renames an identity value**. Synclify sees the old record as gone and the new one as new. The old Webflow item is deleted; a fresh one is created. Any Webflow-owned fields on the old item are lost, and the URL changes.
+
+Leave it off unless deleting a source row genuinely means *unpublish this from the site*.
+</Warning>
+
+## Realtime
+
+Not a setting — it's on for every connection on every plan, with nothing to configure.
+
+*"Realtime sync included — When a change is detected in the source, a sync runs immediately."*
+
+Its health shows on the connection detail page as a **Realtime** stat:
+
+| Display | Meaning |
+| --- | --- |
+| Healthy | Webhooks delivering. |
+| **Polling fallback** | Webhooks degraded, but polling is on and covering. Syncs are delayed, not lost. |
+| **Realtime degraded** / *Webhooks need attention* | Webhooks degraded and no polling configured. Changes may not sync until you run one manually. |
+
+<Tip>
+If you see *Realtime degraded* with no polling fallback, add a polling schedule as a safety net while you investigate. Even a daily scan beats silent staleness.
+</Tip>

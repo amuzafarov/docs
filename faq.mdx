@@ -1,67 +1,41 @@
 ---
-title: "Synclify FAQ: Plans, Data Sources, and How Syncing Works"
-sidebarTitle: "FAQ"
-description: "Answers to common questions about Synclify — availability, supported plans, data sources, security, and how it compares to other sync tools."
+title: "FAQ"
+description: "Quick answers to common questions."
+icon: "circle-question"
 ---
 
-Find answers to the most common questions about Synclify below. If your question isn't covered here, join the community via the waitlist at [synclify.cloud](https://synclify.cloud) or reach out through the support link in your dashboard — the team is happy to help.
-
 <AccordionGroup>
-
-  <Accordion title="When is Synclify launching?">
-    Synclify is targeting a launch on the **Webflow App Marketplace in 2026**. Everyone on the waitlist receives early access before the public launch, so you can start syncing and provide feedback ahead of the general release. Join the waitlist at [synclify.cloud](https://synclify.cloud).
+  <Accordion title="Which sources can I sync?">
+    Airtable today. Google Sheets and Notion are on the roadmap — they appear in the app marked **Coming soon** or aren't selectable yet. Webflow is always the destination.
   </Accordion>
-
-  <Accordion title="Which Webflow plans does Synclify support?">
-    Synclify works with any Webflow plan that includes CMS Collections: the **CMS, Business, and Enterprise** plans. It does not work with the Basic or Starter plans, which do not include CMS Collections. If you are unsure which plan you are on, check your Webflow workspace settings.
+  <Accordion title="How fast do changes sync?">
+    Usually seconds. Realtime sync is included on every plan — Synclify watches your source and runs a sync as soon as it detects a change. Optional [polling](/connections/sync-settings) is a fallback for anything webhooks miss.
   </Accordion>
-
-  <Accordion title="Which data sources does Synclify support?">
-    Synclify supports **Google Sheets, Airtable, and Notion** at launch — all three are available on day one. Additional source integrations may be added in future releases based on community feedback.
+  <Accordion title="Can I edit content in both Airtable and Webflow?">
+    Yes, on a two-way connection. You control it field by field with [per-field ownership](/how-synclify-works#per-field-ownership) — copy owned by Airtable, visuals owned by Webflow, for example. Simultaneous edits to the same field raise a [conflict](/syncing/conflicts) you resolve.
   </Accordion>
-
-  <Accordion title="Does Synclify replace Whalesync or CMS Bridge?">
-    Yes. Synclify covers the same core use case — syncing external data into Webflow CMS — and supports the same primary sources: Google Sheets, Airtable, and Notion. It also adds an **agency-first multi-client dashboard**, so you can manage syncs across multiple Webflow sites from a single place, something neither Whalesync nor CMS Bridge was designed to do.
+  <Accordion title="Will Synclify overwrite my existing Webflow content?">
+    Not without your say-so. [Guided setup](/connections/guided-setup) pairs existing records, asks what to do with unmatched ones, surfaces conflicts, and shows a full preview before the first write. Webflow items with no source row can be kept untouched.
   </Accordion>
-
-  <Accordion title="Is my data safe?">
-    Yes. Synclify is built with several layers of protection:
-
-    - **OAuth tokens** are encrypted at rest using **AES-256-GCM**
-    - **All data in transit** is protected by **TLS 1.3**
-    - **Your source data** is read only at sync time and written directly to Webflow — it is never stored in Synclify's systems
-
-    Your spreadsheets and databases remain your own. See the [Security](security) page for a full breakdown.
+  <Accordion title="Will deleting an Airtable row delete the Webflow item?">
+    Only if you turned on **Delete orphaned records** (off by default). With it off, the Webflow item stays. See [Sync settings](/connections/sync-settings).
   </Accordion>
-
-  <Accordion title="Does Synclify delete CMS items when I delete source rows?">
-    No. Synclify only **creates and updates** CMS items — it never deletes them automatically. If you remove a row from Google Sheets, a record from Airtable, or an entry from Notion, the corresponding Webflow CMS item remains in place. To remove a CMS item, delete it directly in Webflow.
+  <Accordion title="Why can't I change the field mapping on a live connection?">
+    Mappings are fixed once a connection is active. Create an [editable draft](/connections/edit-a-connection), change the mapping, review, and approve. Pausing the connection does **not** make it editable.
   </Accordion>
-
-  <Accordion title="Can I manage multiple client Webflow sites?">
-    Yes. The **agency plan** lets you manage 15 or more Webflow sites from a single Synclify dashboard. Each site gets its own sync configuration, and you can create a dedicated client portal for each one so clients can monitor their own syncs without accessing your full dashboard.
+  <Accordion title="What's the fastest sync interval?">
+    Polling has a 5-minute minimum, but you rarely need it — realtime already delivers changes in seconds. Tighter polling just burns API quota. See [Sync settings](/connections/sync-settings).
   </Accordion>
-
-  <Accordion title="Can my clients trigger syncs themselves?">
-    Yes. Invite clients to their site's **client portal** and they can trigger manual syncs and view sync logs on their own — without needing Webflow credentials or access to your agency account. Client portal logins are scoped to a single site and cannot see any other client's data.
+  <Accordion title="What should the ID field be?">
+    A column that's unique per row and never rewritten — a slug, a name, or a dedicated ID. It's how Synclify matches rows to Webflow items. Changing an identity value makes Synclify see a brand-new record. See [Identity field](/how-synclify-works#the-identity-field).
   </Accordion>
-
-  <Accordion title="How do I sync only some rows from my spreadsheet?">
-    Use your source tool's built-in filtering before connecting to Synclify:
-
-    - **Google Sheets** — create a filtered view or use a dedicated sheet that contains only the rows you want to sync
-    - **Airtable** — create a filtered view in your base and select that view when configuring the connection in Synclify
-    - **Notion** — apply filters to your database view before connecting it to Synclify
-
-    Synclify reads whichever view or sheet you point it at, so controlling what it syncs is as simple as controlling what appears in that view.
+  <Accordion title="Can I connect more than one Webflow site?">
+    Yes. Connect additional Webflow accounts and sites from [Data Sources](/data-sources/manage-data-sources). Each Webflow CMS collection can back one live connection at a time.
   </Accordion>
-
-  <Accordion title="What happens if a sync fails?">
-    Synclify handles failures at the row level. If an individual row or record fails to sync — for example, due to a missing required field or a data type mismatch — that row is **logged and skipped** while the rest of the sync continues. You can view all errors in the **sync log** inside your dashboard and download a CSV error report to identify and fix any issues before re-running the sync.
+  <Accordion title="How is my Webflow/Airtable access secured?">
+    OAuth — you authorize on the provider's site and Synclify never sees your password. Webflow access is scoped to CMS read/write only. Details on the [Security](/security) page.
   </Accordion>
-
-  <Accordion title="How do I get support?">
-    Use the **support link** in your Synclify dashboard to contact the team directly. You can also join the early access community by signing up for the waitlist at [synclify.cloud](https://synclify.cloud) — waitlist members get access to community channels where you can ask questions, share feedback, and connect with other agencies using Synclify.
+  <Accordion title="How do I get help?">
+    When Synclify hits an error it offers a pre-filled support report — accept it. Or email [support@syncwebflow.com](mailto:support@syncwebflow.com). See [Troubleshooting](/troubleshooting) first for the common ones.
   </Accordion>
-
 </AccordionGroup>
