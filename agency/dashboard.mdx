@@ -1,0 +1,59 @@
+---
+title: "Manage All Client Sites from the Agency Dashboard"
+sidebarTitle: "Dashboard"
+description: "Use the Synclify agency dashboard to oversee all client Webflow sites in one place — view sync status, errors, and schedules across 15+ sites."
+---
+
+The agency dashboard is your command center for every client site connected to Synclify. Instead of logging into individual Webflow accounts or chasing down sync results one by one, you get a single panel that surfaces the health, schedule, and last-known status of all your clients' sites at once — so you can catch problems early and keep content flowing without switching context.
+
+## What you see at a glance
+
+The dashboard lists every Webflow site connected to your agency account. For each site, you can immediately see:
+
+- **Site name** — the display name you've assigned to the client's site
+- **Last sync time** — when the most recent sync completed (or attempted)
+- **Sync status** — a color-coded indicator showing whether the last sync succeeded, partially completed, failed, or is currently running
+- **Active schedule** — the current sync frequency (e.g., every 6 hours, daily at 9 AM), or a note if the schedule is paused
+
+Each row also surfaces three **quick-action buttons** so you can act without drilling into a site:
+
+- **Sync Now** — trigger an immediate [manual sync](/syncing/manual-sync) for that site
+- **View Log** — open the latest [sync log](/syncing/logs-and-errors) to inspect record-level results
+- **Settings** — jump directly to that site's configuration
+
+## Navigating to a client's site
+
+Click a site name anywhere in the dashboard list to drill into that client's full sync workspace. From there you can review all connected Collections, inspect [field mappings](/webflow/field-mapping), adjust the [sync schedule](/syncing/schedule), and manage source connections — all scoped entirely to that one client.
+
+Use the back arrow or the left-hand site panel to return to the top-level dashboard at any time.
+
+## Monitoring errors
+
+The dashboard automatically highlights any site that encountered errors during its last sync. An error badge appears next to the site name showing the count of affected records. Click the error count to open the corresponding [sync log](/syncing/logs-and-errors), where you can:
+
+- Review which records failed and why
+- See the exact error messages returned by Webflow or the data source
+- **Download the error report** as a CSV to share with your client or investigate offline
+
+Addressing errors early — before a client notices missing content — is one of the biggest time-savers the dashboard provides.
+
+## Sync status indicators
+
+| Status | Meaning |
+|---|---|
+| ✅ Success | Last sync completed with no errors |
+| ⚠️ Partial | Last sync completed but some rows had errors |
+| ❌ Failed | Last sync failed entirely |
+| 🔄 Running | Sync is currently in progress |
+| ⏸ Paused | Schedule is paused; no automatic syncs running |
+| — | No syncs have been run for this site |
+
+<Tip>
+  Bookmark the agency dashboard as your daily starting point. Glance at status indicators every morning to catch issues before clients notice.
+</Tip>
+
+## Agency plan limits
+
+The agency plan supports **15+ client sites** under a single Synclify account. If your roster grows and you need to expand beyond your current site limit, contact [Synclify support](mailto:support@synclify.io) and the team will adjust your account.
+
+To add or remove client sites, see [Managing Sites](/agency/managing-sites). To give clients their own login to view syncs and trigger updates, see [Client Portal](/agency/client-portal).

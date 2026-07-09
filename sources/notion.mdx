@@ -1,0 +1,70 @@
+---
+title: "Connect Notion Database to Webflow CMS with Synclify"
+sidebarTitle: "Notion"
+description: "Sync a Notion database to Webflow CMS Collections. Synclify uses read-only OAuth to read your database entries and push them as CMS items."
+---
+
+Connecting Notion to Synclify lets you use a Notion database as the content source for a Webflow CMS Collection. Each sync reads the entries in your database — along with their properties — and pushes them as CMS items in Webflow. This keeps your Webflow site in sync with content your team manages in Notion, without any manual exporting or copy-pasting.
+
+## Before you begin
+
+Make sure the following are in place before you connect your database:
+
+- **Notion account access:** You need a Notion account with access to the database you want to sync. Workspace member and guest access both work, as long as the database is shared with your account.
+- **Databases only:** Synclify supports Notion **databases** — full-page or inline. Regular pages, wikis, and page-only content are not supported.
+- **Webflow plan:** Your Webflow site must be on a CMS, Business, or Enterprise plan to use CMS Collections.
+
+## Connect Notion
+
+<Steps>
+  <Step title="Open Sources">
+    Go to **Sources** in your Synclify dashboard.
+  </Step>
+  <Step title="Add a new source">
+    Click **Add Source → Notion**.
+  </Step>
+  <Step title="Authorize via OAuth">
+    Authorize Synclify via OAuth. Notion will ask you to select which pages and databases to share with Synclify — make sure to include the database you want to sync.
+  </Step>
+  <Step title="Select your database">
+    Choose the Notion database you want to sync from the list of shared databases.
+  </Step>
+  <Step title="Preview your properties">
+    Synclify fetches your database properties and displays a preview of the entries it will sync. Confirm that the correct database and properties appear.
+  </Step>
+  <Step title="Save the source">
+    Click **Save Source**. Your Notion database is now registered as a source and is ready to be mapped to a Webflow CMS Collection.
+  </Step>
+</Steps>
+
+## Supported Notion property types
+
+Use the table below to plan how your Notion database properties map to Webflow CMS field types in the visual field mapper.
+
+| Notion property type         | Compatible Webflow field types        |
+|------------------------------|---------------------------------------|
+| Title / Rich text            | Plain Text, Rich Text                 |
+| Number                       | Number                                |
+| URL                          | Link                                  |
+| Files & media                | Image (first file in the list is used)|
+| Checkbox                     | Switch (boolean)                      |
+| Select / Multi-select        | Plain Text                            |
+| Date                         | Plain Text (ISO 8601 format)          |
+
+<Warning>
+  **Relation and rollup properties** are not currently supported and will be skipped during sync. If you need content from a related database, consider duplicating the relevant values into a text or number property.
+</Warning>
+
+## Granting access to additional databases
+
+Notion's OAuth flow requires you to explicitly share each database with Synclify at authorization time. If you need to connect a database you didn't share during the initial setup, follow these steps:
+
+1. Go to **Sources** in your Synclify dashboard.
+2. Find your Notion source and click **Edit**.
+3. Click **Manage Notion Access** to reopen the Notion OAuth dialog.
+4. Click **Add Databases** in the Notion dialog and select the additional databases you want to share.
+5. Confirm the changes. The newly shared databases will now appear in your source selection.
+
+<Tip>
+  Use Notion's built-in **filter** and **sort** options on your database view before connecting it to Synclify. Synclify reads all entries in the database by default, so filtering in Notion is the most direct way to control which records sync to Webflow.
+</Tip>

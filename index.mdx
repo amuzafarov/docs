@@ -1,0 +1,81 @@
+---
+title: "Synclify Docs: Sync Sheets, Airtable & Notion to Webflow"
+sidebarTitle: "Home"
+description: "Guides for syncing Google Sheets, Airtable, and Notion into Webflow CMS — field mapping, sync schedules, agency dashboards, client portals, and security."
+---
+
+Welcome to the Synclify documentation. Synclify connects your spreadsheets, databases, and wikis — Google Sheets, Airtable, and Notion — directly to your Webflow CMS Collections, keeping your site content fresh without writing a single line of code. Whether you manage one Webflow site or a full agency portfolio of fifteen or more, you'll find everything you need here to set up syncs, configure field mappings, and keep your clients' content up to date.
+
+<CardGroup cols={2}>
+  <Card title="Quick Start" icon="rocket" href="/quickstart">
+    Connect your first data source and run your first sync in under 5 minutes.
+  </Card>
+  <Card title="How It Works" icon="circle-info" href="/how-it-works">
+    Understand the sync pipeline, data flow, and error handling in depth.
+  </Card>
+  <Card title="Connect Google Sheets" icon="table" href="/sources/google-sheets">
+    Authenticate and pull data from any Google Sheet into Webflow CMS.
+  </Card>
+  <Card title="Connect Airtable" icon="database" href="/sources/airtable">
+    Link an Airtable base and map its fields to your CMS Collection.
+  </Card>
+  <Card title="Connect Notion" icon="note-sticky" href="/sources/notion">
+    Use a Notion database as the source of truth for your Webflow content.
+  </Card>
+  <Card title="Connect Webflow" icon="link" href="/webflow/connecting-webflow">
+    Authorize Synclify with your Webflow account and select the sites to manage.
+  </Card>
+</CardGroup>
+
+## Syncing and scheduling
+
+<CardGroup cols={2}>
+  <Card title="Field Mapping" icon="sliders" href="/webflow/field-mapping">
+    Drag source columns onto Webflow CMS fields and preview real data before saving.
+  </Card>
+  <Card title="Sync Schedules" icon="clock" href="/syncing/schedule">
+    Configure hourly, daily, weekly, or custom cron schedules for any connection.
+  </Card>
+  <Card title="Manual Sync" icon="play" href="/syncing/manual-sync">
+    Trigger an on-demand sync from the dashboard or client portal at any time.
+  </Card>
+  <Card title="Sync Logs & Errors" icon="list-check" href="/syncing/logs-and-errors">
+    Review per-row results and download CSV error reports after every sync.
+  </Card>
+</CardGroup>
+
+## Agency tools
+
+<CardGroup cols={2}>
+  <Card title="Agency Dashboard" icon="building" href="/agency/dashboard">
+    Manage all your client Webflow sites and syncs from one central panel.
+  </Card>
+  <Card title="Client Portal" icon="user" href="/agency/client-portal">
+    Give clients their own login to trigger syncs and view logs without full dashboard access.
+  </Card>
+  <Card title="Managing Sites" icon="sitemap" href="/agency/managing-sites">
+    Add, organize, and switch between multiple client Webflow sites in one workspace.
+  </Card>
+  <Card title="Security" icon="shield-halved" href="/security">
+    Learn how Synclify protects your data with AES-256-GCM encryption and TLS 1.3.
+  </Card>
+</CardGroup>
+
+## Get up and running in four steps
+
+Not sure where to begin? Follow this high-level path to complete your first sync, then explore the rest of the docs at your own pace.
+
+<Steps>
+  <Step title="Connect Webflow">
+    Authorize Synclify with your Webflow account using a single OAuth click. Synclify automatically detects every CMS Collection across all your sites — no manual configuration needed.
+  </Step>
+  <Step title="Pick your data source">
+    Choose Google Sheets, Airtable, or Notion as your content source and authenticate once. Synclify reads the source structure and surfaces your columns or properties for mapping.
+  </Step>
+  <Step title="Map your fields">
+    Use the visual drag-and-drop field mapper to connect source columns to Webflow CMS fields. Preview real data inline before you save, so you know exactly what will sync.
+  </Step>
+  <Step title="Sync automatically">
+    Set a schedule — hourly, daily, weekly, or a custom interval — or trigger a sync manually at any time from the dashboard or client portal. Synclify handles the rest.
+  </Step>
+</Steps>

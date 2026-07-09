@@ -1,0 +1,64 @@
+---
+title: "Give Clients Self-Service Access with the Client Portal"
+sidebarTitle: "Client Portal"
+description: "Create client logins in Synclify so clients can trigger syncs and view logs themselves — without touching Webflow or your agency account."
+---
+
+Every agency has fielded the request: *"Can you just update the team page real quick?"* The client portal is designed to make that question disappear. When you give a client their own Synclify login, they can trigger syncs, check status, and review results entirely on their own — without ever touching Webflow, your agency account, or your workflow. You stay in control of the configuration; they gain the autonomy to act on it.
+
+## What clients can do in the portal
+
+Once a client logs in, they have access to a focused view of their site's sync activity. From the client portal, a client can:
+
+- View the current sync status for their site
+- Trigger a manual sync using the **Sync Now** button
+- View the full sync log and inspect record-level results
+- Download error reports to review or share with their own team
+
+## What clients cannot do
+
+The client portal is intentionally scoped. Clients have read-and-trigger access only — they cannot make configuration changes or see anything outside their own site:
+
+- They **cannot** view or access other clients' sites
+- They **cannot** change field mappings or sync configurations
+- They **cannot** add or remove data sources
+- They **cannot** access your Webflow account, API credentials, or agency settings
+
+## Creating a client login
+
+<Steps>
+  <Step title="Open the client's site in your dashboard">
+    In the [agency dashboard](/agency/dashboard), click the name of the site you want to grant access to.
+  </Step>
+  <Step title="Open Client Access settings">
+    Click **Settings → Client Access** in the left-hand navigation.
+  </Step>
+  <Step title="Invite the client">
+    Click **Invite Client** to open the invitation form.
+  </Step>
+  <Step title="Enter the client's email">
+    Type the client's email address and click **Send Invite**. Synclify sends an invitation email immediately.
+  </Step>
+  <Step title="Client creates their password">
+    The client receives an email containing a secure link. They click it, set a password, and their account is created.
+  </Step>
+  <Step title="Client logs in to their portal">
+    Once they log in, they see only the sync panel for their site — nothing else is visible.
+  </Step>
+</Steps>
+
+## Managing client access
+
+You can revoke a client's access at any time. Navigate to **Settings → Client Access** for the relevant site and click **Revoke** next to the client's email. Their login is immediately disabled and they can no longer access the portal.
+
+If a client later needs access restored, you can re-invite them following the same steps above.
+
+<Note>
+  Each client portal login is scoped to a single site. If a client has multiple sites with you, invite them separately for each site so they only ever see what's relevant to them.
+</Note>
+
+To add a new client site before setting up access, see [Managing Sites](/agency/managing-sites).
+
+<Tip>
+  Share the client portal link during onboarding so clients can self-serve sync triggers without waiting on you. Include a short Loom video walkthrough for non-technical clients — a 90-second demo of the Sync Now button and the log view is usually all it takes.
+</Tip>

@@ -1,0 +1,64 @@
+---
+title: "View Sync Logs and Download Error Reports in Synclify"
+sidebarTitle: "Logs & Errors"
+description: "View per-record sync results in Synclify's sync log, and download CSV error reports to identify and fix issues in your source data."
+---
+
+Every sync — whether triggered manually or by a schedule — generates a detailed log so you can track exactly what happened to each record. Use the log to confirm that data arrived in Webflow correctly, investigate unexpected results, and download a CSV of any errors to share with your team or fix at the source.
+
+## Reading the sync log
+
+Open any sync log from the **History** tab of your Collection. Each log entry shows:
+
+- **Sync start and end time** — when the sync began and how long it took
+- **Total records processed** — the number of rows read from your source
+- **Summary breakdown** — a count of records by status: Created / Updated / Skipped / Errors
+- **Per-record rows** — a full list of every row processed, with its individual status and any relevant detail message
+
+## Record statuses
+
+Each row in the sync log carries one of four statuses:
+
+| Status | Meaning |
+|---|---|
+| **Created** | A new CMS item was created in Webflow for this row |
+| **Updated** | An existing CMS item was updated — Synclify matched the row to an item by Slug |
+| **Skipped** | The row was unchanged since the last sync; no Webflow write was needed |
+| **Error** | The row failed validation or the Webflow write failed; the error detail is shown inline |
+
+## Common error types
+
+| Error | Cause | Fix |
+|---|---|---|
+| Missing required field | The Name column is empty for this row | Ensure every row has a value in the column mapped to Name |
+| Invalid image URL | An image field contains a non-URL value | Check that image columns contain valid `https://` URLs |
+| Slug conflict | Two rows produce the same slug | Ensure slugs are unique across all rows in your source data |
+| Webflow API rate limit | Too many items processed in a single sync | Reduce your batch size in sync settings or contact support |
+
+## Downloading error reports
+
+If a sync contains errors, you can download a CSV report with the full details for every failed row.
+
+<Steps>
+  <Step title="Open the sync log">
+    Navigate to the **History** tab of your Collection and click on the sync entry you want to investigate.
+  </Step>
+  <Step title="Download the report">
+    Click **Download Error Report**. The button is available whenever the sync contains at least one error row.
+  </Step>
+  <Step title="Review the CSV">
+    A CSV file downloads to your computer with one row per error. Each row includes the original source data and the error message so you can identify exactly what needs to be fixed.
+  </Step>
+</Steps>
+
+<Tip>
+  Fix the errors directly in your source data — Google Sheets, Airtable, or Notion — then [trigger a manual sync](/syncing/manual-sync). Synclify will re-process the previously failed rows and update your CMS with the corrected data.
+</Tip>
+
+## Log retention
+
+Sync logs are retained for 90 days. After that, older logs are automatically deleted and can no longer be accessed or downloaded. If you need to keep a permanent record of a sync, download the error report or copy the log details before the 90-day window closes.
+
+<Note>
+  Errors in individual rows do not stop the sync. Synclify processes every row in your source data and logs any failures along the way — the rest of the sync always completes successfully.
+</Note>

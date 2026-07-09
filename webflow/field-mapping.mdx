@@ -1,0 +1,78 @@
+---
+title: "Map Source Fields to Webflow CMS Fields in Synclify"
+sidebarTitle: "Field Mapping"
+description: "Use Synclify's visual field mapper to connect your source columns to Webflow CMS fields. Preview live data before saving your mapping."
+---
+
+Field mapping is how Synclify knows which column in your source — a Google Sheets column, an Airtable field, or a Notion property — corresponds to which field in your Webflow CMS Collection. Getting your mappings right is essential: a correctly mapped field means your data lands exactly where it belongs in Webflow, with the right format and content every time a sync runs.
+
+## Opening the Field Mapper
+
+<Steps>
+  <Step title="Select your site and Collection">
+    From the Synclify dashboard, select a connected **Site** and then choose the **CMS Collection** you want to configure.
+  </Step>
+  <Step title="Open the mapper">
+    Click **Map Fields** to launch the visual field mapper.
+  </Step>
+  <Step title="Review the mapping interface">
+    The mapper displays your **source columns** on the left and your **Webflow CMS fields** on the right. Draw connections between them by dragging a source column to its matching Webflow field.
+  </Step>
+</Steps>
+
+## Auto-Suggested Mappings
+
+Synclify analyzes the names of your source columns and your Webflow CMS fields, then automatically suggests the most likely matches. For example, a source column named `Title` will be suggested as a match for a Webflow field also named `Title`.
+
+You are not required to accept any suggestion. You can:
+
+- **Accept** a suggestion by leaving it in place
+- **Adjust** a suggestion by dragging a column to a different field
+- **Remove** a suggestion by clicking the ✕ on any mapping line
+
+Review all auto-suggested mappings before saving, especially when source and field names are ambiguous.
+
+## Supported Field Type Mappings
+
+Not all source data types are compatible with every Webflow field type. Use the table below as a reference when building your mappings:
+
+| Source type | Compatible Webflow field types |
+|---|---|
+| Text | Plain Text, Rich Text, Option |
+| Number | Number |
+| URL | Link, Image |
+| Image URL | Image |
+| TRUE/FALSE | Switch |
+| Date | Date, Plain Text |
+
+If you map an incompatible source type to a Webflow field, Synclify will flag the conflict in the mapper before you save.
+
+## The Name Field (Required)
+
+Every Webflow CMS Collection has a **Name** field, and it is required — Webflow will reject any item that lacks a Name value. You must map at least one source column to the Name field before you can save your mapping configuration.
+
+The **Slug** field is closely related: Webflow auto-generates a slug from the Name value if you do not map a column to it manually. The slug becomes the URL path for the CMS item (for example, `/products/blue-sneakers`).
+
+<Tip>
+  Map a unique identifier column — such as an ID, SKU, or handle — to the Slug field to get predictable, stable URLs for your CMS items. This also makes item matching more reliable during future syncs.
+</Tip>
+
+## Live Preview
+
+After setting your mappings, Synclify fetches a sample of real data from your source and displays it in a **preview table**. Each column in the preview corresponds to a mapped Webflow field, so you can see exactly what values will be written to your Collection before any sync runs.
+
+Check the preview for:
+
+- Missing or empty values in required fields
+- Formatting issues (for example, dates or URLs in unexpected formats)
+- Truncated text that may indicate a type mismatch
+
+## Saving and Updating Mappings
+
+Click **Save Mapping** to store your configuration. Mappings are saved per Collection, so each Collection you configure maintains its own independent mapping.
+
+You can return to the field mapper at any time to update your mappings — for example, if you add a new column to your source or add a new field to your Webflow Collection. The next sync run after you save always uses the most recent mapping.
+
+<Warning>
+  Changing a field mapping after data has already synced does **not** retroactively update existing CMS items for that field. The updated mapping applies only to the next sync run and all subsequent runs going forward.
+</Warning>

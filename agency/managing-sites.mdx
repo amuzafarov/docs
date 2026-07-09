@@ -1,0 +1,73 @@
+---
+title: "Add, Organize, and Remove Client Sites in Synclify"
+sidebarTitle: "Managing Sites"
+description: "Learn how to add new client Webflow sites to your Synclify agency dashboard, customize display names, and permanently remove sites you no longer manage."
+---
+
+As your agency grows, so does the list of Webflow sites you're responsible for keeping in sync. Synclify is built to scale with you — adding a new client site takes a few clicks, organizing your dashboard keeps things readable no matter how many clients you have, and removing a site you no longer manage is equally straightforward. This page walks through each of those tasks.
+
+## Adding a new site
+
+<Steps>
+  <Step title="Open Add Site">
+    In the agency dashboard, click **Add Site** in the top-right corner.
+  </Step>
+  <Step title="Connect via Webflow OAuth">
+    Click **Connect Webflow OAuth**. You'll be redirected to a Webflow authorization screen. Log in with the client's Webflow account — or with your own agency account if you already have access to their workspace.
+  </Step>
+  <Step title="Select the workspace and site">
+    After authorizing, choose the correct Webflow workspace from the dropdown, then select the specific site you want to connect to Synclify.
+  </Step>
+  <Step title="Authorize the connection">
+    Click **Authorize**. The site is added to your agency dashboard immediately and appears in the site list.
+  </Step>
+  <Step title="Configure the site">
+    With the site connected, attach a data source ([Google Sheets](/sources/google-sheets), [Airtable](/sources/airtable), or [Notion](/sources/notion)) and set up [field mappings](/webflow/field-mapping) for this client's Collections.
+  </Step>
+</Steps>
+
+## Organizing sites
+
+You can rename how any site appears in your Synclify dashboard without affecting anything in Webflow. Use your client's company name, a project codename, or whatever makes it instantly recognizable to you and your team.
+
+To rename a site, open the site's **Settings** and update the **Display Name** field. The change takes effect immediately across your dashboard and any reports you download.
+
+## Switching between sites
+
+Click any site name in the left-hand panel or the main dashboard list to switch your active context to that site. All views — sync logs, field mappings, schedules, and settings — update to reflect the selected site. Click the Synclify logo or **All Sites** at the top of the left panel to return to the full dashboard view.
+
+## Removing a site
+
+<Steps>
+  <Step title="Open the site's Settings">
+    Navigate to the site you want to remove and click **Settings**.
+  </Step>
+  <Step title="Scroll to Danger Zone">
+    Scroll to the bottom of the Settings page to find the **Danger Zone** section.
+  </Step>
+  <Step title="Click Remove Site">
+    Click **Remove Site** to begin the removal process.
+  </Step>
+  <Step title="Confirm the removal">
+    A confirmation dialog will appear. Type the site name to confirm and click **Remove**. The site is immediately removed from your dashboard.
+  </Step>
+</Steps>
+
+<Warning>
+  Removing a site from Synclify cannot be undone. All sync history, field mappings, schedules, and configurations for that site are permanently deleted. Your Webflow CMS content is unaffected — no items are deleted from Webflow.
+</Warning>
+
+## Site limits by plan
+
+| Plan | Max Sites |
+|---|---|
+| Starter | 1 site |
+| Agency | 15+ sites |
+
+To upgrade from Starter to Agency, go to **Account → Billing** and select the Agency plan. Contact support if you need a custom limit above the default Agency tier.
+
+<Note>
+  If you manage a Webflow site through your own agency Webflow account, you only need to authorize once. Synclify can access all sites within that Webflow workspace, so you won't need a separate authorization for each client site that lives under the same workspace.
+</Note>
+
+Once a site is added and configured, return to the [agency dashboard](/agency/dashboard) for a live status overview across all your clients. To give a client their own login for self-service syncing, see [Client Portal](/agency/client-portal).

@@ -1,0 +1,86 @@
+{
+  "projectType": "saas",
+  "projectName": "Synclify",
+  "projectDescription": "Synclify connects Google Sheets, Airtable, and Notion to Webflow CMS Collections automatically, with an agency-first multi-client dashboard.",
+  "theme": "luma",
+  "primaryColor": "#848485",
+  "lightColor": "#0f0f0f",
+  "darkColor": "#dcdcdd",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "quickstart",
+              "how-it-works"
+            ]
+          },
+          {
+            "group": "Connecting Sources",
+            "pages": [
+              "sources/google-sheets",
+              "sources/airtable",
+              "sources/notion"
+            ]
+          },
+          {
+            "group": "Webflow CMS",
+            "pages": [
+              "webflow/connecting-webflow",
+              "webflow/field-mapping",
+              "webflow/collections"
+            ]
+          },
+          {
+            "group": "Sync & Scheduling",
+            "pages": [
+              "syncing/schedule",
+              "syncing/manual-sync",
+              "syncing/logs-and-errors"
+            ]
+          },
+          {
+            "group": "Agency Features",
+            "pages": [
+              "agency/dashboard",
+              "agency/client-portal",
+              "agency/managing-sites"
+            ]
+          },
+          {
+            "group": "Security & FAQ",
+            "pages": [
+              "security",
+              "faq"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Connect Google Sheets, Airtable, and Notion to Webflow CMS Collections",
+    "Agency multi-client dashboard — manage 15+ Webflow sites from one panel",
+    "Visual field mapper with auto-suggestions and live data preview",
+    "Automated sync scheduling (hourly, daily, weekly, or custom)",
+    "Client portal — give clients their own login to trigger syncs and view logs",
+    "Full sync logs with CSV error reports",
+    "AES-256-GCM encrypted OAuth tokens, TLS 1.3 in transit, no stored source data"
+  ],
+  "publicApiSurface": [
+    "Connect Webflow (OAuth authorization)",
+    "Connect Google Sheets (OAuth)",
+    "Connect Airtable (OAuth)",
+    "Connect Notion (OAuth)",
+    "Visual field mapper",
+    "Sync schedule configuration",
+    "Manual sync trigger",
+    "Sync logs & CSV error export",
+    "Agency dashboard",
+    "Client portal"
+  ]
+}

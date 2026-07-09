@@ -1,0 +1,67 @@
+---
+title: "Synclify FAQ: Plans, Data Sources, and How Syncing Works"
+sidebarTitle: "FAQ"
+description: "Answers to common questions about Synclify — availability, supported plans, data sources, security, and how it compares to other sync tools."
+---
+
+Find answers to the most common questions about Synclify below. If your question isn't covered here, join the community via the waitlist at [synclify.cloud](https://synclify.cloud) or reach out through the support link in your dashboard — the team is happy to help.
+
+<AccordionGroup>
+
+  <Accordion title="When is Synclify launching?">
+    Synclify is targeting a launch on the **Webflow App Marketplace in 2026**. Everyone on the waitlist receives early access before the public launch, so you can start syncing and provide feedback ahead of the general release. Join the waitlist at [synclify.cloud](https://synclify.cloud).
+  </Accordion>
+
+  <Accordion title="Which Webflow plans does Synclify support?">
+    Synclify works with any Webflow plan that includes CMS Collections: the **CMS, Business, and Enterprise** plans. It does not work with the Basic or Starter plans, which do not include CMS Collections. If you are unsure which plan you are on, check your Webflow workspace settings.
+  </Accordion>
+
+  <Accordion title="Which data sources does Synclify support?">
+    Synclify supports **Google Sheets, Airtable, and Notion** at launch — all three are available on day one. Additional source integrations may be added in future releases based on community feedback.
+  </Accordion>
+
+  <Accordion title="Does Synclify replace Whalesync or CMS Bridge?">
+    Yes. Synclify covers the same core use case — syncing external data into Webflow CMS — and supports the same primary sources: Google Sheets, Airtable, and Notion. It also adds an **agency-first multi-client dashboard**, so you can manage syncs across multiple Webflow sites from a single place, something neither Whalesync nor CMS Bridge was designed to do.
+  </Accordion>
+
+  <Accordion title="Is my data safe?">
+    Yes. Synclify is built with several layers of protection:
+
+    - **OAuth tokens** are encrypted at rest using **AES-256-GCM**
+    - **All data in transit** is protected by **TLS 1.3**
+    - **Your source data** is read only at sync time and written directly to Webflow — it is never stored in Synclify's systems
+
+    Your spreadsheets and databases remain your own. See the [Security](security) page for a full breakdown.
+  </Accordion>
+
+  <Accordion title="Does Synclify delete CMS items when I delete source rows?">
+    No. Synclify only **creates and updates** CMS items — it never deletes them automatically. If you remove a row from Google Sheets, a record from Airtable, or an entry from Notion, the corresponding Webflow CMS item remains in place. To remove a CMS item, delete it directly in Webflow.
+  </Accordion>
+
+  <Accordion title="Can I manage multiple client Webflow sites?">
+    Yes. The **agency plan** lets you manage 15 or more Webflow sites from a single Synclify dashboard. Each site gets its own sync configuration, and you can create a dedicated client portal for each one so clients can monitor their own syncs without accessing your full dashboard.
+  </Accordion>
+
+  <Accordion title="Can my clients trigger syncs themselves?">
+    Yes. Invite clients to their site's **client portal** and they can trigger manual syncs and view sync logs on their own — without needing Webflow credentials or access to your agency account. Client portal logins are scoped to a single site and cannot see any other client's data.
+  </Accordion>
+
+  <Accordion title="How do I sync only some rows from my spreadsheet?">
+    Use your source tool's built-in filtering before connecting to Synclify:
+
+    - **Google Sheets** — create a filtered view or use a dedicated sheet that contains only the rows you want to sync
+    - **Airtable** — create a filtered view in your base and select that view when configuring the connection in Synclify
+    - **Notion** — apply filters to your database view before connecting it to Synclify
+
+    Synclify reads whichever view or sheet you point it at, so controlling what it syncs is as simple as controlling what appears in that view.
+  </Accordion>
+
+  <Accordion title="What happens if a sync fails?">
+    Synclify handles failures at the row level. If an individual row or record fails to sync — for example, due to a missing required field or a data type mismatch — that row is **logged and skipped** while the rest of the sync continues. You can view all errors in the **sync log** inside your dashboard and download a CSV error report to identify and fix any issues before re-running the sync.
+  </Accordion>
+
+  <Accordion title="How do I get support?">
+    Use the **support link** in your Synclify dashboard to contact the team directly. You can also join the early access community by signing up for the waitlist at [synclify.cloud](https://synclify.cloud) — waitlist members get access to community channels where you can ask questions, share feedback, and connect with other agencies using Synclify.
+  </Accordion>
+
+</AccordionGroup>

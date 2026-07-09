@@ -1,0 +1,72 @@
+---
+title: "Connect Airtable to Webflow CMS Collections with Synclify"
+sidebarTitle: "Airtable"
+description: "Sync an Airtable base and table to your Webflow CMS Collection. Synclify authenticates via OAuth and reads your records at each sync."
+---
+
+Connecting Airtable to Synclify lets you sync records from any base and table directly into a Webflow CMS Collection. Each time a sync runs — on your chosen schedule or triggered manually — Synclify reads your Airtable records and pushes them as CMS items. This makes Airtable a powerful editorial backend for Webflow sites, letting your team manage content in a familiar interface without touching Webflow directly.
+
+## Before you begin
+
+Make sure the following are in place before you connect your base:
+
+- **Airtable account access:** You need an Airtable account with at least read access to the base you want to sync.
+- **Standard table setup:** Field names should appear in the header row, which is the default Airtable configuration. Synclify uses field names as labels in the visual field mapper.
+- **Webflow plan:** Your Webflow site must be on a CMS, Business, or Enterprise plan to use CMS Collections.
+
+## Connect Airtable
+
+<Steps>
+  <Step title="Open Sources">
+    Go to **Sources** in your Synclify dashboard.
+  </Step>
+  <Step title="Add a new source">
+    Click **Add Source → Airtable**.
+  </Step>
+  <Step title="Authorize via OAuth">
+    Authorize Synclify to access your Airtable account. You'll be redirected to Airtable's OAuth consent screen, where you can review and confirm the requested permissions.
+  </Step>
+  <Step title="Select your base">
+    Choose the **Base** you want to sync from the list of bases available to your account.
+  </Step>
+  <Step title="Select your table">
+    Select the **Table** within that base. Each Airtable source maps to one table at a time.
+  </Step>
+  <Step title="Choose a view (optional)">
+    Select a specific **View** to control which records are included in each sync. Only records visible in the chosen view are synced — records hidden or filtered out by the view are skipped. If you don't select a view, all records in the table are synced.
+  </Step>
+  <Step title="Preview your records">
+    Synclify fetches a preview of your fields and a sample of your records. Verify that the correct fields and data appear before saving.
+  </Step>
+  <Step title="Save the source">
+    Click **Save Source**. Your Airtable table is now registered as a source and is ready to be mapped to a Webflow CMS Collection.
+  </Step>
+</Steps>
+
+## Supported Airtable field types
+
+Use the table below to plan how your Airtable fields map to Webflow CMS field types in the visual field mapper.
+
+| Airtable field type                  | Compatible Webflow field types      |
+|--------------------------------------|-------------------------------------|
+| Single line text / Long text         | Plain Text, Rich Text               |
+| Number, Currency, Percent            | Number                              |
+| URL                                  | Link                                |
+| Attachment (image)                   | Image                               |
+| Checkbox                             | Switch (boolean)                    |
+| Single select / Multiple select      | Option (plain text)                 |
+| Date                                 | Plain Text (ISO 8601 format)        |
+
+<Warning>
+  **Formula fields and rollups** are read as their computed value at sync time — the underlying formula is not transferred to Webflow. **Linked record fields** are not currently supported and will be skipped during sync.
+</Warning>
+
+## Views
+
+When configuring your Airtable source, you can select a specific **view** within your table to control which records sync to Webflow. Only records visible in the selected view are included in each sync — hidden records and records filtered out by the view's conditions are skipped. This lets you use Airtable's native filtering, sorting, and grouping to manage exactly what gets published to your Webflow Collection.
+
+To change the active view, go to **Sources**, find your Airtable source, and click **Edit**.
+
+<Note>
+  Synclify requests **read-only** access to your Airtable base. It never creates, updates, or deletes records in your Airtable tables.
+</Note>

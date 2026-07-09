@@ -1,0 +1,65 @@
+---
+title: "Automate Your CMS Syncs with Scheduling in Synclify"
+sidebarTitle: "Scheduling"
+description: "Set up automatic sync schedules in Synclify to keep your Webflow CMS fresh — choose hourly, daily, weekly, or a custom cron interval."
+---
+
+Automated scheduling keeps your Webflow CMS content fresh without any manual intervention. Once you set a schedule on a Collection sync, Synclify runs the sync for you at the cadence you choose — pulling the latest data from your source and writing updates to Webflow automatically, even while your team sleeps.
+
+## Available schedules
+
+Synclify offers five scheduling options to match how often your source data changes:
+
+| Schedule | Description |
+|---|---|
+| **Hourly** | Syncs every 60 minutes |
+| **Every 6 hours** | Syncs four times per day |
+| **Daily** | Syncs once per day at a time you choose |
+| **Weekly** | Syncs once per week on a day and time you choose |
+| **Custom** | Enter a cron expression for precise control |
+
+## Setting a schedule
+
+<Steps>
+  <Step title="Open the Collection in your dashboard">
+    Go to your site's Collection in the Synclify dashboard.
+  </Step>
+  <Step title="Open sync settings">
+    Click **Settings** on the sync configuration.
+  </Step>
+  <Step title="Select a frequency">
+    Under **Schedule**, select the desired frequency from the dropdown.
+  </Step>
+  <Step title="Choose a time or day (Daily and Weekly only)">
+    For **Daily**, pick the time you want the sync to run. For **Weekly**, pick both the day and the time.
+  </Step>
+  <Step title="Enter a cron expression (Custom only)">
+    For **Custom**, enter a valid cron expression in the field provided — for example, `0 */4 * * *` to sync every 4 hours.
+  </Step>
+  <Step title="Save the schedule">
+    Click **Save**. The schedule activates immediately and the next run time is displayed in the dashboard.
+  </Step>
+</Steps>
+
+## Custom cron expressions
+
+If the preset options don't fit your workflow, use a cron expression to define any interval you need. Synclify follows standard five-field cron syntax: `minute hour day-of-month month day-of-week`.
+
+| Expression | Meaning |
+|---|---|
+| `0 * * * *` | Every hour |
+| `0 9 * * *` | Every day at 9:00 AM UTC |
+| `0 9 * * 1` | Every Monday at 9:00 AM UTC |
+| `*/30 * * * *` | Every 30 minutes |
+
+<Note>
+  All schedule times are UTC. Plan accordingly if your team is in a different timezone — a 9:00 AM UTC sync is 5:00 AM Eastern or 2:00 AM Pacific.
+</Note>
+
+## Pausing or disabling a schedule
+
+You can pause a schedule at any time without deleting your configuration. In the sync **Settings**, toggle the schedule switch to the off position. The schedule pauses immediately and no further automatic syncs run until you toggle it back on. Your frequency, time, and cron settings are all preserved.
+
+<Tip>
+  Set the schedule to align with when your team updates the source data. For example, if editors update Google Sheets every morning, schedule the sync for 30 minutes after their usual update time — that way Webflow always reflects the finished version of the data, not a work in progress.
+</Tip>

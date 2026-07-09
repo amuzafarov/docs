@@ -1,0 +1,46 @@
+---
+title: "Quickstart: Run Your First Synclify Sync in 5 Minutes"
+sidebarTitle: "Quickstart"
+description: "Connect Google Sheets, Airtable, or Notion to a Webflow CMS Collection, map your fields visually, and run your first automated sync in under five minutes."
+---
+
+This guide walks you through connecting a data source to a Webflow CMS Collection and running your first sync. By the end, you'll have live data flowing from Google Sheets, Airtable, or Notion into your Webflow site — and a schedule set up to keep it current automatically. The whole process takes less than five minutes.
+
+<Steps>
+  <Step title="Join the Waitlist & Get Access">
+    Synclify is currently in early access. Head to [synclify.cloud](https://synclify.cloud) and join the waitlist with your email address. Once your spot is confirmed, you'll receive an invite email containing your account activation link. Click the link to set your password and log in to your Synclify workspace for the first time.
+  </Step>
+  <Step title="Connect Webflow">
+    From your Synclify dashboard, click **Add Site** and then **Connect Webflow**. You'll be redirected to a standard Webflow OAuth screen — authorize Synclify to access your account and select the site or sites you want to manage. Once authorized, Synclify automatically detects every CMS Collection on each connected site. No manual setup or API keys are required.
+  </Step>
+  <Step title="Connect a Data Source">
+    Navigate to **Sources** in the sidebar and click **Add Source**. Choose your source type — **Google Sheets**, **Airtable**, or **Notion** — and complete the authentication flow for that service. Synclify stores your credentials as AES-256-GCM encrypted OAuth tokens and never retains your underlying source data between syncs. Once connected, select the specific spreadsheet, base, or database you want to use.
+  </Step>
+  <Step title="Map Your Fields">
+    Open the **Field Mapper** for your new source-to-collection connection. Synclify displays your source columns on the left and your Webflow CMS fields on the right. Drag a source column onto its matching CMS field, or accept one of Synclify's auto-suggested matches. Click any mapped pair to preview real data from your source inline — confirm the values look correct before saving. When you're satisfied with the mapping, click **Save Mapping**.
+  </Step>
+  <Step title="Run Your First Sync">
+    With your mapping saved, click **Sync Now** on the connection card to trigger an immediate manual sync. Synclify fetches your source data, transforms it according to your field mapping, and writes it to your Webflow CMS Collection. Open the **Sync Log** tab to watch progress in real time and review the per-row results. A green status indicator confirms a successful sync. If any rows failed validation, they'll appear in the log with a reason — download the CSV error report for a full breakdown.
+  </Step>
+</Steps>
+
+<Tip>
+  After your first manual sync completes successfully, head to **Schedule** on the connection card and enable automated syncing. Start with a daily schedule to make sure everything is stable, then increase the frequency to hourly if your source data changes more often.
+</Tip>
+
+## What to explore next
+
+<CardGroup cols={2}>
+  <Card title="Field Mapping Guide" icon="sliders" href="/webflow/field-mapping">
+    Learn how to handle rich text, images, reference fields, and multi-select options in the visual mapper.
+  </Card>
+  <Card title="Scheduling Syncs" icon="clock" href="/syncing/schedule">
+    Configure hourly, daily, weekly, or custom cron schedules for any connection.
+  </Card>
+  <Card title="Reading Sync Logs" icon="list-check" href="/syncing/logs-and-errors">
+    Understand the sync log format, filter by status, and export CSV error reports.
+  </Card>
+  <Card title="Agency Dashboard" icon="building" href="/agency/dashboard">
+    Add client sites, invite client users, and manage all your connections from one panel.
+  </Card>
+</CardGroup>

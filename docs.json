@@ -1,0 +1,87 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "luma",
+  "name": "Synclify",
+  "colors": {
+    "primary": "#848485",
+    "light": "#0f0f0f",
+    "dark": "#dcdcdd"
+  },
+  "favicon": "https://media.brand.dev/d469b07b-395b-4cd2-afef-e9b8a98e16db.png",
+  "logo": {
+    "light": "https://media.brand.dev/12e393ba-8d93-4d40-bfdd-9376d88afc10.svg",
+    "dark": "https://media.brand.dev/12e393ba-8d93-4d40-bfdd-9376d88afc10.svg"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Join Waitlist",
+        "href": "https://synclify.cloud/#waitlist"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Get Early Access",
+      "href": "https://synclify.cloud/#waitlist"
+    }
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "quickstart",
+              "how-it-works"
+            ]
+          },
+          {
+            "group": "Connecting Sources",
+            "pages": [
+              "sources/google-sheets",
+              "sources/airtable",
+              "sources/notion"
+            ]
+          },
+          {
+            "group": "Webflow CMS",
+            "pages": [
+              "webflow/connecting-webflow",
+              "webflow/field-mapping",
+              "webflow/collections"
+            ]
+          },
+          {
+            "group": "Sync & Scheduling",
+            "pages": [
+              "syncing/schedule",
+              "syncing/manual-sync",
+              "syncing/logs-and-errors"
+            ]
+          },
+          {
+            "group": "Agency Features",
+            "pages": [
+              "agency/dashboard",
+              "agency/client-portal",
+              "agency/managing-sites"
+            ]
+          },
+          {
+            "group": "Security & FAQ",
+            "pages": [
+              "security",
+              "faq"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "footer": {
+    "socials": {}
+  }
+}
