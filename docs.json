@@ -9,8 +9,8 @@
   },
   "favicon": "https://media.brand.dev/d469b07b-395b-4cd2-afef-e9b8a98e16db.png",
   "logo": {
-    "light": "https://media.brand.dev/12e393ba-8d93-4d40-bfdd-9376d88afc10.svg",
-    "dark": "https://media.brand.dev/12e393ba-8d93-4d40-bfdd-9376d88afc10.svg"
+    "light": "/logo/synclify-light.svg",
+    "dark": "/logo/synclify-dark.svg"
   },
   "navbar": {
     "links": [
