@@ -1,35 +1,65 @@
 ---
-title: "Archive and delete"
-description: "Retire a connection without losing its history, or remove it permanently."
+title: "Delete and archive"
+sidebarTitle: "Delete & archive"
+description: "Retire a connection. It stops syncing and moves to the archive for history."
 icon: "box-archive"
 ---
 
-Two ways to retire a connection. One is reversible in spirit; the other is not reversible at all.
+Retiring a connection is a single action: **Delete**. It stops all sync jobs and moves the connection to your **Archive**, where it's kept for history along with the reason you gave.
 
-## Archive
+<Note>
+Deleting is a **soft** action. The connection leaves your active list but is retained in the Archive as a record — it isn't wiped. The in-app confirmation is worded strongly ("permanently delete… cannot be undone") because it stops syncing and there is no self-serve restore, but the connection and its reason remain visible in the Archive.
+</Note>
 
-Archived connections stop syncing and move out of your main list into **Archive** in the sidebar. Their history stays.
+## What deleting does
 
-Use archive when a campaign ended, a collection is dormant, or you want the connection out of the way without destroying the record of what it did.
+- **Stops all sync jobs** immediately. The connection no longer reacts to source changes, schedules, or manual runs.
+- **Moves the connection to Archive**, tagged with the reason you entered.
+- **Leaves your Webflow CMS items in place.** The items this connection created stay in your site — nothing will update them again.
+- **Leaves your Airtable data untouched.**
 
-## Delete
+## What deleting does not do
 
-Deleting stops all sync jobs and removes the connection permanently.
+- It does **not** delete the CMS items in Webflow.
+- It does **not** touch your source data.
+- There is **no in-app restore** today. The Archive is a read-only history. To sync the same source and collection again, create a new connection.
+
+## Delete a connection
+
+<Steps>
+  <Step title="Open the connection">
+    Go to the connection's detail page.
+  </Step>
+  <Step title="Find the Danger Zone">
+    Scroll to **Danger Zone** and click **Delete**.
+  </Step>
+  <Step title="Read the confirmation">
+    *"This will permanently delete {connection name} and stop all sync jobs."* In practice the connection is retained in your Archive — but syncing does stop.
+  </Step>
+  <Step title="Type the exact name">
+    Character for character. This guards against retiring the wrong connection.
+  </Step>
+  <Step title="Give a reason">
+    Free text, required. It's stored with the connection and shown in the Archive.
+  </Step>
+  <Step title="Confirm">
+    The connection stops syncing and moves to Archive.
+  </Step>
+</Steps>
 
 <Warning>
-**This cannot be undone.** Synclify makes you prove you mean it: you must type the connection's **exact name** *and* give a written reason. The delete button stays disabled until both are filled.
+Both the **name** and the **reason** are required — the confirm button stays disabled until both are filled.
 </Warning>
 
-Deleting a connection:
+## The Archive
 
-- stops all its sync jobs immediately
-- removes the connection and its configuration
-- **does not** delete the CMS items it created in Webflow — those stay in your site
-- **does not** touch your Airtable data
+Retired connections live under **Archive** in the sidebar. It's a read-only list showing each connection and the reason it was retired — useful for auditing what once synced into a collection and why it was stopped.
 
-## When you must delete
+The Archive doesn't sync anything and doesn't block other actions.
 
-Two hard requirements in the product force a delete:
+## When you have to delete
+
+Two situations in the app require retiring a connection first:
 
 <AccordionGroup>
   <Accordion title="Reusing a Webflow collection">
@@ -38,44 +68,19 @@ Two hard requirements in the product force a delete:
     *"Webflow collection already connected — Delete the existing connection for this Webflow collection before creating another one."*
   </Accordion>
   <Accordion title="Disconnecting a data source">
-    An account can't be disconnected while any non-archived, non-deleted connection depends on it. The dialog becomes **Delete connections first** and lists up to five blockers.
+    An account can't be disconnected while a live connection depends on it. Delete the dependent connections first — once archived, they no longer block. The dialog lists up to five blockers.
 
     *"Delete active connections before disconnecting this data source."*
   </Accordion>
 </AccordionGroup>
 
-In both cases archiving is enough — archived connections don't block.
-
 ## Before you delete
 
 <Steps>
   <Step title="Check what depends on it">
-    Is this the only thing keeping a collection populated? Deleting the connection leaves the CMS items in place, but nothing will update them again.
-  </Step>
-  <Step title="Consider archiving instead">
-    Archive stops syncing and preserves history. If you might want the audit trail — or the configuration — archive.
+    Deleting leaves the CMS items in place but stops updating them. If this connection is the only thing keeping a collection current, its content will go stale.
   </Step>
   <Step title="Note the configuration">
-    Mapping, direction, and per-field ownership go with the connection. Rebuilding a large mapping by hand is tedious.
-  </Step>
-</Steps>
-
-## Deleting
-
-<Steps>
-  <Step title="Open the connection">
-    Go to the connection's detail page.
-  </Step>
-  <Step title="Delete connection">
-    Read the warning: *"Stops all sync jobs. This cannot be undone."*
-  </Step>
-  <Step title="Type the exact name">
-    Character for character. This is the guard against deleting the wrong one.
-  </Step>
-  <Step title="Give a reason">
-    Free text, required. It's recorded with the deletion.
-  </Step>
-  <Step title="Confirm">
-    The connection and its jobs are gone.
+    Mapping, direction, and per-field ownership go with the connection, and there's no restore. Rebuilding a large mapping by hand is tedious — capture it if you might need it again.
   </Step>
 </Steps>
