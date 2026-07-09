@@ -1,0 +1,98 @@
+---
+title: "Field compatibility"
+description: "Which Airtable columns map cleanly to each Webflow CMS field type."
+icon: "table-list"
+---
+
+When you [map fields](/connections/field-mapping), Synclify checks that each source column is compatible with the Webflow field you're pointing it at. This page is the reference for what maps to what.
+
+## How the type check works
+
+Synclify sorts every field into one of four **type families** and requires both sides of a mapping to share a family:
+
+| Family | Webflow field types | Typical Airtable columns |
+| --- | --- | --- |
+| **Text** | Plain text, Rich text, Link, Email, Phone, Image, Multi-reference | Single line, Long text, Email, URL, Phone, Single select |
+| **Number** | Number | Number, Currency, Percent, Count, Autonumber, Rating |
+| **Boolean** | Switch | Checkbox |
+| **Date/time** | Date/Time | Date, Created time, Last modified time |
+
+A mapping within the same family is allowed. A mapping **across** families is blocked in the wizard — you can't continue until you fix it.
+
+<Warning>
+Blocking is why you'll see **Continue** disabled: *"This field expects a number, but the source column is a different type."* Map a compatible column, or change the column's type in Airtable.
+</Warning>
+
+<Note>
+The family check is deliberately stricter than the backend, which only *warns*. Without it, a bad mapping would create the connection and then fail on every sync. See [Field mapping](/connections/field-mapping#type-compatibility).
+</Note>
+
+## Webflow field reference
+
+Every Webflow CMS field type Synclify supports, and the Airtable columns that feed it cleanly.
+
+| Webflow field | Family | Airtable source | Notes |
+| --- | --- | --- | --- |
+| **Plain text** | Text | Single line text, Single select, Formula (text) | Direct 1:1. |
+| **Rich text** | Text | Long text, Rich text | Formatting may need to be HTML. Code blocks and checklists may not carry over. |
+| **Number** | Number | Number, Currency, Percent, Count, Autonumber, Rating | The value is sent, not the symbol — `$1,200` syncs as `1200`, `40%` as `40`. |
+| **Switch** | Boolean | Checkbox | Maps `true` / `false`. |
+| **Date/Time** | Date/time | Date, Created time, Last modified time | Align time zones between Airtable and Webflow, or dates can shift by a day. |
+| **Email** | Text | Email | Must be a valid email string. |
+| **Link** | Text | URL, Button | Any web or video URL. |
+| **Phone** | Text | Phone number | — |
+| **Image** | Text* | A column holding a public image **URL** | See [Images](#images-and-references) below. |
+| **Multi-reference** | Text* | A column holding the referenced items' identifiers | See [References](#images-and-references) below. |
+
+<Note>
+**\*** Image and Multi-reference belong to the **text** family, so the wizard won't block a plain-text column mapped to them. But the family check can't see whether the *value* is a real image URL or a valid reference — that's on you. Test with a few records before syncing a whole table.
+</Note>
+
+## Images and references
+
+These fields pass the type check as text, but the source **value** has to be right or the record is skipped or fails at sync time.
+
+<AccordionGroup>
+  <Accordion title="Image" icon="image">
+    The source column must contain a **publicly reachable image URL**. Webflow fetches the image and hosts its own copy.
+
+    - An Airtable **Attachment** field exposes a URL you can map.
+    - Keep files reasonably sized — very large images can fail to upload.
+    - A private or expiring URL won't fetch.
+  </Accordion>
+  <Accordion title="Multi-reference" icon="diagram-project">
+    The source column must contain the **identifiers of the items being referenced** in the target Webflow collection — not their display names.
+
+    - Sync the referenced (child) collection **first**, so the items exist to point at.
+    - Store the referenced items' identifiers (slug or ID) in the source column, one connection per relationship.
+  </Accordion>
+</AccordionGroup>
+
+## Airtable columns with no clean match
+
+Some Airtable field types have no Webflow equivalent. Flatten them in the source before mapping:
+
+| Airtable field | Why it doesn't map | Workaround |
+| --- | --- | --- |
+| **Multiple select** | Webflow has no multi-value option field. | Combine into a single text/rich-text column, or model it as a Multi-reference to an options collection. |
+| **Duration** | No Webflow duration type. | Convert to a Number (seconds/minutes) or a text label. |
+| **User**, **Created by**, **Modified by** | No collaborator type in Webflow. | Map the person's name via a Formula or Lookup that outputs text. |
+| **Rollup / Lookup** | Output type varies and isn't reliably typed. | Reference the underlying field, or output text via a Formula. |
+| **Barcode** | No equivalent. | Map the barcode's text value via a Formula. |
+
+## Tips for clean mappings
+
+<Steps>
+  <Step title="Pick a stable identity field">
+    Your [ID field](/how-synclify-works#the-identity-field) should be unique and unchanging — a slug or an ID, not a value people rewrite.
+  </Step>
+  <Step title="Match single-select options exactly">
+    When feeding a Webflow Option-style field, the source values must match the allowed options exactly — watch for trailing spaces and capitalization.
+  </Step>
+  <Step title="Use ISO dates and consistent time zones">
+    Dates sync most reliably in ISO 8601 form (`2026-07-09T10:22:00Z`) with both sides on the same time zone.
+  </Step>
+  <Step title="Map each field once">
+    A source column feeds one Webflow field per connection. To fill two Webflow fields from one value, duplicate the column in Airtable.
+  </Step>
+</Steps>

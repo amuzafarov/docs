@@ -53,6 +53,7 @@
             "pages": [
               "connections/create-a-connection",
               "connections/field-mapping",
+              "connections/field-compatibility",
               "connections/guided-setup",
               "connections/sync-settings",
               "connections/edit-a-connection",
