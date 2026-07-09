@@ -15,14 +15,14 @@
   "navbar": {
     "links": [
       {
-        "label": "Join Waitlist",
-        "href": "https://synclify.cloud/#waitlist"
+        "label": "Log in",
+        "href": "https://app.synclify.cloud/login"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Get Early Access",
-      "href": "https://synclify.cloud/#waitlist"
+      "label": "Sign up",
+      "href": "https://app.synclify.cloud/register"
     }
   },
   "navigation": {
