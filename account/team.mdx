@@ -1,0 +1,63 @@
+---
+title: "Team"
+description: "Invite teammates and assign roles."
+icon: "users"
+---
+
+**Settings → Team** manages who can access your Synclify workspace.
+
+The header shows your seat usage: `N / max members · N seats left`.
+
+## Roles
+
+| Role | Access |
+| --- | --- |
+| **Owner** | Full access, including billing and team management. |
+| **Member** | Manage connections, sites, and syncs. No billing. |
+| **Client** | Read-only access to assigned sites. |
+
+Owner is not an invitable role — it belongs to whoever holds the account.
+
+<Tip>
+**Client** is the role for the people whose site it is. They can see what's syncing without being able to change a mapping or delete a connection.
+</Tip>
+
+## Inviting
+
+<Steps>
+  <Step title="Invite">
+    Enter the teammate's email and pick a role.
+  </Step>
+  <Step title="They accept">
+    They appear as `pending` until they accept, then `active`.
+  </Step>
+</Steps>
+
+If an invite goes stale, **resend** it.
+
+## Managing members
+
+- **Edit** — change a member's display name or role.
+- **Remove** — revoke access.
+- **Resend invite** — for anyone still `pending`.
+
+## Seat limits
+
+Your plan sets the seat count. When you're out:
+
+> **Seat limit reached** — Upgrade your plan to invite more members.
+
+Free up a seat by removing a member, or [upgrade](/account/billing).
+
+<Note>
+Seat enforcement is based on your **API plan**, which may allow fewer seats than the plan card advertised at checkout. If the numbers disagree, the enforced limit is the one you hit. Contact support if you were billed for seats you can't use.
+</Note>
+
+## Invite errors
+
+| Message | Cause |
+| --- | --- |
+| *Invalid email address* | Malformed email. |
+| *Already on the team* | That address is already a member or has a pending invite. |
+| *Seat limit reached* | Your plan is full. |
+| *Invite failed* / *Update failed* / *Remove failed* / *Resend failed* | The request didn't reach the backend. Retry; accept the support report prompt if it keeps failing. |

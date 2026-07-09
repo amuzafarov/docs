@@ -1,0 +1,60 @@
+---
+title: "Manage data sources"
+description: "Review account health, reconnect, and disconnect providers."
+icon: "plug"
+---
+
+**Data Sources** lists every provider account you have connected, its health, and the resources Synclify discovered from it.
+
+## Account health
+
+Each account carries a status:
+
+| Status | Meaning | What to do |
+| --- | --- | --- |
+| `active` | Healthy. | Nothing. |
+| `degraded` | Reachable, but something is failing — commonly rate limits or webhook delivery. | Watch the connection's **Realtime** indicator. If it says *Polling fallback*, syncs still run, just on the schedule instead of instantly. |
+| `reauth required` | The token expired or was revoked. **Syncs stop.** | Reconnect the account. |
+| `disconnected` | Not connected. | Reconnect, or remove. |
+
+<Note>
+The label is rendered from the raw status, so `reauth_required` displays as **reauth required**. It means the same thing.
+</Note>
+
+## Reconnecting
+
+Open the account and re-run the authorization. Nothing about your connections, mappings, or history is lost — you are refreshing a credential, not rebuilding the setup. Syncs resume once the account returns to `active`.
+
+Reconnect when:
+
+- The status is `reauth required`.
+- You changed your password on the provider.
+- Your workspace role changed, or someone revoked the app's access.
+- You want to widen the grant — for example, to expose an Airtable base Synclify can't see.
+
+## Refreshing resources
+
+Synclify discovers your bases, tables, sites, and collections when you connect. Newly created resources appear after the account refreshes its resource list. If a table you just made is missing, reopen the account on the Data Sources page.
+
+## Disconnecting an account
+
+<Warning>
+**You cannot disconnect an account that a connection depends on.** Synclify blocks it — the dialog title changes to **Delete connections first** and lists up to five of the blocking connections.
+</Warning>
+
+To disconnect:
+
+<Steps>
+  <Step title="Delete or archive dependent connections">
+    Every connection using the account must be archived or deleted first. See [Archive and delete](/connections/archive-and-delete).
+  </Step>
+  <Step title="Disconnect the account">
+    Return to **Data Sources**, open the account, and disconnect.
+  </Step>
+</Steps>
+
+The error you'll see if you skip step one: *"Delete active connections before disconnecting this data source."*
+
+## When the page won't load
+
+*"Data sources unavailable"* with a retry button means Synclify couldn't reach the backend. Retry. If it persists, Synclify will offer to send a support report — accept it, since it attaches the failing request details.

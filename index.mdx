@@ -1,81 +1,60 @@
 ---
-title: "Synclify Docs: Sync Sheets, Airtable & Notion to Webflow"
-sidebarTitle: "Home"
-description: "Guides for syncing Google Sheets, Airtable, and Notion into Webflow CMS — field mapping, sync schedules, agency dashboards, client portals, and security."
+title: "Synclify"
+sidebarTitle: "Introduction"
+description: "Keep your Webflow CMS in sync with the tools your team already works in."
 ---
 
-Welcome to the Synclify documentation. Synclify connects your spreadsheets, databases, and wikis — Google Sheets, Airtable, and Notion — directly to your Webflow CMS Collections, keeping your site content fresh without writing a single line of code. Whether you manage one Webflow site or a full agency portfolio of fifteen or more, you'll find everything you need here to set up syncs, configure field mappings, and keep your clients' content up to date.
+Synclify connects the tools your team writes content in to the Webflow CMS collections your site renders. Edit a row in Airtable, and the matching Webflow CMS item updates — usually within seconds, without anyone opening the Webflow Designer.
+
+<Frame caption="Every source table you sync into Webflow, its direction, schedule, and live status — in one list.">
+  <img src="/images/connections-list.png" alt="The Synclify Connections page listing two connections with their direction, destination site, status, and schedule" />
+</Frame>
+
+## What you can build
 
 <CardGroup cols={2}>
-  <Card title="Quick Start" icon="rocket" href="/quickstart">
-    Connect your first data source and run your first sync in under 5 minutes.
+  <Card title="One-way publishing" icon="arrow-right">
+    Your source is the single source of truth. Writers work in Airtable; Webflow mirrors it.
   </Card>
-  <Card title="How It Works" icon="circle-info" href="/how-it-works">
-    Understand the sync pipeline, data flow, and error handling in depth.
+  <Card title="Two-way collaboration" icon="arrows-left-right">
+    Designers edit copy in Webflow, writers edit in Airtable. Synclify keeps both aligned, field by field.
   </Card>
-  <Card title="Connect Google Sheets" icon="table" href="/sources/google-sheets">
-    Authenticate and pull data from any Google Sheet into Webflow CMS.
+  <Card title="Realtime updates" icon="bolt">
+    Synclify watches your source for changes and runs a sync as soon as it detects one.
   </Card>
-  <Card title="Connect Airtable" icon="database" href="/sources/airtable">
-    Link an Airtable base and map its fields to your CMS Collection.
-  </Card>
-  <Card title="Connect Notion" icon="note-sticky" href="/sources/notion">
-    Use a Notion database as the source of truth for your Webflow content.
-  </Card>
-  <Card title="Connect Webflow" icon="link" href="/webflow/connecting-webflow">
-    Authorize Synclify with your Webflow account and select the sites to manage.
+  <Card title="Safe first launch" icon="shield-check">
+    Guided setup pairs existing records, surfaces conflicts, and previews every write before anything changes.
   </Card>
 </CardGroup>
 
-## Syncing and scheduling
+## How it fits together
 
-<CardGroup cols={2}>
-  <Card title="Field Mapping" icon="sliders" href="/webflow/field-mapping">
-    Drag source columns onto Webflow CMS fields and preview real data before saving.
-  </Card>
-  <Card title="Sync Schedules" icon="clock" href="/syncing/schedule">
-    Configure hourly, daily, weekly, or custom cron schedules for any connection.
-  </Card>
-  <Card title="Manual Sync" icon="play" href="/syncing/manual-sync">
-    Trigger an on-demand sync from the dashboard or client portal at any time.
-  </Card>
-  <Card title="Sync Logs & Errors" icon="list-check" href="/syncing/logs-and-errors">
-    Review per-row results and download CSV error reports after every sync.
-  </Card>
-</CardGroup>
-
-## Agency tools
-
-<CardGroup cols={2}>
-  <Card title="Agency Dashboard" icon="building" href="/agency/dashboard">
-    Manage all your client Webflow sites and syncs from one central panel.
-  </Card>
-  <Card title="Client Portal" icon="user" href="/agency/client-portal">
-    Give clients their own login to trigger syncs and view logs without full dashboard access.
-  </Card>
-  <Card title="Managing Sites" icon="sitemap" href="/agency/managing-sites">
-    Add, organize, and switch between multiple client Webflow sites in one workspace.
-  </Card>
-  <Card title="Security" icon="shield-halved" href="/security">
-    Learn how Synclify protects your data with AES-256-GCM encryption and TLS 1.3.
-  </Card>
-</CardGroup>
-
-## Get up and running in four steps
-
-Not sure where to begin? Follow this high-level path to complete your first sync, then explore the rest of the docs at your own pace.
+Three things make up every Synclify setup:
 
 <Steps>
-  <Step title="Connect Webflow">
-    Authorize Synclify with your Webflow account using a single OAuth click. Synclify automatically detects every CMS Collection across all your sites — no manual configuration needed.
+  <Step title="Data sources">
+    The accounts you connect. Webflow is always the destination. Airtable is the source.
+    See [Connect Webflow](/data-sources/connect-webflow) and [Connect Airtable](/data-sources/connect-airtable).
   </Step>
-  <Step title="Pick your data source">
-    Choose Google Sheets, Airtable, or Notion as your content source and authenticate once. Synclify reads the source structure and surfaces your columns or properties for mapping.
+  <Step title="Connections">
+    One source table bound to one Webflow CMS collection, with a field mapping, a sync direction, and a schedule. A connection is the unit you create, activate, pause, and delete.
   </Step>
-  <Step title="Map your fields">
-    Use the visual drag-and-drop field mapper to connect source columns to Webflow CMS fields. Preview real data inline before you save, so you know exactly what will sync.
-  </Step>
-  <Step title="Sync automatically">
-    Set a schedule — hourly, daily, weekly, or a custom interval — or trigger a sync manually at any time from the dashboard or client portal. Synclify handles the rest.
+  <Step title="Syncs">
+    Each run of a connection. Triggered by a source change (realtime), on a schedule (fallback scan), or by you (manual).
   </Step>
 </Steps>
+
+## Start here
+
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="play" href="/quickstart">
+    Go from a fresh account to a live connection.
+  </Card>
+  <Card title="How Synclify works" icon="book-open" href="/how-synclify-works">
+    Identity fields, sync direction, and field ownership.
+  </Card>
+</CardGroup>
+
+<Note>
+Google Sheets support is in development and appears in the app marked **Coming soon**. Airtable is the supported source today.
+</Note>

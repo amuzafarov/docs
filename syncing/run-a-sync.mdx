@@ -1,0 +1,91 @@
+---
+title: "Run a sync"
+description: "Realtime, polling, and manual runs — and what happens during one."
+icon: "arrows-rotate"
+---
+
+Three things start a sync. Every one of them runs the same five phases.
+
+## Triggers
+
+<CardGroup cols={3}>
+  <Card title="Webhook" icon="bolt">
+    Realtime. Synclify detects a source change and runs immediately. On for every connection, every plan.
+  </Card>
+  <Card title="Scheduled" icon="clock">
+    Polling fallback, if you configured one. Minimum interval 5 minutes.
+  </Card>
+  <Card title="Manual" icon="hand-pointer">
+    You click **Sync now**.
+  </Card>
+</CardGroup>
+
+The run history labels each run with its trigger, so you can always tell why a sync happened.
+
+## Sync now
+
+Available only when the connection is `active`.
+
+<Note>
+**"Connection is not active — Approve and activate the latest draft before syncing."**
+
+You have a pending draft. Finish [review and approve](/connections/edit-a-connection) first.
+</Note>
+
+Direction is derived from the connection's mode and its field mappings — a two-way connection syncs bidirectionally, a one-way connection syncs source-to-destination. You don't choose it at run time.
+
+## The five phases
+
+Manual runs open a live drawer that tracks progress, refreshing roughly every second and a half.
+
+<Steps>
+  <Step title="Fetch source">
+    Read the current state of the Airtable table.
+  </Step>
+  <Step title="Diff records">
+    Compare against the last known state and against Webflow. Decide what to create, update, delete, and skip.
+  </Step>
+  <Step title="Write to Webflow">
+    Apply the changes to CMS items.
+  </Step>
+  <Step title="Publish">
+    If auto-publish is on, push items live. If off, they remain as staged changes in Webflow.
+  </Step>
+  <Step title="Done">
+    Final counts written to history.
+  </Step>
+</Steps>
+
+Throughout, you see running counts: **created**, **updated**, **deleted**, **skipped**, **failed**.
+
+### Cancelling
+
+The drawer has a cancel button. Cancelling stops the run. Records already written stay written — cancel is a stop, not a rollback.
+
+### Confirm publish
+
+If conflicts surface after the write phase, the drawer asks you to **Confirm publish** before it proceeds. Resolve them, then continue. See [Conflicts](/syncing/conflicts).
+
+## Realtime health
+
+The connection detail page shows a **Realtime** stat:
+
+| Display | What's happening | Impact |
+| --- | --- | --- |
+| Healthy | Webhooks delivering. | Changes sync in seconds. |
+| **Polling fallback** | Webhooks degraded; polling is on. | Changes sync on your poll interval instead of instantly. Nothing is lost. |
+| **Realtime degraded** — *Webhooks need attention* | Webhooks degraded; no polling configured. | **Changes may not sync at all** until you run a manual sync. |
+
+<Warning>
+*Realtime degraded* with no polling means your site is silently going stale. Add a polling schedule as a stopgap, then check whether the provider account is `degraded` on the [Data Sources](/data-sources/manage-data-sources) page.
+</Warning>
+
+## Why a record was skipped
+
+Skips are normal and usually mean nothing needs doing:
+
+- Nothing changed since the last sync.
+- The field's owner is the other side ([per-field ownership](/how-synclify-works#per-field-ownership)).
+- The item was marked *keep untouched* during [guided setup](/connections/guided-setup) — a Webflow item with no source row.
+
+Failures are different. See [Sync history](/syncing/sync-history) to inspect them.

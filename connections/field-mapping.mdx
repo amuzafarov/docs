@@ -1,0 +1,85 @@
+---
+title: "Field mapping"
+description: "Match source columns to Webflow fields, set the identity field, and control per-field direction."
+icon: "arrows-left-right"
+---
+
+Mapping tells Synclify which Airtable column feeds which Webflow field. Get it right here and syncs are boring, which is what you want.
+
+## Auto-mapping
+
+When you land on the mapping step, Synclify matches source columns to Webflow fields by name and known aliases. It takes a second or two.
+
+Auto-mapping is a starting point, not an answer. Always review it. It matches on names, so two similarly-named fields can get crossed.
+
+## The ID field
+
+Exactly one mapped pair must be marked **Use as ID field**. Synclify uses it to decide whether an Airtable row and a Webflow item are the same record.
+
+Synclify preselects `slug`, `name`, or `title` when one exists.
+
+<Warning>
+Without it you cannot continue: *"Identity strategy is required — Map at least one matching field, such as slug or name, before creating the connection."*
+</Warning>
+
+Pick a column that is unique per row and doesn't get rewritten. Changing an identity value in the source makes Synclify treat the row as a new record — it loses track of the existing Webflow item.
+
+Identity-mapped fields have their direction locked.
+
+## Type compatibility
+
+Synclify sorts field types into four families and refuses to map across them:
+
+| Family | Examples |
+| --- | --- |
+| **text** | single line, long text, rich text, email, URL, slug |
+| **number** | integer, decimal, currency |
+| **boolean** | checkbox, switch |
+| **date/time** | date, datetime |
+
+Mapping a text column into a number field blocks **Continue**.
+
+<Tip>
+This check is stricter than the backend's, deliberately. The backend only warns — so without this guard the connection would be created, then fail on every sync when Webflow rejects the value. Better to be stopped now.
+</Tip>
+
+Fix a mismatch by remapping to a compatible field, or by changing the column type in Airtable.
+
+## Adding and removing fields
+
+Add a mapping for any source column that auto-mapping missed. Remove any mapping you don't want synced — an internal Airtable column, a formula field, a notes column.
+
+<Warning>
+**Required Webflow fields cannot be removed.** Webflow rejects items missing them, so the mapping stays. If you see *"Required field cannot be removed"*, map something into it — or make the field optional in Webflow.
+</Warning>
+
+## Per-field direction (two-way only)
+
+On a two-way connection, each mapped field has its own direction. Click the toggle beside a field to cycle through:
+
+<AccordionGroup>
+  <Accordion title="Airtable owns" icon="arrow-right">
+    Source writes, Webflow doesn't. Webflow edits to this field are discarded on the next sync.
+  </Accordion>
+  <Accordion title="Webflow owns" icon="arrow-left">
+    Webflow writes, source doesn't. The column is read but never applied.
+  </Accordion>
+  <Accordion title="Two Way" icon="arrows-left-right">
+    Either side writes. Simultaneous edits to the same record raise a [conflict](/syncing/conflicts).
+  </Accordion>
+</AccordionGroup>
+
+Two exceptions, both enforced:
+
+- **`slug` is always *Airtable owns*.** Webflow derives and validates slugs; two writers means broken URLs.
+- **The identity field's direction cannot be changed.** A record renamed on both sides can't be matched.
+
+<Tip>
+A good default for two-way: everything *Airtable owns* except the handful of fields designers actually touch in Webflow — hero image, SEO title, a layout flag. You keep one-way discipline on copy without locking anyone out.
+</Tip>
+
+## Changing a mapping later
+
+Mappings are fixed once the connection is live. Add a column to Airtable and it will not appear in an active connection.
+
+To change one, [create an editable draft](/connections/edit-a-connection), adjust the mapping, then review and approve. Synclify re-runs validation and shows a preview before anything changes.

@@ -1,0 +1,81 @@
+---
+title: "Archive and delete"
+description: "Retire a connection without losing its history, or remove it permanently."
+icon: "box-archive"
+---
+
+Two ways to retire a connection. One is reversible in spirit; the other is not reversible at all.
+
+## Archive
+
+Archived connections stop syncing and move out of your main list into **Archive** in the sidebar. Their history stays.
+
+Use archive when a campaign ended, a collection is dormant, or you want the connection out of the way without destroying the record of what it did.
+
+## Delete
+
+Deleting stops all sync jobs and removes the connection permanently.
+
+<Warning>
+**This cannot be undone.** Synclify makes you prove you mean it: you must type the connection's **exact name** *and* give a written reason. The delete button stays disabled until both are filled.
+</Warning>
+
+Deleting a connection:
+
+- stops all its sync jobs immediately
+- removes the connection and its configuration
+- **does not** delete the CMS items it created in Webflow — those stay in your site
+- **does not** touch your Airtable data
+
+## When you must delete
+
+Two hard requirements in the product force a delete:
+
+<AccordionGroup>
+  <Accordion title="Reusing a Webflow collection">
+    A Webflow collection can back only one live connection. To point a different source at a collection that's already connected, delete the existing connection first.
+
+    *"Webflow collection already connected — Delete the existing connection for this Webflow collection before creating another one."*
+  </Accordion>
+  <Accordion title="Disconnecting a data source">
+    An account can't be disconnected while any non-archived, non-deleted connection depends on it. The dialog becomes **Delete connections first** and lists up to five blockers.
+
+    *"Delete active connections before disconnecting this data source."*
+  </Accordion>
+</AccordionGroup>
+
+In both cases archiving is enough — archived connections don't block.
+
+## Before you delete
+
+<Steps>
+  <Step title="Check what depends on it">
+    Is this the only thing keeping a collection populated? Deleting the connection leaves the CMS items in place, but nothing will update them again.
+  </Step>
+  <Step title="Consider archiving instead">
+    Archive stops syncing and preserves history. If you might want the audit trail — or the configuration — archive.
+  </Step>
+  <Step title="Note the configuration">
+    Mapping, direction, and per-field ownership go with the connection. Rebuilding a large mapping by hand is tedious.
+  </Step>
+</Steps>
+
+## Deleting
+
+<Steps>
+  <Step title="Open the connection">
+    Go to the connection's detail page.
+  </Step>
+  <Step title="Delete connection">
+    Read the warning: *"Stops all sync jobs. This cannot be undone."*
+  </Step>
+  <Step title="Type the exact name">
+    Character for character. This is the guard against deleting the wrong one.
+  </Step>
+  <Step title="Give a reason">
+    Free text, required. It's recorded with the deletion.
+  </Step>
+  <Step title="Confirm">
+    The connection and its jobs are gone.
+  </Step>
+</Steps>

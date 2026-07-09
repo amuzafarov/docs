@@ -1,0 +1,94 @@
+---
+title: "Create a connection"
+description: "The four-step wizard: destination, source, mapping, settings."
+icon: "plus"
+---
+
+A connection binds one Airtable table to one Webflow CMS collection. Building one takes four steps, and then [guided setup](/connections/guided-setup) reconciles whatever already exists on both sides.
+
+Start at **Connections** → **New connection**.
+
+<Note>
+Nothing is written to Webflow during the wizard. The connection is created as a **draft** and stays inert until you approve the first preview.
+</Note>
+
+## Step 1 — Destination
+
+Pick the Webflow site, then the CMS collection to sync into.
+
+<Warning>
+**Webflow collection already connected.** A collection can back only one live connection. If it is already taken, delete the existing connection for that collection before creating another.
+</Warning>
+
+Choose the destination first because it determines the field list you'll map into — including which fields Webflow marks required.
+
+## Step 2 — Source
+
+Pick the provider, then the specific resource.
+
+- **Airtable** — choose a base, then a table.
+- **Google Sheets** — visible but disabled, marked **Coming soon**.
+
+If your Airtable account isn't listed, connect it first from [Data Sources](/data-sources/connect-airtable).
+
+## Step 3 — Map fields
+
+Synclify auto-maps on entry, matching source column names to Webflow field names and known aliases. It takes a moment.
+
+Then you:
+
+- Review each mapped pair and correct the wrong ones.
+- Set the **ID field** — required.
+- Add mappings for columns auto-mapping missed, and remove ones you don't want synced.
+
+Type mismatches across families (text, number, boolean, date/time) block **Continue**. Required Webflow fields cannot be removed.
+
+This step has enough depth to deserve its own page: [Field mapping](/connections/field-mapping).
+
+## Step 4 — Settings
+
+<ParamField path="Connection name" type="required">
+  How the connection appears in lists, history, and the delete confirmation. Use something you'd recognize under pressure — `Blog posts → Webflow`, not `Connection 3`.
+</ParamField>
+
+<ParamField path="Sync direction" type="one-way | two-way" default="one-way">
+  **One-way** (`Source updates Webflow`) — Airtable is the source of truth; Webflow edits to mapped fields are overwritten.
+
+  **Two-way** (`Shared fields can update both sides`) — edits flow both ways, and you get [per-field ownership](/how-synclify-works#per-field-ownership).
+</ParamField>
+
+<ParamField path="Sync cadence" type="manual | polling" default="manual">
+  **Manual** — syncs only when you click **Sync now**.
+
+  **Polling** — a fallback scan every N minutes, hours, or days.
+
+  Realtime sync runs regardless of this setting. Polling exists to catch what webhooks miss.
+</ParamField>
+
+<ParamField path="Auto-publish after sync" type="toggle" default="on">
+  On: synced items are published live. Off: they land in Webflow as staged changes for someone to publish by hand.
+</ParamField>
+
+<ParamField path="Delete orphaned records" type="toggle" default="off">
+  Off: a Webflow item whose source row disappeared is left alone.
+
+  On: it is **permanently deleted** from Webflow.
+</ParamField>
+
+<Warning>
+**Minimum poll interval is 5 minutes.** Anything shorter is rejected: *"Minimum poll interval is 5 minutes to avoid rate-limit issues."* Tighter polling gets you rate-limited by Airtable and Webflow, which makes syncs slower, not faster. Realtime already covers the sub-minute case.
+</Warning>
+
+<Warning>
+**Delete orphaned records is destructive and permanent.** A source row deleted by accident — or an identity value someone renamed — will delete the matching Webflow item on the next sync. Leave this off unless deletions in the source genuinely mean "unpublish from the site."
+</Warning>
+
+## Leaving mid-wizard
+
+Your progress is saved as you go, and reloading the page resumes where you were. But navigating away deliberately prompts:
+
+> **Leave connection setup?** Your setup will be discarded and you'll have to start over.
+
+## After the wizard
+
+Synclify creates the draft and immediately starts [guided setup](/connections/guided-setup) — pairing existing records, collecting your decisions about unmatched ones, resolving conflicts, and previewing the first sync before anything is written.

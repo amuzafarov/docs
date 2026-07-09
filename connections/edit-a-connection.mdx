@@ -1,0 +1,86 @@
+---
+title: "Edit a connection"
+description: "Change a live connection safely using editable drafts."
+icon: "pen"
+---
+
+You cannot edit a live connection in place, and **pausing it does not make it editable**. Instead, Synclify gives you an editable draft: a copy you change freely, validate, preview, and then promote.
+
+<Warning>
+**Pausing is not editing.** Paused connections reject edits — the API returns errors. If you paused a connection hoping to change its mapping, that isn't the path. Create a draft.
+</Warning>
+
+## The draft flow
+
+<Steps>
+  <Step title="Create the draft">
+    Open the connection and make a change. Synclify asks: **Create editable draft?** Confirm.
+
+    The live connection keeps running untouched while you work.
+  </Step>
+  <Step title="Make your changes">
+    Adjust field mappings, per-field directions, sync direction, cadence, publishing, or deletion policy.
+  </Step>
+  <Step title="Save">
+    Your changes are stored on the draft.
+  </Step>
+  <Step title="Save & Review">
+    Synclify validates the draft and computes a preview of what the next sync would do.
+  </Step>
+  <Step title="Approve">
+    Read the preview. Approving activates the draft, replacing the live configuration.
+  </Step>
+</Steps>
+
+Drafts survive page reloads and browser restarts. Come back and Synclify picks up where you left off.
+
+## What validation checks
+
+The same guards as creation:
+
+- Every mapping is type-compatible across text / number / boolean / date-time families.
+- An identity field is set.
+- Required Webflow fields are mapped.
+- Existing records still pair correctly under the new mapping.
+
+<Note>
+**Warnings do not block approval.** Anything reported as a warning — including *"dry-run preview is only available"* — lets you activate, with a toast. Only `error`, `failed`, or `invalid` statuses stop you.
+
+A warning still deserves a read. Warnings are how Synclify tells you a mapping is legal but probably not what you meant.
+</Note>
+
+## Changing the identity field
+
+Possible, but think first.
+
+Changing which field identifies a record re-pairs everything. Records that paired under the old field may not pair under the new one. Synclify shows you the consequences in the preview — read the create and delete counts carefully.
+
+If **Delete orphaned records** is on, an identity change that fails to re-pair will **delete** the unmatched Webflow items and create replacements. Turn that setting off before changing identity, then turn it back on once you've confirmed the pairing.
+
+## Picking up a new source column
+
+Adding a column in Airtable does not add it to a live connection. Mappings are fixed at activation.
+
+Create a draft, map the new column, review, approve.
+
+## Approval hiccups
+
+<AccordionGroup>
+  <Accordion title="Approve failed, then succeeded on retry">
+    If the preview was incomplete, Synclify re-runs the full preview and retries the approval once. No action needed.
+  </Accordion>
+  <Accordion title="'Connection is not active — Approve and activate the latest draft before syncing.'">
+    You clicked **Sync now** while a draft is pending. Finish the review-and-approve flow first; **Sync now** only works on `active` connections.
+  </Accordion>
+  <Accordion title="Validation reports unpaired records after a mapping change">
+    The message tells you: recheck the draft, and if it persists, resolve the records in Airtable or Webflow directly. Usually the new identity field's values don't actually match across the two sides.
+  </Accordion>
+</AccordionGroup>
+
+## A known limitation
+
+<Warning>
+Webhook-triggered syncs continue to fire against the live connection while you edit a draft. Pausing the connection is not a valid workaround, because paused connections can't be edited.
+
+In practice: make your draft changes and approve them in one sitting rather than leaving a draft open for days.
+</Warning>

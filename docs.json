@@ -31,48 +31,54 @@
         "tab": "Documentation",
         "groups": [
           {
-            "group": "Get Started",
+            "group": "Get started",
             "pages": [
-              "introduction",
+              "index",
               "quickstart",
-              "how-it-works"
+              "how-synclify-works"
             ]
           },
           {
-            "group": "Connecting Sources",
+            "group": "Data sources",
             "pages": [
-              "sources/google-sheets",
-              "sources/airtable",
-              "sources/notion"
+              "data-sources/connect-webflow",
+              "data-sources/connect-airtable",
+              "data-sources/connect-google-sheets",
+              "data-sources/connect-notion",
+              "data-sources/manage-data-sources"
             ]
           },
           {
-            "group": "Webflow CMS",
+            "group": "Connections",
             "pages": [
-              "webflow/connecting-webflow",
-              "webflow/field-mapping",
-              "webflow/collections"
+              "connections/create-a-connection",
+              "connections/field-mapping",
+              "connections/guided-setup",
+              "connections/sync-settings",
+              "connections/edit-a-connection",
+              "connections/archive-and-delete"
             ]
           },
           {
-            "group": "Sync & Scheduling",
+            "group": "Syncing",
             "pages": [
-              "syncing/schedule",
-              "syncing/manual-sync",
-              "syncing/logs-and-errors"
+              "syncing/run-a-sync",
+              "syncing/sync-history",
+              "syncing/conflicts"
             ]
           },
           {
-            "group": "Agency Features",
+            "group": "Account",
             "pages": [
-              "agency/dashboard",
-              "agency/client-portal",
-              "agency/managing-sites"
+              "account/sign-in",
+              "account/team",
+              "account/billing"
             ]
           },
           {
-            "group": "Security & FAQ",
+            "group": "Help",
             "pages": [
+              "troubleshooting",
               "security",
               "faq"
             ]

@@ -1,0 +1,130 @@
+---
+title: "Troubleshooting"
+description: "What Synclify's messages mean and how to clear them."
+icon: "life-ring"
+---
+
+Most Synclify messages tell you exactly what to do. These are the ones where the reason isn't obvious.
+
+## My changes aren't reaching Webflow
+
+Work down this list:
+
+<Steps>
+  <Step title="Is the connection active?">
+    `draft`, `paused`, and `awaiting_approval` connections don't sync. Check the status on the connection page.
+  </Step>
+  <Step title="Is the data source healthy?">
+    On [Data Sources](/data-sources/manage-data-sources), a `reauth required` account **stops syncs entirely**. Reconnect it.
+  </Step>
+  <Step title="Is realtime degraded?">
+    The connection's **Realtime** stat. If it says *Webhooks need attention* with no polling configured, changes may not sync at all. Run a manual sync, then add a polling fallback.
+  </Step>
+  <Step title="Is the field owned by Webflow?">
+    On a two-way connection, a field set to **Webflow owns** ignores source changes by design. Check its direction in the mapping.
+  </Step>
+  <Step title="Did the last run partially succeed?">
+    `partially_succeeded` means some records failed. Open the run in [Sync history](/syncing/sync-history).
+  </Step>
+  <Step title="Is auto-publish off?">
+    Items may be sitting in Webflow as staged changes, waiting for someone to publish the site.
+  </Step>
+</Steps>
+
+## Setup and creation
+
+<AccordionGroup>
+  <Accordion title="Webflow collection already connected">
+    A collection can back only one live connection. Delete or archive the existing one first. See [Archive and delete](/connections/archive-and-delete).
+  </Accordion>
+  <Accordion title="Identity strategy is required">
+    Mark one mapped pair as the **ID field** — typically `slug`, `name`, or `title`. See [Identity field](/how-synclify-works#the-identity-field).
+  </Accordion>
+  <Accordion title="Required field cannot be removed">
+    Webflow marks the field required, so it must stay mapped. Either map a source column into it, or make the field optional in Webflow.
+  </Accordion>
+  <Accordion title="Continue is disabled on the mapping step">
+    A mapping crosses type families (text / number / boolean / date-time). Find the mismatched pair and fix it, or change the column type in Airtable.
+  </Accordion>
+  <Accordion title="Minimum poll interval is 5 minutes">
+    Shorter intervals get you rate-limited, which slows every sync. Realtime already delivers changes in seconds — polling is only a fallback.
+  </Accordion>
+  <Accordion title="Auto-pair is not available for this draft">
+    Not an error. Save the required existing-data decision instead and continue.
+  </Accordion>
+  <Accordion title="Existing-data decisions are not available for this draft">
+    Recheck the draft after the mapping update. If validation still reports unpaired records, resolve them directly in Airtable or Webflow.
+
+    The usual cause: the identity column's values don't actually match across the two sides.
+  </Accordion>
+  <Accordion title="Connection setup unavailable / Connection not found">
+    Return to the connections list and reopen it. If it persists, the backend is unreachable — accept the support report prompt.
+  </Accordion>
+</AccordionGroup>
+
+## Editing and approval
+
+<AccordionGroup>
+  <Accordion title="I paused the connection but can't edit it">
+    Pausing is not editing. Paused connections reject edits. Create an **editable draft** instead — see [Edit a connection](/connections/edit-a-connection).
+  </Accordion>
+  <Accordion title="Connection is not active — Approve and activate the latest draft before syncing">
+    A draft is pending. Finish **Save & Review** → **Approve** before running a manual sync.
+  </Accordion>
+  <Accordion title="Approval succeeded but showed a warning">
+    Warnings don't block activation — including *"dry-run preview is only available"*. Only errors do. Read the warning anyway: it usually means a mapping is legal but not what you intended.
+  </Accordion>
+  <Accordion title="Setup hangs on 'evaluating existing rows'">
+    Expected on larger tables. Synclify retries automatically.
+  </Accordion>
+</AccordionGroup>
+
+## Syncing
+
+<AccordionGroup>
+  <Accordion title="Records keep getting duplicated in Webflow">
+    Almost always the identity field. Someone changed an identity value in the source, so Synclify saw a new record and created a new item.
+
+    Pick an identity column nobody rewrites — a dedicated ID, or a slug that's frozen once published.
+  </Accordion>
+  <Accordion title="Webflow items disappeared">
+    Check **Delete orphaned records** on the connection. If it's on, deleting a source row — or renaming its identity value — permanently deletes the Webflow item.
+  </Accordion>
+  <Accordion title="Item-level details are not available for this run">
+    That run didn't retain per-record detail. The summary counts are accurate. Re-run the sync to get an inspectable run.
+  </Accordion>
+  <Accordion title="Keep Webflow on a conflict didn't stick">
+    A known issue — a later sync can push the source value back. Set that field's direction to **Webflow owns**, which is enforced reliably. See [Conflicts](/syncing/conflicts).
+  </Accordion>
+  <Accordion title="This conflict type has no self-serve resolution">
+    Contact support.
+  </Accordion>
+  <Accordion title="Sync runs are burning through my plan">
+    Widen the polling interval, and check whether an Airtable automation is rewriting rows continuously. Every trigger counts against the monthly allowance.
+  </Accordion>
+</AccordionGroup>
+
+## Accounts and access
+
+<AccordionGroup>
+  <Accordion title="Invalid OAuth state. Please try again.">
+    A security check failed — the response didn't match the request Synclify sent. Reload and retry. Usually caused by completing the authorization in a different browser or tab.
+  </Accordion>
+  <Accordion title="Delete active connections before disconnecting this data source">
+    Archive or delete every connection using that account first. The dialog lists up to five blockers.
+  </Accordion>
+  <Accordion title="Seat limit reached">
+    Remove a member, or upgrade. See [Billing](/account/billing).
+  </Accordion>
+  <Accordion title="I was signed out unexpectedly">
+    Your session expired or was revoked. Sign in again.
+  </Accordion>
+</AccordionGroup>
+
+## Something broke and there's no message for it
+
+When Synclify hits a server error or can't reach the backend, it offers to send a support report. **Accept it.** The report pre-fills your email with the timestamp, the page, the failing endpoint, the HTTP status, and the error code — everything support needs and nobody remembers to include.
+
+Add one sentence about what you were doing. That sentence is usually what makes the report solvable.
+
+Support: [support@syncwebflow.com](mailto:support@syncwebflow.com)

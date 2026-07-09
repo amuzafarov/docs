@@ -1,0 +1,60 @@
+---
+title: "Conflicts"
+description: "What a conflict is, and how to resolve one."
+icon: "code-merge"
+---
+
+A conflict is Synclify refusing to guess. When a record changed on both sides since the last sync, there is no correct answer available to software — so it stops and asks.
+
+Conflicts only happen on **two-way** connections, and only on fields whose direction is **Two Way**. A field owned by one side can't conflict: the owner wins by definition.
+
+## Where they show up
+
+- **During [guided setup](/connections/guided-setup)** — records that pair on the identity field but disagree on values.
+- **During a sync** — the live drawer pauses after the write phase and asks you to **Confirm publish**.
+- **On the connection page** — the conflicts panel lists anything unresolved.
+
+## Resolving one
+
+Each conflict offers the resolutions that make sense for it. Synclify hides the ones that don't apply.
+
+| Resolution | Result |
+| --- | --- |
+| **Keep source** | The Airtable value wins. Webflow is updated to match. |
+| **Keep Webflow** | The Webflow value wins. |
+| **Mark resolved** | You handled it yourself, outside Synclify. |
+| **Ignore** | Leave both sides as they are. |
+
+<Warning>
+**Verify the outcome when you choose "Keep Webflow."** There is a known issue where a subsequent sync can apply the source value back into Webflow instead of propagating the Webflow value to the source.
+
+Until it's fixed, after choosing Keep Webflow: run a sync, then check the record in Webflow. If it reverted, set that field's direction to **Webflow owns** — ownership is enforced reliably, and it prevents the conflict from recurring.
+</Warning>
+
+<Note>
+**"This conflict type has no self-serve resolution. Contact support to resolve it."**
+
+Some conflicts need backend intervention. Support can clear them.
+</Note>
+
+## Avoiding conflicts
+
+Conflicts are a symptom of two people owning the same field. The fix is usually structural, not procedural.
+
+<Steps>
+  <Step title="Assign ownership per field">
+    On a two-way connection, set each field to **Airtable owns** or **Webflow owns** wherever one side is genuinely authoritative. Reserve **Two Way** for the rare field both sides legitimately edit.
+
+    Most "two-way" setups in practice have almost no truly two-way fields — copy is owned by Airtable, visuals by Webflow.
+  </Step>
+  <Step title="Use one-way where you can">
+    If nobody edits mapped fields in Webflow, use a one-way connection. No conflicts are possible.
+  </Step>
+  <Step title="Don't edit the same record in both places">
+    Where a field must be two-way, agree on a convention — writers touch it in Airtable, nobody touches it in Webflow between syncs.
+  </Step>
+</Steps>
+
+<Tip>
+Repeated conflicts on the same field are a message. That field wants an owner. Give it one.
+</Tip>
