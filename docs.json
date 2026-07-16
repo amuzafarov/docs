@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "luma",
-  "name": "Synclify",
+  "name": "Synclify.cloud",
   "colors": {
     "primary": "#848485",
     "light": "#dcdcdd",
@@ -9,20 +9,20 @@
   },
   "favicon": "https://media.brand.dev/d469b07b-395b-4cd2-afef-e9b8a98e16db.png",
   "logo": {
-    "light": "https://media.brand.dev/12e393ba-8d93-4d40-bfdd-9376d88afc10.svg",
-    "dark": "https://media.brand.dev/12e393ba-8d93-4d40-bfdd-9376d88afc10.svg"
+    "light": "/logo/logo-light.svg",
+    "dark": "/logo/logo-dark.svg"
   },
   "navbar": {
     "links": [
       {
-        "label": "Join Waitlist",
-        "href": "https://synclify.cloud/#waitlist"
+        "label": "Log in",
+        "href": "https://app.synclify.cloud/login"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Get Early Access",
-      "href": "https://synclify.cloud/#waitlist"
+      "label": "Sign up",
+      "href": "https://app.synclify.cloud/register"
     }
   },
   "navigation": {
@@ -53,6 +53,7 @@
             "pages": [
               "connections/create-a-connection",
               "connections/field-mapping",
+              "connections/field-compatibility",
               "connections/guided-setup",
               "connections/sync-settings",
               "connections/edit-a-connection",

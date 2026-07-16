@@ -2,6 +2,7 @@
 title: "Create a connection"
 description: "The four-step wizard: destination, source, mapping, settings."
 icon: "plus"
+mode: "wide"
 ---
 
 A connection binds one Airtable table to one Webflow CMS collection. Building one takes four steps, and then [guided setup](/connections/guided-setup) reconciles whatever already exists on both sides.
@@ -16,6 +17,10 @@ Nothing is written to Webflow during the wizard. The connection is created as a 
 
 Pick the Webflow site, then the CMS collection to sync into.
 
+<Frame caption="Each collection shows its field count, so you can tell them apart at a glance.">
+  <img src="/images/wizard-destination.png" alt="Wizard step 1: choosing a Webflow CMS collection from a dropdown of available collections" />
+</Frame>
+
 <Warning>
 **Webflow collection already connected.** A collection can back only one live connection. If it is already taken, delete the existing connection for that collection before creating another.
 </Warning>
@@ -29,11 +34,19 @@ Pick the provider, then the specific resource.
 - **Airtable** — choose a base, then a table.
 - **Google Sheets** — visible but disabled, marked **Coming soon**.
 
+<Frame caption="Select Airtable, then pick the table to sync from.">
+  <img src="/images/wizard-source.png" alt="Wizard step 2: Airtable selected as the source with a table dropdown; Google Sheets shown as Coming soon" />
+</Frame>
+
 If your Airtable account isn't listed, connect it first from [Data Sources](/data-sources/connect-airtable).
 
 ## Step 3 — Map fields
 
 Synclify auto-maps on entry, matching source column names to Webflow field names and known aliases. It takes a moment.
+
+<Frame caption="Each Webflow field shows its type (PlainText, Switch, Reference…). Unmatched fields read '— not mapped —'; the row marked ID field is the record identifier.">
+  <img src="/images/field-mapping.png" alt="Wizard step 3: Airtable source columns mapped to Webflow CMS fields, with the Slug row marked as the ID field" />
+</Frame>
 
 Then you:
 
@@ -46,6 +59,10 @@ Type mismatches across families (text, number, boolean, date/time) block **Conti
 This step has enough depth to deserve its own page: [Field mapping](/connections/field-mapping).
 
 ## Step 4 — Settings
+
+<Frame caption="Name the connection, set direction and cadence, then Create connection. Realtime is included regardless of cadence.">
+  <img src="/images/wizard-settings.png" alt="Wizard step 4: connection settings with sync direction, polling cadence, auto-publish on, and delete orphaned records off" />
+</Frame>
 
 <ParamField path="Connection name" type="required">
   How the connection appears in lists, history, and the delete confirmation. Use something you'd recognize under pressure — `Blog posts → Webflow`, not `Connection 3`.
