@@ -1,0 +1,82 @@
+---
+title: "Differences"
+description: "Background checks compare both sides and report what does not line up — and what you decide about it."
+icon: "code-compare"
+---
+
+Synclify runs background checks that compare both sides of a connection. Anything that does not line up is reported as a **difference**, in the **Differences found** panel on the connection's history tab.
+
+> Background checks compare both sides and report what does not line up. Only differences waiting on you are listed. Deciding here changes the record of the difference, not the data at your providers.
+
+That last sentence is the important one. Resolving a difference records a decision. It does not edit anything in Airtable or Webflow.
+
+<Note>
+  The panel is visible to **owners, admins, and support** only. Operators and viewers never see it, so if a teammate cannot find it, check their [role](/account/team#roles).
+</Note>
+
+## What gets reported
+
+| Difference | What it means |
+| --- | --- |
+| _Record is not linked yet_ | A record exists on one side with no counterpart paired to it. |
+| _Values differ between the two sides_ | Both sides hold a value and they don't match. |
+| _More than one possible match_ | Several records could be the counterpart. Synclify will not guess. |
+| _Possible match needs review_ | A likely counterpart was found, but confidence is not high enough to link it automatically. |
+| _The linked record no longer exists_ | The pairing points at something that has since been removed. |
+| _Open conflicts block this check_ | The check could not finish because conflicts are outstanding. |
+| _Field or table structure changed_ | The schema moved underneath the connection. |
+| _No webhook activity received_ | Realtime delivery has gone quiet — see [Realtime health](/monitoring/realtime-health). |
+
+## Deciding
+
+Not every difference offers a decision, and the panel is explicit about which do.
+
+<AccordionGroup>
+  <Accordion title="Link records" icon="link">
+    Offered when Synclify has a candidate. **Accept** it and the two records are linked, then a follow-up check is queued to confirm: _"The two records are now linked. A check is already running and will confirm it."_
+  </Accordion>
+
+  <Accordion title="Mark resolved" icon="circle-check">
+    For a difference you have already fixed at the providers. It moves to history.
+  </Accordion>
+
+  <Accordion title="Ignore" icon="eye-slash">
+    For a difference you accept. _"It stays in history and will come back if the next check still sees it."_ Ignoring is not suppression — a real problem returns.
+  </Accordion>
+</AccordionGroup>
+
+<Warning>
+  Every decision requires a **reason**, and _"The reason is recorded in your workspace audit log."_ Write something a colleague could act on in three months, not "ok".
+</Warning>
+
+## Differences with nothing to decide
+
+Some differences cannot be resolved from this panel — they clear themselves once the underlying cause is fixed. Rather than show a row with a disabled button, the panel collapses them to one line: _"N differences reported — nothing to decide."_
+
+Expanding it names what clears each one:
+
+| Difference | What clears it |
+| --- | --- |
+| _Record is not linked yet_ | "An unmatched source row is only created in Webflow when this connection's record decisions allow it. Review that decision, then run a sync." There is a **Review record decisions** link straight to it. |
+| _Open conflicts block this check_ | "Open the run that raised the conflicts and choose a winner there." |
+| _Field or table structure changed_ | "Re-open the field mapping so the changed fields are picked up, then approve the draft." |
+
+## History
+
+**Show history** reveals differences that were resolved or ignored. When nothing is open, the panel retires itself entirely — no section, no history toggle. History is a record of decisions, not a standing report.
+
+Only the most recent differences are listed at once: _"Only the most recent differences are shown. Resolve these and refresh to see the rest."_
+
+## Differences versus conflicts
+
+They are not the same thing, and they have separate panels.
+
+|  | Difference | [Conflict](/syncing/conflicts) |
+| --- | --- | --- |
+| **What it is** | A pairing or structural problem — records that don't line up. | Both sides edited the same two-way field since the last sync. |
+| **What you decide** | Whether the records are the same thing. | Which value wins. |
+| **Effect on data** | None. The decision is a record. | The winning value is written. |
+
+<Tip>
+  If differences keep reappearing on the same records, the usual cause is an unstable identity field. A field people rewrite makes every edit look like a brand-new record — see [the identity field](/how-synclify-works#the-identity-field).
+</Tip>

@@ -4,44 +4,108 @@ description: "Create an account, sign in, and sign out."
 icon: "right-to-bracket"
 ---
 
+Synclify accounts are per person. Your workspace is what holds connections, data sources, and billing.
+
 ## Creating an account
 
-Two ways:
+Registration starts with an **email address only** — no password yet.
 
-<Tabs>
-  <Tab title="Email and password">
-    Register with an email address and a password of **at least 8 characters**.
-  </Tab>
-  <Tab title="Google">
-    **Continue with Google** on either the sign-in or sign-up page. Google is the only OAuth provider for Synclify accounts.
+<Steps>
+  <Step title="Enter your email">
+    **Send verification link.** _"Start by verifying your email address."_
+  </Step>
+  <Step title="Check your inbox">
+    _"Your profile and password are created only after you verify your address."_ A single-use verification link is on its way.
+  </Step>
+  <Step title="Finish creating your account">
+    The link opens **Finish creating your account** — _"Your email is verified. Choose your name and password to create your workspace."_ Password minimum is **12 characters**.
+  </Step>
+</Steps>
 
-    (This is separate from the Google Sheets *data source*, which is not yet available.)
-  </Tab>
-</Tabs>
+You can also register with **Google**.
 
-New accounts go straight to [onboarding](/data-sources/connect-webflow) to connect Webflow.
+<Note>
+  Signing in with Google is unrelated to the Google Sheets data source. One is how you get into Synclify; the other is a place Synclify reads content from.
+</Note>
 
 ## Signing in
 
-Same two options. If you registered with Google, use Google — there's no password on that account.
+Three routes, all from the same page:
 
-Once signed in you land on **Connections**. If you were sent to sign-in from somewhere else in the app, Synclify returns you there afterwards.
+<Tabs>
+  <Tab title="Password">
+    Email and password. The **Sign in** button submits.
+  </Tab>
+  <Tab title="Email link">
+    **Email me a sign-in link** sends a one-time link — _"a sign-in link is on its way. It works once and expires in 15 minutes."_ Resending is rate-limited with a short countdown.
+  </Tab>
+  <Tab title="Google">
+    OAuth, same account as registration.
+  </Tab>
+</Tabs>
 
-## Signing out
+### Forgot your password
 
-Click your avatar in the top bar → **Sign out**.
+The emailed sign-in link **is** the password-recovery path — there is no separate reset flow. Use **Forgot?** and follow the link, which offers an optional set-a-new-password field alongside signing in.
+
+<Note>
+  The confirmation you get is the same whether or not the address has an account. That is deliberate: it stops the page being used to discover who has a Synclify account.
+</Note>
+
+### Why the link isn't consumed when it loads
+
+Corporate mail scanners follow links in email before you ever click them. If loading the page consumed the link, your sign-in would be spent by a security filter.
+
+So the page **waits**. It shows **Finish signing in** — _"You followed a sign-in link. Continue to open your workspace."_ — and does nothing until you press the button.
+
+<AccordionGroup>
+  <Accordion title="This sign-in link doesn't work anymore">
+    _"It may have expired or already been used. Sign-in links work once and expire after 15 minutes."_ Go back to sign-in and request a fresh one.
+  </Accordion>
+
+  <Accordion title="This verification link doesn't work anymore">
+    The registration equivalent. _"Start registration again to receive a fresh link."_
+  </Accordion>
+
+  <Accordion title="Email sign-in is not available yet">
+    Link sign-in isn't enabled for this account. _"Sign in with your password instead."_
+  </Accordion>
+
+  <Accordion title="Too many requests">
+    _"Wait a few minutes before requesting another link."_
+  </Accordion>
+</AccordionGroup>
+
+## Two-factor challenge
+
+If [two-factor authentication](/account/workspace-security#two-factor-authentication) is on, sign-in adds a code step — for password, email link, and Google alike.
+
+Enter the current code from your authenticator app, or an unused recovery code. If it's rejected: _"That code didn't work — Enter the current code from your authenticator app or a recovery code."_
+
+An attempt that sits too long expires: _"Sign-in attempt expired — Enter your email and password again."_ Start over; nothing is wrong with your account.
+
+## Accepting an invite
+
+An invite link opens `/invite`, which works whether or not you're signed in. Enter your name and a password (at least 12 characters, confirmed). If the address already has Synclify credentials, those are kept rather than replaced.
+
+See [Team](/account/team) for how invites are issued and revoked.
+
+## Confirm your email
+
+Until your address is verified, an amber banner sits in the app: _"Confirm your email address to secure your account."_ **Resend verification email** sends another, once per page load.
 
 ## Sessions
 
-Your session persists across browser restarts. If it expires or is revoked, Synclify signs you out and returns you to the sign-in page — the next action you take will bounce you there.
+Your session is a **cookie**, protected against cross-site request forgery. No token is held in browser storage where a script could read it.
+
+Signing out doesn't just forget who you are — it resets the app. Every store returns to its initial state, the cached data is dropped, and Synclify's local storage is cleared, including saved connection-wizard drafts. Your device's **theme** preference is kept.
+
+<Note>
+  The same reset happens when you [switch workspaces](/account/team#switching-workspaces). The next account to use the tab sees nothing belonging to the previous one.
+</Note>
 
 ## Onboarding
 
-New accounts must connect Webflow before doing anything else. You'll be:
+New accounts land in onboarding, which walks you through connecting a source, mapping fields, and previewing before the first sync. Webflow must be authorized before you can build anything — see [Connect Webflow](/data-sources/connect-webflow).
 
-1. Sent to Webflow to authorize CMS read and write access.
-2. Asked to select which Webflow sites to sync (at least one).
-
-Your progress survives a page reload — leave and come back and you'll resume at the same step.
-
-If you see **"Invalid OAuth state. Please try again."**, a security check failed: the response from Webflow didn't match the request Synclify sent. Reload and retry. It usually means the authorization was opened in a different browser or tab, or a stale page was resumed.
+Notion and Google Sheets appear as **Coming soon** and can't be selected yet.

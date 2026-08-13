@@ -1,0 +1,95 @@
+---
+title: "Realtime health and repair"
+sidebarTitle: "Realtime health"
+description: "What the Realtime states mean, why repairs run on their own, and the rare cases that need a person."
+icon: "tower-broadcast"
+---
+
+Realtime sync depends on a webhook the provider delivers to Synclify. When that delivery path breaks, syncing does not stop — it falls back to polling — but latency goes from seconds to minutes.
+
+**Repairs run automatically.** That is the headline. Synclify re-registers a broken webhook on its own, and nothing is toasted at you for a repair you did not ask for. The panel described below appears only in the cases that genuinely need a person.
+
+## The Realtime tile
+
+Every connection shows one Realtime tile:
+
+| State | Sub-label | Meaning |
+| --- | --- | --- |
+| **Realtime ready** | Provider webhooks verified | _"The provider confirmed this connection can receive realtime changes."_ |
+| **Realtime degraded** | Webhooks need attention | _"Realtime delivery is not fully working for this connection."_ |
+| **Polling fallback** | Realtime degraded | Realtime is degraded, but a polling schedule is covering it. |
+| **Reconnect needed** | Provider access expired | _"Reconnect the provider account before webhooks can be checked or repaired."_ |
+| **Manual only** | Webhooks are not supported | Nothing is broken. This provider has no realtime path. |
+| **Not configured** | Realtime needs repair | No webhook is registered yet. |
+| **Check failed** | Refresh webhook health | _"The last provider check did not complete. Run it again."_ |
+| **Not checked** | Webhook health is unknown | No check has run. |
+
+<Note>
+  **Polling fallback is not a failure state.** It means realtime broke and your polling schedule caught it. Records still sync — just on the poll interval rather than within seconds. A connection with no polling schedule shows **Realtime degraded** instead, and that one is worth acting on.
+</Note>
+
+## Re-checking
+
+A health check performs **live reads against the provider**. That is why it never runs automatically on page load — opening a page should not spend your provider's rate limit.
+
+Use **Re-check webhooks** on the connection, or **Refresh check** on a Data Sources account, when you want a fresh answer.
+
+## When a person is needed
+
+The **Realtime webhook health** panel renders only for states automatic repair cannot clear:
+
+<AccordionGroup>
+  <Accordion title="Reconnect needed">
+    _"Repair is disabled until provider access is reconnected."_ Reconnect the account on [Data Sources](/data-sources/manage-data-sources) first — nothing else can proceed.
+  </Accordion>
+
+  <Accordion title="Reconciliation required">
+    Synclify cannot tell what state the provider is in. Refresh the provider evidence before anything is changed.
+  </Accordion>
+
+  <Accordion title="Awaiting signed delivery">
+    A replacement webhook is registered but unproven. It is confirmed by an actual signed delivery, not by the registration succeeding.
+  </Accordion>
+
+  <Accordion title="Exact cleanup required">
+    A stale registration must be removed before a new attempt can be made. Cleanup targets exactly the identified registrations and nothing else.
+  </Accordion>
+
+  <Accordion title="Ready to retry">
+    Cleanup is confirmed. A new replacement attempt can be authorized.
+  </Accordion>
+
+  <Accordion title="Check failed">
+    _"Refresh the health check. Repair does not run for an unknown provider state."_ Synclify will not act on a state it could not read.
+  </Accordion>
+</AccordionGroup>
+
+<Warning>
+  **Retry repair** queues work; it does not prove it. _"Only a later healthy check confirms the provider finished."_ A queued replacement stays pending rather than reporting success it cannot vouch for. Re-check before you conclude it worked.
+</Warning>
+
+## Account-level health
+
+Data Sources shows the same picture per connected account, across all its resources at once. Use it when several connections degrade together — that usually means the account, not the connections.
+
+The account check is **never** automatic, for the same reason: each one performs a live provider inventory read.
+
+## Why realtime breaks
+
+<AccordionGroup>
+  <Accordion title="The provider account was reauthorized" icon="key">
+    Re-authorizing can invalidate existing webhook registrations. Synclify re-registers them; give it a check afterwards.
+  </Accordion>
+
+  <Accordion title="The source table or collection was rebuilt" icon="table">
+    A webhook registered against a resource that no longer exists cannot deliver. See [Change synced resources](/connections/edit-a-connection).
+  </Accordion>
+
+  <Accordion title="The provider dropped it" icon="cloud">
+    Providers expire webhook registrations on their own schedule. This is the ordinary case, and the one automatic repair exists for.
+  </Accordion>
+</AccordionGroup>
+
+<Tip>
+  Keep a polling schedule on connections that matter, even with realtime working. Polling is what turns a broken webhook into a slower sync instead of a stopped one — see [Sync settings](/connections/sync-settings).
+</Tip>

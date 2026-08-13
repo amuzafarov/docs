@@ -14,14 +14,14 @@ Ten runs per page, newest first:
 | --- | --- |
 | **Time** | When the run started. |
 | **Status** | How it ended. |
-| **Direction** | Source → Webflow, or bidirectional. |
+| **Direction** | Which way this run moved data. |
 | **Actions** | Records created, updated, deleted, skipped, failed. |
 | **Duration** | How long it took. |
 
-While the tab is open the list refreshes every few seconds, so an in-progress run updates in place.
+While the tab is open the list refreshes every few seconds, so an in-progress run updates in place. Refreshing backs off while the tab sits idle and stops entirely while the browser tab is hidden.
 
 <Frame caption="A partial run: 2 updated, 39 skipped, 1 failed. The failed record is the one worth opening.">
-  <img src="/images/sync-history.png" alt="Sync History tab listing one run with a Partial status, its direction, action counts, and duration" />
+  ![Sync History tab listing one run with a Partial status, its direction, action counts, and duration](/images/sync-history.png)
 </Frame>
 
 ## Reading a status
@@ -33,20 +33,54 @@ While the tab is open the list refreshes every few seconds, so an in-progress ru
 | `partial` / `partially_succeeded` | Some records applied, some failed. | **Open the run.** Something is wrong with specific records. |
 | `failed` / `error` | The run did not complete. | Open the run; check the source and destination account health. |
 | `cancelled` | Someone stopped it. | Records already written stayed written. |
+| `awaiting_approval` | Conflicts are waiting on a decision. | Open the run and choose a winner — see [Conflicts](/syncing/conflicts). |
+
+A run's displayed status is derived, not just echoed. Open conflicts render it as `awaiting_approval`; failures alongside successful writes render it as `partially_succeeded`; failures alone render it as `failed`. A cancelled run always surfaces as **cancelled** — never as a failure.
 
 <Warning>
-`partially_succeeded` is the status people ignore and shouldn't. The sync "worked" — but some rows silently didn't make it into Webflow. Open the run and find out which.
+  `partially_succeeded` is the status people ignore and shouldn't. The sync "worked" — but some rows silently didn't make it into Webflow. Open the run and find out which.
 </Warning>
 
 ## Run detail
 
-Click any run to see what it did record by record: what was created, updated, deleted, or skipped, and which records failed and why.
+Click any run to see what it did, record by record. The detail view groups items into **Failed**, **Updated**, **Created**, **Deleted**, and **Skipped**.
+
+Each row names the record and shows the direction that write took, so a two-way run makes it obvious which side each change came from.
+
+### Write evidence
+
+An updated record lists the fields that changed, with their before and after values.
 
 <Note>
-**"Item-level details are not available for this run."**
-
-Some runs don't retain per-record detail. The summary counts are still accurate. If you need to know which records failed, run the sync again and inspect the fresh run.
+  Only fields whose values **genuinely changed** are listed. A sync that touches a record without altering a field does not pad the list with unchanged values. Newly created records show all their fields, because all of them are new.
 </Note>
+
+Where a provider request was made, the evidence comes from that request and response summary — so what you read is what was actually sent, not what Synclify intended to send.
+
+Deleted records are identified by **name** and **slug** only. The rest of a deleted record's fields describe what it happened to contain, not what the delete did.
+
+<Accordion title="No item details">
+  Some runs record summary counts without per-record rows. The counts are still accurate. This is now the rare exception rather than the norm — if you need per-record detail, run the sync again and open the fresh run.
+</Accordion>
+
+## Why a run applied no changes
+
+A run that writes nothing is usually doing exactly what you configured. Rather than claim everything was already up to date, Synclify says which of those reasons applied:
+
+| Message | What it means |
+| --- | --- |
+| _"Both sides already agree, so there was nothing to sync."_ | A genuine no-op. Nothing differed. |
+| _"Source-only rows were left out of Webflow, as configured."_ | Your [record decisions](/connections/guided-setup) told Synclify not to create unmatched source rows in Webflow. |
+| _"Webflow-only items were left unmanaged, as configured."_ | Your record decisions left unmatched Webflow items alone. |
+| _"These records were skipped and nothing was written."_ | The records were skipped. Anything genuinely pending shows as the run's own status and in the conflict panel. |
+| _"Deletes cannot be written to_ {provider}_, so this run applied no changes."_ | The provider does not accept deletes through this connection. |
+| _"This connection cannot write to_ {provider}_, so this run applied no changes."_ | No mapped field on this connection writes to that provider. |
+
+A reason Synclify has no wording for yet is still shown, spelled out as words: _"This run applied no changes:_ {reason}_."_
+
+<Tip>
+  The two "as configured" messages are the most commonly misread. They are not errors — they are your guided-setup choices being honoured. To change them, revisit the connection's record decisions.
+</Tip>
 
 ## Common failure causes
 
@@ -54,26 +88,28 @@ Some runs don't retain per-record detail. The summary counts are still accurate.
   <Accordion title="A required Webflow field was empty">
     Webflow rejects items missing a required field value. Fill the source column for those rows, or make the field optional in Webflow.
   </Accordion>
+
   <Accordion title="A value didn't fit the field type">
     Field-type checks catch most of this at mapping time, but a value can still be rejected at write time — a number out of range, a malformed URL, an option that isn't in Webflow's allowed set.
   </Accordion>
+
   <Accordion title="Duplicate identity values">
     Two source rows with the same identity value can't both own the same Webflow item. Deduplicate in Airtable.
   </Accordion>
+
   <Accordion title="Rate limits">
     Heavy polling or a large first sync can hit Airtable or Webflow API limits, which surfaces as a `degraded` account. Widen your polling interval.
   </Accordion>
+
   <Accordion title="The provider account needs reauth">
     Check [Data Sources](/data-sources/manage-data-sources). A `reauth required` account stops syncs.
   </Accordion>
 </AccordionGroup>
 
-## Counting runs against your plan
+## Usage and your plan
 
-Your plan caps sync runs per month. **Settings → Billing** shows the count for the current calendar month, in UTC, with a progress bar.
-
-Realtime runs count. If a chatty source table is burning through your allowance, widen what triggers a sync — sync fewer columns, or split the table.
+Sync runs are not metered. Your plan limits **active connections** and **synced items** — see [Billing](/account/billing#usage). Running a sync more often does not consume an allowance.
 
 ## If a run won't load
 
-*"Sync run unavailable"* means Synclify couldn't fetch it. Retry. If it persists, accept the support report prompt — it attaches the failing request details automatically.
+_"Sync run unavailable"_ means Synclify couldn't fetch it. Retry. If it persists, accept the support report prompt — it attaches the failing request details automatically.

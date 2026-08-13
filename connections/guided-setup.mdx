@@ -13,9 +13,9 @@ Most collections aren't empty when you connect them. There are Airtable rows wit
 Synclify matches existing source rows to existing Webflow items on the [identity field](/how-synclify-works#the-identity-field), using exact matches only. The matched records are shown in a table for you to check.
 
 <Note>
-**"Auto-pair is not available for this draft — Save the required existing-data decision instead."**
+  **"Auto-pair is not available for this draft — Save the required existing-data decision instead."**
 
-Not an error. Some drafts can't be auto-paired; skip to the decisions below and Synclify proceeds normally.
+  Not an error. Some drafts can't be auto-paired; skip to the decisions below and Synclify proceeds normally.
 </Note>
 
 ## 2. Record decisions
@@ -24,18 +24,36 @@ Whatever didn't pair needs a decision. You get up to two, and each is required i
 
 <AccordionGroup>
   <Accordion title="Source rows with no matching Webflow item" icon="arrow-right">
-    *"N source rows ready to sync, but Webflow has no matching CMS items."*
+    _"N source rows ready to sync, but Webflow has no matching CMS items."_
 
     Choose **Create Webflow items**. Synclify creates a CMS item for each on the first sync.
   </Accordion>
+
   <Accordion title="Webflow items with no matching source row" icon="arrow-left">
-    *"N Webflow CMS items not present in source."*
+    Two choices, and you pick one:
 
-    Choose **Keep untouched**. They stay in Webflow, and this connection will never update or remove them.
+    - **Leave them alone** _(recommended)_ — _"The items stay in "_{collection}_" exactly as they are. This connection never edits or deletes them."_
+    - **Import them into "**{source}**"** — _"Synclify creates matching rows in "_{source}_", then keeps both sides in sync."_
 
-    This is the safe default and usually the right one — those items are typically older content that predates your source table.
+    Leaving them alone is the default and usually the right one — those items are typically older content that predates your source table. Import is for the opposite case: the Webflow collection is the content you want to start managing from the source.
   </Accordion>
 </AccordionGroup>
+
+<Note>
+  This step appears **even when the source table is empty**. An empty source and a full collection is exactly the situation where the import decision matters most, so Synclify asks rather than assuming.
+</Note>
+
+Your choice is saved with the draft and restated on the first-sync step and on the connection page, so it is never a decision you made once and cannot see again.
+
+### Reading the dry-run summary
+
+The preview counts what the planner plans. Record decisions are promises about what the first sync will write, so a summary that ignored them could read _"0 planned changes"_ while the review card above it promised to import a dozen items.
+
+It doesn't. The summary appends the pending writes:
+
+> 2 imports into Airtable pending 3 creates in Webflow pending
+
+These notes appear in both the summary text and the dialog's counts line, and they survive a page reload. **Leave them alone** contributes nothing to the count, because it writes nothing.
 
 ## 3. Conflicts
 
@@ -52,14 +70,14 @@ Read it. This is the last checkpoint before Webflow changes.
 **Approve** activates the connection.
 
 <Note>
-**Warnings do not block activation.** Validation results that are warnings — including *"dry-run preview is only available"* — let you proceed, with a toast. Only genuine errors (`error`, `failed`, `invalid`) block. If a warning looks material, cancel and investigate rather than clicking through.
+  **Warnings do not block activation.** Validation results that are warnings — including _"dry-run preview is only available"_ — let you proceed, with a toast. Only genuine errors (`error`, `failed`, `invalid`) block. If a warning looks material, cancel and investigate rather than clicking through.
 </Note>
 
 ## 5. First sync
 
-The manual sync fires automatically the moment the connection activates. Direction is bidirectional for two-way connections, source-to-destination otherwise.
+The manual sync fires automatically the moment the connection activates. Its direction follows what your mapped fields allow — see [the direction you actually get](/how-synclify-works#the-direction-you-actually-get).
 
-You'll see: *"Your connection is active now. The first sync has started automatically."* After a 10-second countdown you're redirected to the connection page, where you can watch the live phases.
+You'll see: _"Your connection is active now. The first sync has started automatically."_ After a 10-second countdown you're redirected to the connection page, where you can watch the live phases.
 
 ## If setup stalls
 
@@ -69,15 +87,19 @@ You'll see: *"Your connection is active now. The first sync has started automati
 
     Usually means the identity field can't match anything — check that the column you chose actually holds the same values on both sides.
   </Accordion>
+
   <Accordion title="'This conflict type has no self-serve resolution'">
     Contact support. Some conflicts need backend intervention.
   </Accordion>
+
   <Accordion title="Setup seems to hang on 'evaluating existing rows'">
     Expected on larger tables. Synclify retries automatically. Give it a moment.
   </Accordion>
+
   <Accordion title="Approve fails once, then works">
     If the preview was incomplete, Synclify re-runs it in full and retries the approval. No action needed.
   </Accordion>
+
   <Accordion title="You closed the tab mid-setup">
     Progress is saved. Reopen the connection and Synclify resumes at the stage you left.
   </Accordion>

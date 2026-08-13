@@ -69,10 +69,20 @@
             ]
           },
           {
+            "group": "Monitoring",
+            "pages": [
+              "monitoring/health",
+              "monitoring/differences",
+              "monitoring/deleted-records",
+              "monitoring/realtime-health"
+            ]
+          },
+          {
             "group": "Account",
             "pages": [
               "account/sign-in",
               "account/team",
+              "account/workspace-security",
               "account/billing"
             ]
           },

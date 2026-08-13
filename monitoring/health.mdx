@@ -1,0 +1,93 @@
+---
+title: "Workspace health"
+description: "One page listing everything that needs your attention across connections and connected accounts."
+icon: "heart-pulse"
+---
+
+**Health** in the sidebar answers one question: _is anything broken right now?_ It gathers every connection and every connected account into a single list, worst first.
+
+> Everything that needs your attention across connections and connected accounts.
+
+The sidebar entry carries a badge with the number of items needing attention, fetched once when the app loads. If the badge is clear, nothing is asking for you.
+
+## The four tiles
+
+| Tile | Sub-label | What it counts |
+| --- | --- | --- |
+| **Connections monitored** | Across this workspace | Every connection being watched. |
+| **Needs attention** | Open N items to review | Everything that is not healthy — warnings and criticals together. |
+| **Critical** | Blocking syncs until fixed | Only the issues that stop a sync outright. |
+| **Open conflicts** | Waiting for a decision | Conflicts nobody has resolved yet. |
+
+## The list
+
+One row per thing that can be unhealthy. Connected accounts and connections appear in the **same** table, sorted worst severity first, so a broken Airtable account never hides below a long list of healthy connections.
+
+| Column | What it shows |
+| --- | --- |
+| **Connection or account** | What the row is. |
+| **Health** | `Critical`, `Warning`, or `Healthy`. |
+| **Status** | The underlying operational status. |
+| **What needs attention** | The first issue, truncated to one line, with a `+N` badge when there are more. |
+
+Clicking a row takes you where you can act on it: an account row opens [Data Sources](/data-sources/manage-data-sources), a connection row opens that connection. A row with nothing wrong reads **Nothing to do**.
+
+## How severity is decided
+
+<AccordionGroup>
+  <Accordion title="Critical" icon="circle-exclamation">
+    Reserved for issues that **stop a sync outright**. These are the ones worth interrupting your day for.
+  </Accordion>
+
+  <Accordion title="Warning" icon="triangle-exclamation">
+    The connection keeps syncing but needs a fix. A `misconfigured` connection is deliberately a warning, not a critical — it is still working.
+  </Accordion>
+
+  <Accordion title="Healthy" icon="circle-check">
+    Nothing outstanding. `not_applicable` counts as healthy — for example, a connection that was never meant to use realtime.
+  </Accordion>
+</AccordionGroup>
+
+<Note>
+  Health uses the same vocabulary as the connections table by design, so the two can never disagree with each other. A status neither page recognises falls back to what the open issues say rather than rendering blank.
+</Note>
+
+## Filters
+
+Four chips, each showing its own count: **All**, **Needs attention**, **Critical**, **Healthy**.
+
+If a filter has nothing in it you'll see _"Nothing matches this filter"_ — _"Switch to another filter to see the rest of the workspace."_ That is a good outcome for the Critical filter.
+
+## Refreshing
+
+**Refresh** re-runs the report on demand. The page does not poll in the background.
+
+<AccordionGroup>
+  <Accordion title="Health overview unavailable">
+    The report could not be loaded. _"Use refresh to load the workspace health report again."_
+  </Accordion>
+
+  <Accordion title="No connections to monitor">
+    _"Create your first connection to see its health here."_ Nothing is wrong — there is simply nothing to watch yet.
+  </Accordion>
+</AccordionGroup>
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Realtime health" icon="tower-broadcast" href="/monitoring/realtime-health">
+    Why a connection fell back to polling, and what repairs itself.
+  </Card>
+
+  <Card title="Differences" icon="code-compare" href="/monitoring/differences">
+    Records the two sides disagree about.
+  </Card>
+
+  <Card title="Conflicts" icon="code-merge" href="/syncing/conflicts">
+    Resolve a field both sides changed.
+  </Card>
+
+  <Card title="Data sources" icon="plug" href="/data-sources/manage-data-sources">
+    Reconnect an account that needs reauth.
+  </Card>
+</CardGroup>

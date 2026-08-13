@@ -9,7 +9,7 @@ mode: "wide"
 Synclify connects the tools your team writes content in to the Webflow CMS collections your site renders. Edit a row in Airtable, and the matching Webflow CMS item updates — usually within seconds, without anyone opening the Webflow Designer.
 
 <Frame caption="Every source table you sync into Webflow, its direction, schedule, and live status — in one list.">
-  <img src="/images/connections-list.png" alt="The Synclify Connections page listing three connections with their direction, destination site, status, and schedule" />
+  ![The Synclify Connections page listing three connections with their direction, destination site, status, and schedule](/images/connections-list.png)
 </Frame>
 
 ## What you can build
@@ -18,12 +18,15 @@ Synclify connects the tools your team writes content in to the Webflow CMS colle
   <Card title="One-way publishing" icon="arrow-right">
     Your source is the single source of truth. Writers work in Airtable; Webflow mirrors it.
   </Card>
+
   <Card title="Two-way collaboration" icon="arrows-left-right">
     Designers edit copy in Webflow, writers edit in Airtable. Synclify keeps both aligned, field by field.
   </Card>
+
   <Card title="Realtime updates" icon="bolt">
     Synclify watches your source for changes and runs a sync as soon as it detects one.
   </Card>
+
   <Card title="Safe first launch" icon="shield-check">
     Guided setup pairs existing records, surfaces conflicts, and previews every write before anything changes.
   </Card>
@@ -35,8 +38,7 @@ Three things make up every Synclify setup:
 
 <Steps>
   <Step title="Data sources">
-    The accounts you connect. Webflow is always the destination. Airtable is the source.
-    See [Connect Webflow](/data-sources/connect-webflow) and [Connect Airtable](/data-sources/connect-airtable).
+    The accounts you connect. Webflow is always the destination. Airtable is the source. See [Connect Webflow](/data-sources/connect-webflow) and [Connect Airtable](/data-sources/connect-airtable).
   </Step>
   <Step title="Connections">
     One source table bound to one Webflow CMS collection, with a field mapping, a sync direction, and a schedule. A connection is the unit you create, activate, pause, and delete.
@@ -52,11 +54,20 @@ Three things make up every Synclify setup:
   <Card title="Quickstart" icon="play" href="/quickstart">
     Go from a fresh account to a live connection.
   </Card>
+
   <Card title="How Synclify works" icon="book-open" href="/how-synclify-works">
     Identity fields, sync direction, and field ownership.
+  </Card>
+
+  <Card title="Workspace health" icon="heart-pulse" href="/monitoring/health">
+    Everything needing attention across connections and accounts, worst first.
+  </Card>
+
+  <Card title="Security settings" icon="lock" href="/account/workspace-security">
+    Two-factor, review policy, kill switches, and support access.
   </Card>
 </CardGroup>
 
 <Note>
-Google Sheets support is in development and appears in the app marked **Coming soon**. Airtable is the supported source today.
+  Google Sheets and Notion are in development and appear in the app marked **Coming soon**. Airtable is the supported source today.
 </Note>

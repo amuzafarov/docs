@@ -4,77 +4,98 @@ description: "Plans, usage, invoices, and upgrades."
 icon: "credit-card"
 ---
 
-**Settings → Billing** shows your plan, your usage this month, and the way to change either.
+**Settings → Billing** is the **Plan & usage** page: your current plan, what you are using against it, and the ways to change either.
+
+Limits control **activations, resumes, and new item creates**. Going over a limit does not delete anything — it stops you adding more.
 
 ## Plans
 
-Every plan includes realtime sync. Plans differ on volume, sites, seats, and support.
+Every plan includes realtime sync. Plans differ on how many connections you can keep active and how many items they may sync.
 
-<CardGroup cols={2}>
-  <Card title="Freelancer" icon="user">
-    From **$9/mo**. 1 site, 1 data source, 1 member, email support.
+| Plan | Price |
+| --- | --- |
+| **Free** | \$0 — no card required |
+| **Starter** | \$19/mo |
+| **Pro** | \$49/mo |
+| **Agency** | \$129/mo |
+| **Scale** | From \$299/mo — quoted per workload |
 
-    Tiers by monthly record volume: 500 / 1k / 5k.
-  </Card>
-  <Card title="Starter" icon="users">
-    From **$39/mo**. 5 sites, 2 data sources, 3 members, email support.
-
-    Tiers: 10k / 25k / 50k records.
-  </Card>
-  <Card title="Agency" icon="building">
-    From **$99/mo**. 15 sites, all data sources, 5 members, priority email support.
-
-    Tiers: 250k / 500k / unlimited records.
-  </Card>
-  <Card title="Enterprise" icon="crown">
-    **Custom.** Unlimited sites and members, custom data sources, dedicated support and SLA.
-  </Card>
-</CardGroup>
-
-Within a plan, pick the record-volume tier that fits. Move up a tier without changing plans.
+Each plan card in the app shows that plan's own limits — **active connections** and **synced items** — alongside the price. The full feature comparison, including sites, seats, and support tiers, lives on the [pricing page](https://synclify.cloud/#pricing).
 
 <Note>
-The **enforced** limits come from the plan your account is provisioned with, which can be more restrictive than the plan card's advertised numbers — particularly on seats and sites. The limit you actually hit in the app is the real one. If it's lower than what you paid for, contact support.
+  The limits enforced in the app come from the plan your workspace is actually provisioned with. If a limit you hit is lower than the plan you paid for, the enforced one is the real one — contact support.
 </Note>
 
 ## Usage
 
-Three meters, each with a progress bar, showing `/ Unlimited` where the plan has no cap:
+Two meters, each with a progress bar reading `used / limit`:
 
 <AccordionGroup>
-  <Accordion title="Webflow sites" icon="globe">
-    Sites you've connected against your plan's site allowance.
+  <Accordion title="Active connections" icon="link">
+    Connections currently live. This is the limit that blocks a new activation or a resume.
   </Accordion>
-  <Accordion title="Team members" icon="users">
-    Seats used. Hitting this shows *"Seat limit reached"* on the [Team](/account/team) page.
-  </Accordion>
-  <Accordion title="Sync runs this month" icon="arrows-rotate">
-    Runs in the current calendar month, **UTC**. Resets at the start of the next month.
 
-    Every trigger counts — realtime, scheduled, and manual. A chatty source table can burn the allowance quickly.
+  <Accordion title="Synced items" icon="layer-group">
+    Records mapped across all of your connections. This is the limit that blocks new item creates.
   </Accordion>
 </AccordionGroup>
 
+The bar turns **amber at 80%** and **red at 100%**, so you can see a ceiling coming before you hit it.
+
 <Tip>
-If sync runs are climbing faster than expected, the usual cause is a polling interval set too tight, or a source table where an automation rewrites rows continuously. Widen the poll interval — realtime already covers latency.
+  If synced items are climbing faster than expected, the usual cause is a source table that grew rather than a sync misbehaving. Archive connections you no longer need — that frees both meters.
 </Tip>
 
 ## Upgrading
 
-Click the plan you want. Synclify sends you to a hosted Stripe checkout. Your plan updates when payment completes.
+Pick the plan you want. The button reads **Upgrade** for a higher plan and **Switch plan** for a lateral or lower one; your current plan is labelled **Current plan** and cannot be selected.
 
-If checkout doesn't open — *"Checkout unavailable"* — retry. If it persists, accept the support report prompt.
+Synclify sends you to a hosted Stripe checkout. Your plan updates when payment completes. If confirmation is still settling you will see _"Upgrade processing"_ — the page keeps polling until it resolves.
+
+If checkout doesn't open, retry. If it persists, accept the support report prompt.
+
+## Downgrading
+
+Downgrading is not immediate, because a lower plan can leave you over its limits.
+
+<Steps>
+  <Step title="Schedule the downgrade">
+    Synclify shows the target limits — _"Target limits: N active connections and N synced items"_ — and, if your current usage exceeds them, by how much.
+  </Step>
+  <Step title="Confirm or cancel">
+    A scheduled downgrade stays pending until you **confirm** it. You can **cancel** it any time before it applies.
+  </Step>
+  <Step title="Grace period">
+    If you land over the new plan's limits, the workspace gets a bounded grace period rather than an instant cutoff.
+  </Step>
+  <Step title="Pause-all">
+    When the grace deadline passes, **every active connection pauses**. Nothing is deleted.
+  </Step>
+</Steps>
+
+### Choosing what to resume
+
+After a pause-all, an **owner** opens **Choose connections to resume**. The picker shows **Selected connections** and **Selected synced items** against the new plan's limits and refuses a selection that would exceed either. Connections that cannot fit are explained individually — for example, _"This connection has 12,000 mapped items and exceeds the 5,000-item Starter limit."_
+
+**Keep all connections paused** is a valid answer. You can resume connections within your limits later from the Connections list.
+
+<Warning>
+  Reduce usage **before** the grace deadline if you can. Once pause-all fires, every connection stops syncing until someone chooses which ones to resume.
+</Warning>
+
+## Subscription notices
+
+Two banners can appear above the plan card, and both show the server's own message rather than a generic one:
+
+| Banner | Meaning |
+| --- | --- |
+| Amber | A superseded subscription is winding down. |
+| Red — _"Billing needs attention"_ | Admission is blocked. New connections cannot be activated until the billing state is resolved. |
+
+A red notice is why an activation may be refused before you even reach the wizard's final step — see [Create a connection](/connections/create-a-connection).
 
 ## Invoices and payment methods
 
-**Manage billing** opens the Stripe customer portal, where you can update your card, download invoices, and see billing history. Synclify never handles your card details.
+**Manage subscription** opens the Stripe customer portal, where you can update your card, download invoices, and see billing history. Synclify never handles your card details.
 
-*"Billing portal unavailable"* means the portal link couldn't be fetched. Retry.
-
-## Downgrading and cancelling
-
-Both happen in the Stripe portal.
-
-<Warning>
-Downgrading enforces the lower plan's limits. If you have more sites, seats, or connections than the new plan allows, reduce them **before** you downgrade — otherwise you may find yourself unable to invite, connect, or sync until you're back under the cap.
-</Warning>
+If the portal link can't be fetched, retry. While billing is unconfigured for the workspace, the upgrade and portal buttons are disabled and a banner says so.

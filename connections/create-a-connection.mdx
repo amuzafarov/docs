@@ -10,7 +10,7 @@ A connection binds one Airtable table to one Webflow CMS collection. Building on
 Start at **Connections** → **New connection**.
 
 <Note>
-Nothing is written to Webflow during the wizard. The connection is created as a **draft** and stays inert until you approve the first preview.
+  Nothing is written to Webflow during the wizard. The connection is created as a **draft** and stays inert until you approve the first preview.
 </Note>
 
 ## Step 1 — Destination
@@ -18,11 +18,18 @@ Nothing is written to Webflow during the wizard. The connection is created as a 
 Pick the Webflow site, then the CMS collection to sync into.
 
 <Frame caption="Each collection shows its field count, so you can tell them apart at a glance.">
-  <img src="/images/wizard-destination.png" alt="Wizard step 1: choosing a Webflow CMS collection from a dropdown of available collections" />
+  ![Wizard step 1: choosing a Webflow CMS collection from a dropdown of available collections](/images/wizard-destination.png)
 </Frame>
 
 <Warning>
-**Webflow collection already connected.** A collection can back only one live connection. If it is already taken, delete the existing connection for that collection before creating another.
+  **Webflow collection already connected.** A collection can back only one live connection. Claimed resources carry an **Already synced** badge in the dropdown, so you see it before you pick rather than after you submit.
+
+  What the badge tells you depends on who holds the claim:
+
+  - **Someone in your workspace** — the message names the connection holding it and offers a button to open it. Pause or archive that connection to free the resource.
+  - **Another workspace** — you're told the resource is already synced, and nothing about the other tenant is revealed.
+
+  Either way, **Continue** stays blocked until you pick something free.
 </Warning>
 
 Choose the destination first because it determines the field list you'll map into — including which fields Webflow marks required.
@@ -32,10 +39,10 @@ Choose the destination first because it determines the field list you'll map int
 Pick the provider, then the specific resource.
 
 - **Airtable** — choose a base, then a table.
-- **Google Sheets** — visible but disabled, marked **Coming soon**.
+- **Google Sheets** and **Notion** — visible but disabled, both marked **Coming soon**.
 
 <Frame caption="Select Airtable, then pick the table to sync from.">
-  <img src="/images/wizard-source.png" alt="Wizard step 2: Airtable selected as the source with a table dropdown; Google Sheets shown as Coming soon" />
+  ![Wizard step 2: Airtable selected as the source with a table dropdown; Google Sheets shown as Coming soon](/images/wizard-source.png)
 </Frame>
 
 If your Airtable account isn't listed, connect it first from [Data Sources](/data-sources/connect-airtable).
@@ -44,8 +51,12 @@ If your Airtable account isn't listed, connect it first from [Data Sources](/dat
 
 Synclify auto-maps on entry, matching source column names to Webflow field names and known aliases. It takes a moment.
 
+Auto-mapping is deliberately conservative. It matches on **name evidence only** — an exact key, a full token match, a known synonym — and never on field type or position. It then assigns globally: the strongest pair is settled first and **both fields are consumed**, so one source column can never be auto-mapped onto two Webflow fields. A column called `Name` does not land on `Job Title` just because nothing better was found.
+
+Manual mapping has no such restraint. Anything auto-mapping declined to guess, you can still map yourself.
+
 <Frame caption="Each Webflow field shows its type (PlainText, Switch, Reference…). Unmatched fields read '— not mapped —'; the row marked ID field is the record identifier.">
-  <img src="/images/field-mapping.png" alt="Wizard step 3: Airtable source columns mapped to Webflow CMS fields, with the Slug row marked as the ID field" />
+  ![Wizard step 3: Airtable source columns mapped to Webflow CMS fields, with the Slug row marked as the ID field](/images/field-mapping.png)
 </Frame>
 
 Then you:
@@ -54,27 +65,29 @@ Then you:
 - Set the **ID field** — required.
 - Add mappings for columns auto-mapping missed, and remove ones you don't want synced.
 
-Type mismatches across families (text, number, boolean, date/time) block **Continue**. Required Webflow fields cannot be removed.
+Incompatible pairs block **Continue**. Required Webflow fields cannot be removed.
+
+Where a pair can be written one way but not read back, Synclify says so here and **disables Two-way with the reason**, rather than accepting the mapping and failing at creation.
 
 This step has enough depth to deserve its own page: [Field mapping](/connections/field-mapping).
 
 ## Step 4 — Settings
 
 <Frame caption="Name the connection, set direction and cadence, then Create connection. Realtime is included regardless of cadence.">
-  <img src="/images/wizard-settings.png" alt="Wizard step 4: connection settings with sync direction, polling cadence, auto-publish on, and delete orphaned records off" />
+  ![Wizard step 4: connection settings with sync direction, polling cadence, auto-publish on, and delete orphaned records off](/images/wizard-settings.png)
 </Frame>
 
 <ParamField path="Connection name" type="required">
   How the connection appears in lists, history, and the delete confirmation. Use something you'd recognize under pressure — `Blog posts → Webflow`, not `Connection 3`.
 </ParamField>
 
-<ParamField path="Sync direction" type="one-way | two-way" default="one-way">
+<ParamField path="Sync direction" default="one-way" type="one-way | two-way">
   **One-way** (`Source updates Webflow`) — Airtable is the source of truth; Webflow edits to mapped fields are overwritten.
 
   **Two-way** (`Shared fields can update both sides`) — edits flow both ways, and you get [per-field ownership](/how-synclify-works#per-field-ownership).
 </ParamField>
 
-<ParamField path="Sync cadence" type="manual | polling" default="manual">
+<ParamField path="Sync cadence" default="manual" type="manual | polling">
   **Manual** — syncs only when you click **Sync now**.
 
   **Polling** — a fallback scan every N minutes, hours, or days.
@@ -82,29 +95,57 @@ This step has enough depth to deserve its own page: [Field mapping](/connections
   Realtime sync runs regardless of this setting. Polling exists to catch what webhooks miss.
 </ParamField>
 
-<ParamField path="Auto-publish after sync" type="toggle" default="on">
+<ParamField path="Auto-publish after sync" default="on" type="toggle">
   On: synced items are published live. Off: they land in Webflow as staged changes for someone to publish by hand.
 </ParamField>
 
-<ParamField path="Delete orphaned records" type="toggle" default="off">
+<ParamField path="Delete orphaned records" default="off" type="toggle">
   Off: a Webflow item whose source row disappeared is left alone.
 
   On: it is **permanently deleted** from Webflow.
 </ParamField>
 
 <Warning>
-**Minimum poll interval is 5 minutes.** Anything shorter is rejected: *"Minimum poll interval is 5 minutes to avoid rate-limit issues."* Tighter polling gets you rate-limited by Airtable and Webflow, which makes syncs slower, not faster. Realtime already covers the sub-minute case.
+  **Minimum poll interval is 5 minutes.** Anything shorter is rejected: _"Minimum poll interval is 5 minutes to avoid rate-limit issues."_ Tighter polling gets you rate-limited by Airtable and Webflow, which makes syncs slower, not faster. Realtime already covers the sub-minute case.
 </Warning>
 
 <Warning>
-**Delete orphaned records is destructive and permanent.** A source row deleted by accident — or an identity value someone renamed — will delete the matching Webflow item on the next sync. Leave this off unless deletions in the source genuinely mean "unpublish from the site."
+  **Delete propagation is destructive and permanent.** A source row deleted by accident — or an identity value someone renamed — will delete the matching Webflow item on the next sync. Leave this off unless deletions in the source genuinely mean "unpublish from the site."
+
+  New connections are delete-safe by default, and turning propagation on later requires ticking an explicit acknowledgement as well as the toggle — see [Sync settings](/connections/sync-settings#delete-propagation).
 </Warning>
+
+## When creation is blocked
+
+Two things can stop a connection before the wizard's final step, and both tell you **before** you click rather than refusing afterwards.
+
+<AccordionGroup>
+  <Accordion title="Plan limit reached" icon="chart-simple">
+    Your plan caps how many connections can be active at once. When you're at the cap, a banner names the limit and **Create** is disabled. Pause or archive a connection, or [upgrade](/account/billing).
+  </Accordion>
+
+  <Accordion title="Billing needs attention" icon="credit-card">
+    When the workspace's billing state would cause activation to be refused, an inline notice appears up front — with a pre-filled support draft — instead of letting you build a connection that cannot be activated. See [Billing](/account/billing#subscription-notices).
+  </Accordion>
+</AccordionGroup>
+
+<Note>
+  The wizard is a write action. A **viewer** who types the URL is redirected rather than shown a form they cannot submit — see [roles](/account/team#roles).
+</Note>
+
+## If a provider's resources won't load
+
+A per-account banner shows **the provider's own message** rather than an empty dropdown. If Airtable has hit a monthly API limit, that is what it says — which is far more useful than "no tables found".
 
 ## Leaving mid-wizard
 
-Your progress is saved as you go, and reloading the page resumes where you were. But navigating away deliberately prompts:
+Your progress is saved to this browser as you go, so reloading the page resumes exactly where you were. Navigating away deliberately still prompts:
 
 > **Leave connection setup?** Your setup will be discarded and you'll have to start over.
+
+<Warning>
+  A saved wizard draft is **cleared on sign-out and on workspace switch**. If you are midway through a setup, finish it or note your choices before switching workspaces — see [switching workspaces](/account/team#switching-workspaces).
+</Warning>
 
 ## After the wizard
 

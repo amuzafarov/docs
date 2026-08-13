@@ -1,0 +1,62 @@
+---
+title: "Deleted records"
+description: "Records deleted on either side stay recoverable for a retention window."
+icon: "trash-can-arrow-up"
+---
+
+When a synced record is deleted on either side, Synclify keeps a record of it. A **Deleted records** tab appears on the connection.
+
+> Records deleted on either side stay here for their retention window. Restoring re-links the copy that still exists — it does not recreate the record the provider deleted.
+
+Read that carefully, because it is the thing people expect wrongly. **Restore is not undelete.** It re-links the copy that survived so the next sync treats it as the same record instead of a brand-new one.
+
+<Note>
+  This tab only appears on a live connection with **delete propagation** switched on. If you don't see it, deletes aren't being propagated — see [Sync settings](/connections/sync-settings).
+</Note>
+
+## States
+
+| State | Meaning |
+| --- | --- |
+| **Deleted in source** | The Airtable row is gone; the Webflow item may still exist. |
+| **Deleted in destination** | The Webflow item is gone; the source row may still exist. |
+| **Deleted on both sides** | Both copies are gone. Nothing is left to re-link. |
+| **Retention window closed** | The window lapsed. _"Restore is no longer possible."_ |
+
+Each row names the record by its **name and slug** — not a provider id you have never seen. Where a delete time was never captured, the row says _"Delete time not recorded"_ rather than inventing one.
+
+## Retention
+
+A restorable record shows how long you have: _"Restorable until_ {date}_"_. Once that passes, the state becomes **Retention window closed** and the action is gone.
+
+<Warning>
+  Retention is a deadline, not a backup. If a delete was a mistake, restore it while the window is open — there is no self-serve recovery afterwards.
+</Warning>
+
+## Restoring
+
+Restoring is available to **owners, admins, and operators**. Anyone else sees: _"Ask a workspace owner, admin, or operator to restore a deleted record."_
+
+<Steps>
+  <Step title="Choose the record">
+    Click **Restore** on a row that is still within its retention window.
+  </Step>
+  <Step title="Confirm">
+    The dialog — **Restore this deleted record?** — states exactly what will happen: _"The next sync will re-link_ {record} _instead of treating it as new. This does not recreate the copy that was deleted at the provider — a later sync decides that under this connection's delete policy."_
+  </Step>
+  <Step title="Give a reason (optional)">
+    _"Why are you restoring this record?"_ The reason is optional here, but it is the only note your teammates will have.
+  </Step>
+</Steps>
+
+On success: _"The next sync re-links the record that still exists instead of creating a duplicate."_
+
+If the retention window lapsed between loading the page and confirming, the restore is refused rather than half-applied. Refresh and the row will show its real state.
+
+## Why this exists
+
+Without tombstones, a deleted-then-recreated record looks like a stranger. The next sync would create a duplicate rather than recognising it. Keeping the record of the delete is what lets Synclify tell "this is new" apart from "this came back".
+
+<Tip>
+  If you are seeing unexpected rows here, check whether delete propagation should be on at all. It is off by default for exactly this reason — see [Sync settings](/connections/sync-settings).
+</Tip>
