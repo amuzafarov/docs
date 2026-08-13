@@ -18,7 +18,7 @@ You need:
 - Permission to authorize apps on both accounts.
 
 <Tip>
-Your Airtable table should have one column that uniquely identifies each row — a `Name`, `Title`, or `Slug`. Synclify needs it to match rows to Webflow items. See [Identity field](/how-synclify-works#the-identity-field).
+  Your Airtable table should have one column that uniquely identifies each row — a `Name`, `Title`, or `Slug`. Synclify needs it to match rows to Webflow items. See [Identity field](/how-synclify-works#the-identity-field).
 </Tip>
 
 ## 1. Create your account
@@ -41,7 +41,7 @@ Right after sign-up, Synclify walks you through connecting Webflow.
 You land on the **Connections** page. It is empty — that is expected. Once you've built a few, it looks like this:
 
 <Frame>
-  <img src="/images/connections-list.png" alt="Connections page showing three connections with their status, schedule, and mapped field count" />
+  ![Connections page showing three connections with their status, schedule, and mapped field count](/images/connections-list.png)
 </Frame>
 
 ## 3. Connect Airtable
@@ -80,8 +80,8 @@ Click **Connections** → **New connection**. Four steps:
   <Step title="Settings">
     Name the connection. Then choose:
 
-    - **Sync direction** — *One-way* (source updates Webflow) or *Two-way* (shared fields update both sides).
-    - **Sync cadence** — *Manual only*, or add a *polling* fallback scan. Minimum interval is 5 minutes.
+    - **Sync direction** — _One-way_ (source updates Webflow) or _Two-way_ (shared fields update both sides).
+    - **Sync cadence** — _Manual only_, or add a _polling_ fallback scan. Minimum interval is 5 minutes.
     - **Auto-publish after sync** — on by default. Synced items go live rather than staying as staged changes.
     - **Delete orphaned records** — off by default. Leave it off unless you want removing a source row to delete the Webflow item.
 
@@ -114,12 +114,19 @@ From here on, editing a row in Airtable triggers a sync on its own.
   <Card title="How Synclify works" icon="book-open" href="/how-synclify-works">
     Sync direction, identity fields, and per-field ownership.
   </Card>
+
   <Card title="Editing a live connection" icon="pen" href="/connections/edit-a-connection">
     Change a mapping safely using drafts.
   </Card>
+
   <Card title="Running syncs" icon="arrows-rotate" href="/syncing/run-a-sync">
     Realtime, polling, and manual runs.
   </Card>
+
+  <Card title="Workspace health" icon="heart-pulse" href="/monitoring/health">
+    One page listing everything that needs your attention across connections and accounts.
+  </Card>
+
   <Card title="Troubleshooting" icon="life-ring" href="/troubleshooting">
     What the errors mean and how to clear them.
   </Card>

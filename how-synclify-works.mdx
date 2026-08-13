@@ -22,12 +22,12 @@ A Webflow collection can back only one live connection at a time. Two connection
 
 ## The identity field
 
-Synclify has to answer one question on every sync: *is this Airtable row the same thing as that Webflow item?*
+Synclify has to answer one question on every sync: _is this Airtable row the same thing as that Webflow item?_
 
 The **identity field** — labelled **ID field** or **Use as ID field** in the mapping step — is the mapped pair used to answer it. Synclify matches records by comparing the value of the source column against the value of the destination field.
 
 <Warning>
-A connection cannot be created without an identity field. If none is set you'll see: *"Identity strategy is required — Map at least one matching field, such as slug or name, before creating the connection."*
+  A connection cannot be created without an identity field. If none is set you'll see: _"Identity strategy is required — Map at least one matching field, such as slug or name, before creating the connection."_
 </Warning>
 
 Choose a column that is **unique** and **stable**:
@@ -63,6 +63,23 @@ Set per connection, in the Settings step.
   </Tab>
 </Tabs>
 
+### The direction you actually get
+
+Mode is a **permission**, not a description. A two-way connection where every field is set to _Webflow owns_ is still writing in one direction only — Webflow to the source.
+
+So Synclify reports the direction it derives from your **field ownership**, not the mode you picked. On the connection page you see two provider names and an arrow:
+
+| Shown | Meaning |
+| --- | --- |
+| `Airtable → Webflow` — One-way | Every mapped field that writes, writes to Webflow. |
+| `Webflow → Airtable` — One-way | Every mapped field that writes, writes back to the source. |
+| `Airtable ↔ Webflow` — Two-way, per field | Mapped fields write in both directions. |
+| **Nothing syncs** — No mapped field writes | The connection is live, but no mapped field can write anywhere. |
+
+<Warning>
+  **Nothing syncs** is the one to act on. The connection looks healthy and runs on schedule, but every mapped field is configured so that nothing can be written. Check field ownership in the mapping — see [Field mapping](/connections/field-mapping).
+</Warning>
+
 ## Per-field ownership
 
 On a two-way connection, each mapped field carries its own direction. Click the direction toggle next to a field to cycle it:
@@ -71,9 +88,11 @@ On a two-way connection, each mapped field carries its own direction. Click the 
   <Accordion title="Airtable owns" icon="arrow-right">
     Only the source can change this field. Webflow edits to it are discarded on the next sync. This is one-way behavior, scoped to a single field.
   </Accordion>
+
   <Accordion title="Webflow owns" icon="arrow-left">
     Only Webflow can change this field. The source column is read but never applied. Useful for fields designers own — hero images, layout flags, SEO overrides.
   </Accordion>
+
   <Accordion title="Two Way" icon="arrows-left-right">
     Either side can change it. Simultaneous edits raise a conflict.
   </Accordion>
@@ -81,11 +100,11 @@ On a two-way connection, each mapped field carries its own direction. Click the 
 
 Two fields are locked and cannot be changed:
 
-- The **`slug` field** is always *Airtable owns*. Webflow generates and validates slugs; letting both sides write them produces broken URLs.
+- The **`slug` field** is always _Airtable owns_. Webflow generates and validates slugs; letting both sides write them produces broken URLs.
 - The **identity field** cannot have its direction changed, because a record that renames itself on both sides can no longer be matched.
 
 <Tip>
-The most common production setup is a two-way connection where most fields are *Airtable owns* and a handful of visual fields are *Webflow owns*. You get one-way discipline on copy without locking designers out of the site.
+  The most common production setup is a two-way connection where most fields are _Airtable owns_ and a handful of visual fields are _Webflow owns_. You get one-way discipline on copy without locking designers out of the site.
 </Tip>
 
 ## Syncs
@@ -96,16 +115,26 @@ A **sync** is one run of a connection. Three things trigger one:
 | --- | --- |
 | **Webhook** (realtime) | Synclify detects a change in the source and runs immediately. Included on every plan. |
 | **Scheduled** (polling) | A fallback scan at a fixed interval, catching anything webhooks missed. Minimum 5 minutes. |
-| **Manual** | You click **Sync now**. Only available while the connection is `active`. |
+| **Manual** | You click **Sync now** and choose a direction. Only available while the connection is `active`. See [Run a sync](/syncing/run-a-sync). |
 
 Every run moves through the same five phases:
 
 <Steps>
-  <Step title="Fetch source">Read the current state of the source table.</Step>
-  <Step title="Diff records">Compare against the last known state and against Webflow. Decide what to create, update, delete, or skip.</Step>
-  <Step title="Write to Webflow">Apply the changes to CMS items.</Step>
-  <Step title="Publish">If auto-publish is on, push the items live. Otherwise they stay as staged changes.</Step>
-  <Step title="Done">Record counts and any failures in the run history.</Step>
+  <Step title="Fetch source">
+    Read the current state of the source table.
+  </Step>
+  <Step title="Diff records">
+    Compare against the last known state and against Webflow. Decide what to create, update, delete, or skip.
+  </Step>
+  <Step title="Write to Webflow">
+    Apply the changes to CMS items.
+  </Step>
+  <Step title="Publish">
+    If auto-publish is on, push the items live. Otherwise they stay as staged changes.
+  </Step>
+  <Step title="Done">
+    Record counts and any failures in the run history.
+  </Step>
 </Steps>
 
 ## Connection states
@@ -124,5 +153,19 @@ The ones you will actually see:
 | `archived` | Retired but retained. |
 
 <Warning>
-Pausing is **not** how you edit a connection. Paused connections reject edits. To change a live connection, create an editable draft — see [Editing a connection](/connections/edit-a-connection).
+  Pausing is **not** how you edit a connection. Paused connections reject edits. To change a live connection, create an editable draft — see [Editing a connection](/connections/edit-a-connection).
 </Warning>
+
+## Where health lives
+
+Once connections are live, two pages tell you whether they are working:
+
+<CardGroup cols={2}>
+  <Card title="Workspace health" icon="heart-pulse" href="/monitoring/health">
+    Everything needing attention across every connection and connected account, worst first.
+  </Card>
+
+  <Card title="Realtime health" icon="tower-broadcast" href="/monitoring/realtime-health">
+    Whether webhooks are delivering, and what repairs itself without you.
+  </Card>
+</CardGroup>

@@ -25,7 +25,9 @@ Redirects after sign-in are validated too — Synclify only follows relative pat
 ## Your account
 
 - Sign in with email and password (**minimum 8 characters**) or Google OAuth.
-- Your session token is held in your browser. Signing out clears it.
+- Your session is a **cookie**, protected against cross-site request forgery. No bearer token is held in browser storage where a script could read it.
+- Signing out resets the app: every store returns to its initial state, cached data is dropped, and Synclify's local storage is cleared. The next person to use the browser sees nothing of your workspace.
+- **Two-factor authentication** is available, and applies to password, emailed-link, and Google sign-in alike. See [Security settings](/account/workspace-security#two-factor-authentication).
 - If a request ever comes back unauthorized, Synclify clears your session immediately and returns you to sign-in.
 
 ## Data handling
@@ -37,13 +39,21 @@ Redirects after sign-in are validated too — Synclify only follows relative pat
 ## Safe writes
 
 - **Nothing is written without a preview.** A new connection stays an inert draft until you approve a full preview of the first sync. See [Guided setup](/connections/guided-setup).
-- **Deletes are opt-in.** Removing a source row deletes the Webflow item only if you turned on **Delete orphaned records** — off by default. See [Sync settings](/connections/sync-settings).
+- **Deletes are opt-in twice.** Delete propagation is off by default, and turning it on requires both a toggle and an explicit acknowledgement that counterpart records can be deleted. A stored policy Synclify cannot interpret **fails closed** rather than guessing. See [Sync settings](/connections/sync-settings#delete-propagation).
+- **Deletes are recoverable for a window.** A deleted record is kept as a tombstone and can be restored during its retention period. See [Deleted records](/monitoring/deleted-records).
 - **Idempotency.** Every change Synclify sends carries an idempotency key, so a retried request can't accidentally apply the same change twice.
-- **Destructive actions are gated.** Deleting a connection requires typing its exact name plus a written reason.
+- **Destructive actions are gated.** Archiving a connection requires typing its exact name plus a written reason. Disconnecting a provider account additionally requires a **step-up identity check** — your current password, or an authenticator or recovery code — and an exact typed confirmation. See [Manage data sources](/data-sources/manage-data-sources#disconnecting-an-account).
+- **You can stop everything.** Workspace kill switches block all syncing, automatic syncing, or reverse syncing, each requiring a reason that is written to the audit log. See [Security settings](/account/workspace-security#workspace-kill-switches).
+
+## Auditing
+
+Reasons are required — not optional notes — on the actions that matter: engaging a kill switch, resolving or ignoring a [difference](/monitoring/differences), archiving a connection, and granting support access. Each is written to your workspace audit log with who did it and when.
 
 ## Team access
 
-Roles scope what teammates can do — **Owner** (full, including billing), **Member** (manage connections and syncs), **Client** (read-only). See [Team](/account/team).
+Roles scope what teammates can do — **Owner**, **Admin**, **Operator**, **Viewer**, and **Support**. See [Team](/account/team#roles) for exactly what each one can reach.
+
+**Support** is never a standing seat. Support can only open your workspace through a time-boxed grant you issue yourself, with a reason you supply, and everything they do is recorded in a plain-language trail you can read. You can end it at any moment, and it expires on its own if you don't. See [Support access](/account/workspace-security#support-access).
 
 ## Reporting a problem
 

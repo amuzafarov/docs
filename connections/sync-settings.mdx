@@ -14,7 +14,7 @@ Four settings decide when a connection runs and what it's allowed to do. They're
 
 ## Sync cadence
 
-Two options, shown in the connection settings as **Fallback scan**: *"Keep manual syncs only or add a polling backup for missed webhooks."*
+Two options, shown in the connection settings as **Fallback scan**: _"Keep manual syncs only or add a polling backup for missed webhooks."_
 
 <Tabs>
   <Tab title="Manual">
@@ -28,9 +28,9 @@ Two options, shown in the connection settings as **Fallback scan**: *"Keep manua
 </Tabs>
 
 <Warning>
-**Minimum poll interval: 5 minutes.** *"Minimum poll interval is 5 minutes to avoid rate-limit issues."*
+  **Minimum poll interval: 5 minutes.** _"Minimum poll interval is 5 minutes to avoid rate-limit issues."_
 
-Polling harder does not make syncs faster. It burns Airtable and Webflow API quota, which makes every sync — including the realtime ones — slower and more likely to fail. If you want sub-minute latency, you already have it: realtime is included on every plan.
+  Polling harder does not make syncs faster. It burns Airtable and Webflow API quota, which makes every sync — including the realtime ones — slower and more likely to fail. If you want sub-minute latency, you already have it: realtime is included on every plan.
 </Warning>
 
 A sensible polling interval is measured in hours, not minutes. It exists to catch the rare miss, not to carry the load.
@@ -52,48 +52,62 @@ Default: **on**.
   </Tab>
 </Tabs>
 
-## Delete orphaned records
+## Delete propagation
 
-Default: **off**.
+Default: **off**. New connections are delete-safe until you deliberately change that.
 
-Controls what happens when a Webflow item's source row disappears.
+The setting is **Delete counterpart records** — _"Propagate deletion to the mapped record in the other provider."_
 
 <Tabs>
-  <Tab title="Off (ignore)">
-    The Webflow item stays. Synclify stops managing it.
+  <Tab title="Off">
+    A deleted record's counterpart stays. Synclify stops managing it.
 
     Safe. Costs you stale items that need occasional manual cleanup.
   </Tab>
-  <Tab title="On (hard delete)">
-    The Webflow item is **permanently deleted**.
+  <Tab title="On">
+    Deleting a mapped record in one provider deletes its counterpart in the other.
   </Tab>
 </Tabs>
 
+Switching it on is a **two-step** action. An amber **Destructive delete propagation** block appears — _"Deleting a mapped record in either provider can delete its mapped counterpart in the other provider."_ — with a checkbox you must tick:
+
+> I understand that counterpart records can be deleted.
+
+Saving stays disabled until you do. One misplaced click cannot arm this.
+
 <Warning>
-**Turning this on makes source deletions irreversible in Webflow.**
+  **Turning this on makes deletions propagate across providers.**
 
-Two ways it bites people who didn't expect it:
+  Two ways it bites people who didn't expect it:
 
-1. Someone deletes an Airtable row to "clean up" — the published page disappears.
-2. Someone **renames an identity value**. Synclify sees the old record as gone and the new one as new. The old Webflow item is deleted; a fresh one is created. Any Webflow-owned fields on the old item are lost, and the URL changes.
+  1. Someone deletes an Airtable row to "clean up" — the published page disappears.
+  2. Someone **renames an identity value**. Synclify sees the old record as gone and the new one as new. The old Webflow item is deleted; a fresh one is created. Any Webflow-owned fields on the old item are lost, and the URL changes.
 
-Leave it off unless deleting a source row genuinely means *unpublish this from the site*.
+  Leave it off unless deleting a source row genuinely means _unpublish this from the site_.
 </Warning>
+
+Switching it on adds a **Deleted records** tab to the connection, where a deleted record stays recoverable for a retention window — see [Deleted records](/monitoring/deleted-records).
+
+### When the policy can't be saved
+
+<AccordionGroup>
+  <Accordion title="Unsupported stored delete policy">
+    The stored policy is in a shape this version of Synclify cannot interpret. Rather than guess at something destructive, it **fails closed** and blocks saving. Contact support.
+  </Accordion>
+
+  <Accordion title="Delete policy cannot be saved">
+    Something else blocks the change; the blocker's own reason is shown beneath the heading.
+  </Accordion>
+</AccordionGroup>
 
 ## Realtime
 
 Not a setting — it's on for every connection on every plan, with nothing to configure.
 
-*"Realtime sync included — When a change is detected in the source, a sync runs immediately."*
+_"Realtime sync included — When a change is detected in the source, a sync runs immediately."_
 
-Its health shows on the connection detail page as a **Realtime** stat:
-
-| Display | Meaning |
-| --- | --- |
-| Healthy | Webhooks delivering. |
-| **Polling fallback** | Webhooks degraded, but polling is on and covering. Syncs are delayed, not lost. |
-| **Realtime degraded** / *Webhooks need attention* | Webhooks degraded and no polling configured. Changes may not sync until you run one manually. |
+Its health shows on the connection detail page as a **Realtime** stat. Broken webhooks are repaired automatically; the full state table and the repair flow live on [Realtime health](/monitoring/realtime-health).
 
 <Tip>
-If you see *Realtime degraded* with no polling fallback, add a polling schedule as a safety net while you investigate. Even a daily scan beats silent staleness.
+  If you see _Realtime degraded_ with no polling fallback, add a polling schedule as a safety net while you investigate. Even a daily scan beats silent staleness.
 </Tip>

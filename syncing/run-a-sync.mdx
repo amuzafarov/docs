@@ -12,9 +12,11 @@ Three things start a sync. Every one of them runs the same five phases.
   <Card title="Webhook" icon="bolt">
     Realtime. Synclify detects a source change and runs immediately. On for every connection, every plan.
   </Card>
+
   <Card title="Scheduled" icon="clock">
     Polling fallback, if you configured one. Minimum interval 5 minutes.
   </Card>
+
   <Card title="Manual" icon="hand-pointer">
     You click **Sync now**.
   </Card>
@@ -27,16 +29,30 @@ The run history labels each run with its trigger, so you can always tell why a s
 Available only when the connection is `active`.
 
 <Frame caption="Sync now sits in the connection header, beside the status dropdown.">
-  <img src="/images/connection-detail.png" alt="Connection detail header showing sync direction, field mapping count, last sync, Realtime health, schedule, and the Sync Now button" />
+  ![Connection detail header showing sync direction, field mapping count, last sync, Realtime health, schedule, and the Sync Now button](/images/connection-detail.png)
 </Frame>
 
 <Note>
-**"Connection is not active — Approve and activate the latest draft before syncing."**
+  **"Connection is not active — Approve and activate the latest draft before syncing."**
 
-You have a pending draft. Finish [review and approve](/connections/edit-a-connection) first.
+  You have a pending draft. Finish [review and approve](/connections/edit-a-connection) first.
 </Note>
 
-Direction is derived from the connection's mode and its field mappings — a two-way connection syncs bidirectionally, a one-way connection syncs source-to-destination. You don't choose it at run time.
+### Choosing a direction
+
+**Sync now** does not guess. It opens **Choose sync direction** — _"Select which way data should move between_ {source} _and_ {destination}_."_
+
+| Option | What it does |
+| --- | --- |
+| **Source → destination** | _"Read the source and apply allowed changes to the destination."_ |
+| **Destination → source** | _"Read the destination and apply only destination-owned or two-way fields to the source."_ |
+| **Both directions** | _"Run both scans. Conflicting overlapping edits may require review."_ |
+
+Only the lanes where mapped fields can actually write are offered. On a one-way connection there is nothing to choose; on a two-way connection where every field is _Airtable owns_, the reverse lane is not shown, because it would do nothing.
+
+<Note>
+  This is a **run-time** choice and it does not change the connection. Sending one manual run in the reverse direction does not make the connection two-way — see [the direction you actually get](/how-synclify-works#the-direction-you-actually-get).
+</Note>
 
 ## The five phases
 
@@ -72,17 +88,19 @@ If conflicts surface after the write phase, the drawer asks you to **Confirm pub
 
 ## Realtime health
 
-The connection detail page shows a **Realtime** stat:
+The connection detail page shows a **Realtime** stat. The three you will see most:
 
 | Display | What's happening | Impact |
 | --- | --- | --- |
-| Healthy | Webhooks delivering. | Changes sync in seconds. |
+| **Realtime ready** | Webhooks delivering. | Changes sync in seconds. |
 | **Polling fallback** | Webhooks degraded; polling is on. | Changes sync on your poll interval instead of instantly. Nothing is lost. |
-| **Realtime degraded** — *Webhooks need attention* | Webhooks degraded; no polling configured. | **Changes may not sync at all** until you run a manual sync. |
+| **Realtime degraded** — _Webhooks need attention_ | Webhooks degraded; no polling configured. | **Changes may not sync at all** until you run a manual sync. |
 
 <Warning>
-*Realtime degraded* with no polling means your site is silently going stale. Add a polling schedule as a stopgap, then check whether the provider account is `degraded` on the [Data Sources](/data-sources/manage-data-sources) page.
+  _Realtime degraded_ with no polling means your site is silently going stale. Add a polling schedule as a stopgap, then check whether the provider account is `degraded` on the [Data Sources](/data-sources/manage-data-sources) page.
 </Warning>
+
+Broken webhooks are **repaired automatically** — the panel only appears for the cases that need a person. The full state table, the repair flow, and the account-level check live on [Realtime health](/monitoring/realtime-health).
 
 ## Why a record was skipped
 
@@ -90,6 +108,6 @@ Skips are normal and usually mean nothing needs doing:
 
 - Nothing changed since the last sync.
 - The field's owner is the other side ([per-field ownership](/how-synclify-works#per-field-ownership)).
-- The item was marked *keep untouched* during [guided setup](/connections/guided-setup) — a Webflow item with no source row.
+- The item was marked _keep untouched_ during [guided setup](/connections/guided-setup) — a Webflow item with no source row.
 
 Failures are different. See [Sync history](/syncing/sync-history) to inspect them.

@@ -8,6 +8,10 @@ Most Synclify messages tell you exactly what to do. These are the ones where the
 
 ## My changes aren't reaching Webflow
 
+<Tip>
+  **Start at [Workspace health](/monitoring/health).** It gathers every unhealthy connection and account into one list, worst first — usually naming the problem before you work through the checklist below.
+</Tip>
+
 Work down this list:
 
 <Steps>
@@ -18,7 +22,7 @@ Work down this list:
     On [Data Sources](/data-sources/manage-data-sources), a `reauth required` account **stops syncs entirely**. Reconnect it.
   </Step>
   <Step title="Is realtime degraded?">
-    The connection's **Realtime** stat. If it says *Webhooks need attention* with no polling configured, changes may not sync at all. Run a manual sync, then add a polling fallback.
+    The connection's **Realtime** stat. If it says _Webhooks need attention_ with no polling configured, changes may not sync at all. Run a manual sync, then add a polling fallback.
   </Step>
   <Step title="Is the field owned by Webflow?">
     On a two-way connection, a field set to **Webflow owns** ignores source changes by design. Check its direction in the mapping.
@@ -37,26 +41,33 @@ Work down this list:
   <Accordion title="Webflow collection already connected">
     A collection can back only one live connection. Delete the existing one first — it moves to the Archive. See [Delete and archive](/connections/archive-and-delete).
   </Accordion>
+
   <Accordion title="Identity strategy is required">
     Mark one mapped pair as the **ID field** — typically `slug`, `name`, or `title`. See [Identity field](/how-synclify-works#the-identity-field).
   </Accordion>
+
   <Accordion title="Required field cannot be removed">
     Webflow marks the field required, so it must stay mapped. Either map a source column into it, or make the field optional in Webflow.
   </Accordion>
+
   <Accordion title="Continue is disabled on the mapping step">
     A mapping crosses type families (text / number / boolean / date-time). Find the mismatched pair and fix it, or change the column type in Airtable.
   </Accordion>
+
   <Accordion title="Minimum poll interval is 5 minutes">
     Shorter intervals get you rate-limited, which slows every sync. Realtime already delivers changes in seconds — polling is only a fallback.
   </Accordion>
+
   <Accordion title="Auto-pair is not available for this draft">
     Not an error. Save the required existing-data decision instead and continue.
   </Accordion>
+
   <Accordion title="Existing-data decisions are not available for this draft">
     Recheck the draft after the mapping update. If validation still reports unpaired records, resolve them directly in Airtable or Webflow.
 
     The usual cause: the identity column's values don't actually match across the two sides.
   </Accordion>
+
   <Accordion title="Connection setup unavailable / Connection not found">
     Return to the connections list and reopen it. If it persists, the backend is unreachable — accept the support report prompt.
   </Accordion>
@@ -68,12 +79,15 @@ Work down this list:
   <Accordion title="I paused the connection but can't edit it">
     Pausing is not editing. Paused connections reject edits. Create an **editable draft** instead — see [Edit a connection](/connections/edit-a-connection).
   </Accordion>
+
   <Accordion title="Connection is not active — Approve and activate the latest draft before syncing">
     A draft is pending. Finish **Save & Review** → **Approve** before running a manual sync.
   </Accordion>
+
   <Accordion title="Approval succeeded but showed a warning">
-    Warnings don't block activation — including *"dry-run preview is only available"*. Only errors do. Read the warning anyway: it usually means a mapping is legal but not what you intended.
+    Warnings don't block activation — including _"dry-run preview is only available"_. Only errors do. Read the warning anyway: it usually means a mapping is legal but not what you intended.
   </Accordion>
+
   <Accordion title="Setup hangs on 'evaluating existing rows'">
     Expected on larger tables. Synclify retries automatically.
   </Accordion>
@@ -87,20 +101,29 @@ Work down this list:
 
     Pick an identity column nobody rewrites — a dedicated ID, or a slug that's frozen once published.
   </Accordion>
+
   <Accordion title="Webflow items disappeared">
-    Check **Delete orphaned records** on the connection. If it's on, deleting a source row — or renaming its identity value — permanently deletes the Webflow item.
+    Check **delete propagation** on the connection. If it's on, deleting a source row — or renaming its identity value — deletes the Webflow item. Look in the connection's **Deleted records** tab: within the retention window you can still [restore](/monitoring/deleted-records) the pairing.
   </Accordion>
+
   <Accordion title="Item-level details are not available for this run">
-    That run didn't retain per-record detail. The summary counts are accurate. Re-run the sync to get an inspectable run.
+    Rare now — most runs carry full per-record rows with write evidence. That particular run didn't retain them; the summary counts are still accurate. Re-run the sync to get an inspectable run. See [Run detail](/syncing/sync-history#run-detail).
   </Accordion>
+
   <Accordion title="Keep Webflow on a conflict didn't stick">
     A known issue — a later sync can push the source value back. Set that field's direction to **Webflow owns**, which is enforced reliably. See [Conflicts](/syncing/conflicts).
   </Accordion>
+
   <Accordion title="This conflict type has no self-serve resolution">
     Contact support.
   </Accordion>
-  <Accordion title="Sync runs are burning through my plan">
-    Widen the polling interval, and check whether an Airtable automation is rewriting rows continuously. Every trigger counts against the monthly allowance.
+
+  <Accordion title="A run says it applied no changes">
+    Usually your own configuration being honoured — most often _"Source-only rows were left out of Webflow, as configured."_ Synclify names the reason rather than claiming everything was up to date. See [Sync history](/syncing/sync-history#why-a-run-applied-no-changes).
+  </Accordion>
+
+  <Accordion title="Unsupported stored delete policy">
+    The connection's stored delete policy is in a shape this version can't interpret, so saving is blocked rather than guessing at something destructive. Contact support.
   </Accordion>
 </AccordionGroup>
 
@@ -110,12 +133,35 @@ Work down this list:
   <Accordion title="Invalid OAuth state. Please try again.">
     A security check failed — the response didn't match the request Synclify sent. Reload and retry. Usually caused by completing the authorization in a different browser or tab.
   </Accordion>
-  <Accordion title="Delete active connections before disconnecting this data source">
-    Delete every connection using that account first — deleting moves them to the Archive, which no longer blocks. The dialog lists up to five blockers.
+
+  <Accordion title="Active connections still use this account. Archive them before disconnecting.">
+    Archive every connection using that account first. The dialog lists up to five blockers. See [Disconnecting an account](/data-sources/manage-data-sources#disconnecting-an-account).
   </Accordion>
+
+  <Accordion title="Verification expired or was already used. Verify your identity again.">
+    Step-up proofs are single-use and short-lived. Start the verification again from the disconnect dialog.
+  </Accordion>
+
+  <Accordion title="No verification factor is available.">
+    _"Set a password or enroll two-factor authentication in Security settings."_ Disconnecting requires a factor to step up with — see [Security settings](/account/workspace-security).
+  </Accordion>
+
+  <Accordion title="Billing needs attention">
+    Activation is blocked until the workspace's billing state is resolved, and upgrading will not clear it. The banner shows the server's own message. See [Billing](/account/billing#subscription-notices).
+  </Accordion>
+
+  <Accordion title="Plan limit reached">
+    You're at your plan's active-connection cap. Pause or archive a connection, or [upgrade](/account/billing).
+  </Accordion>
+
+  <Accordion title="I can't open the connection wizard">
+    **Viewers** cannot create connections. Typing the URL redirects rather than showing a form that can't be submitted. Ask an owner or admin to change your [role](/account/team#roles).
+  </Accordion>
+
   <Accordion title="Seat limit reached">
     Remove a member, or upgrade. See [Billing](/account/billing).
   </Accordion>
+
   <Accordion title="I was signed out unexpectedly">
     Your session expired or was revoked. Sign in again.
   </Accordion>

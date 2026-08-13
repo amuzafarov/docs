@@ -1,0 +1,130 @@
+---
+title: "Security settings"
+description: "Password, two-factor authentication, review policy, kill switches, and support access."
+icon: "lock"
+---
+
+**Settings → Security** holds the controls you operate. It is not the same page as [Security](/security), which describes how Synclify handles your data and credentials.
+
+What you find here depends on your role — some cards are owner-only.
+
+## Change password
+
+> Change the password you sign in with. Changing it signs out every other session.
+
+Enter your current password, then the new one twice. Minimum **8 characters**. If you have only ever signed in with a link or with Google, leave the current-password field empty — it says _"Leave empty if you never set one."_
+
+<AccordionGroup>
+  <Accordion title="Current password incorrect">
+    _"Check your current password and try again."_
+  </Accordion>
+
+  <Accordion title="Password not allowed">
+    The new password was rejected by policy. _"Choose a password of at least 8 characters."_
+  </Accordion>
+
+  <Accordion title="Passwords do not match">
+    The confirmation field differs from the new password.
+  </Accordion>
+</AccordionGroup>
+
+<Note>
+  Changing your password signs out **every other session**. That is the point: it is also how you evict a session you no longer control.
+</Note>
+
+## Two-factor authentication
+
+> Require a code from an authenticator app on every sign-in — password and emailed link alike.
+
+Note "and emailed link alike": turning this on closes the gap where someone with access to your inbox could sign in without your password.
+
+<Steps>
+  <Step title="Turn on">
+    Scan the QR code with your authenticator app, or type the **manual entry secret**.
+  </Step>
+  <Step title="Confirm">
+    Enter the current 6-digit code to prove enrollment worked.
+  </Step>
+  <Step title="Save your recovery codes">
+    _"Save these recovery codes now — they are shown only once."_ **Copy codes**, store them somewhere that is not the device running your authenticator, then click **I saved them**.
+  </Step>
+</Steps>
+
+The status row then reads **On**, with how many recovery codes are left.
+
+Turning it off needs _"a current authenticator code or an unused recovery code"_. If the code is rejected: _"That code didn't work — Enter a current authenticator code or an unused recovery code."_
+
+<Warning>
+  Recovery codes are shown **once** and each works **once**. Lose both your authenticator and your codes and you will need support to get back in.
+</Warning>
+
+## Review before changes go live
+
+Owner-only. It decides whether a connection can be activated by the same person who set it up.
+
+<Tabs>
+  <Tab title="Two-person review on">
+    **A second owner or admin must approve.** _"The person who edits a connection cannot be the one who activates it."_
+
+    Use this when a bad activation would be expensive — client sites, large collections, anything with delete propagation on.
+  </Tab>
+  <Tab title="Two-person review off">
+    **Anyone who can edit can approve.** _"Faster for solo workspaces and small teams. Every activation is still recorded."_
+
+    This is the default, and it is a reasonable one. Recording is not the same as blocking, but it does mean nothing is anonymous.
+  </Tab>
+</Tabs>
+
+Turning it on is disabled until there is somebody to do the reviewing: _"Invite a second owner or admin to enable two-person review."_
+
+## Workspace kill switches
+
+> Emergency stops for this workspace's syncing. Engaging one requires a reason and is recorded in the audit log.
+
+Available to **owners, admins, and support**.
+
+| Switch | What it blocks |
+| --- | --- |
+| **Pause all syncing** | _"Blocks every new sync run and cancels runs already in flight. The big red button."_ |
+| **Pause automatic syncing** | _"Blocks webhook-triggered runs. Manual and scheduled syncs keep working."_ |
+| **Pause reverse syncing** | _"Blocks any run that writes back to your source (reverse, bidirectional, destination reconciliation)."_ |
+
+**Engage** asks _"Why are you engaging this? (required)"_ and then **Engage switch**. An engaged switch shows its reason and the time it was engaged. **Release** lifts it.
+
+<Warning>
+  Releasing a switch does not replay what it blocked: _"Blocked runs stay stopped — trigger them again if needed."_ After a **Pause all syncing**, check the connections that should have synced meanwhile.
+</Warning>
+
+A switch can also carry a **Disabled platform-wide** badge, which means it is off at the platform level and not something your workspace controls.
+
+<Tip>
+  **Pause reverse syncing** is the surgical one. If a bad edit is propagating from Webflow back into your source, it stops the damage while leaving normal source-to-Webflow syncing alive.
+</Tip>
+
+## Support access
+
+Support cannot open your workspace unless you let them. Visible to **owners and admins**.
+
+> Everything a support agent looked at or changed in this workspace, newest first. Recorded automatically and kept for your audit history.
+
+<Steps>
+  <Step title="Allow support access">
+    Enter the support agent's email and answer _"What do you need help with? (required)"_.
+  </Step>
+  <Step title="Pick a duration">
+    **24** or **72 hours** by default. The button reads **Allow for N hours**.
+  </Step>
+  <Step title="It expires on its own">
+    _"_{agent} _can help until_ {time}_. It ends on its own."_ You do not have to remember to revoke it.
+  </Step>
+</Steps>
+
+While a grant is live, an amber card names who can open the workspace, the reason you gave, when it ends, and **· not opened yet** until they first use it. **End access** revokes it immediately: _"Support can no longer open this workspace."_
+
+### The trail
+
+Every action a support agent takes is listed in plain language — "Viewed the job queue", "Paused Blog → Posts" — with who did it, when, and a **Change** badge on anything that altered state. Repeated actions collapse with a count.
+
+<Note>
+  This is why **Support** is not an invitable [role](/account/team#roles). Support access is always a time-boxed grant with a stated reason and a full record — never a standing seat on your team.
+</Note>

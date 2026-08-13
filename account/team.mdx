@@ -12,52 +12,72 @@ The header shows your seat usage: `N / max members · N seats left`.
 
 | Role | Access |
 | --- | --- |
-| **Owner** | Full access, including billing and team management. |
-| **Member** | Manage connections, sites, and syncs. No billing. |
-| **Client** | Read-only access to assigned sites. |
+| **Owner** | Everything, including billing and removing people. |
+| **Admin** | Everything except billing and workspace deletion. |
+| **Operator** | Build and run connections; cannot manage people or billing. |
+| **Viewer** | Read-only. |
+| **Support** | Support tools and emergency stops. Everything they open is recorded in Support access. |
 
-Owner is not an invitable role — it belongs to whoever holds the account.
+**Operator** is the default when you open the invite dialog — it is the right role for most teammates, because it covers building and running connections without exposing billing or the member list.
+
+<Note>
+  **Support** is not an invitable role. It is never granted from this page. Support access is issued through a separate, expiring grant on [Security settings](/account/workspace-security#support-access), with a required reason and a full audit trail — and it ends on its own.
+</Note>
 
 <Tip>
-**Client** is the role for the people whose site it is. They can see what's syncing without being able to change a mapping or delete a connection.
+  **Viewer** is the role for the people whose site it is. They can see what's syncing without being able to change a mapping or delete a connection. Viewers who type a write-only URL — the connection wizard, for instance — are redirected rather than shown a broken page.
 </Tip>
 
 ## Inviting
 
 <Steps>
   <Step title="Invite">
-    Enter the teammate's email and pick a role.
+    Enter the teammate's email and pick a role. Validation appears **beside the field** as you type — _"Enter a valid email address."_ or _"This email is already on the team."_ — rather than as a toast after you submit.
   </Step>
   <Step title="They accept">
-    They appear as `pending` until they accept, then `active`.
+    They appear as `pending` until they accept, then `active`. Accepting asks for a name and a password of at least 8 characters.
   </Step>
 </Steps>
 
-If an invite goes stale, **resend** it.
+When the invite is created you'll see _"Invite email sent"_. If delivery could not be confirmed you get _"Invite created — Email delivery was not confirmed. Re-send the invite before sharing access."_ instead. Treat that as a prompt, not a formality: an unsent invite is a teammate waiting on nothing.
 
 ## Managing members
 
-- **Edit** — change a member's display name or role.
-- **Remove** — revoke access.
-- **Resend invite** — for anyone still `pending`.
+On an **active** member:
+
+- **Change role** — pick a different role from the actions menu.
+- **Remove member** — revoke access, behind a confirmation.
+
+On a **pending** invite:
+
+- **Resend invite email** — issues a fresh invite and **revokes the superseded one**. Any link you shared earlier stops working.
+- **Revoke invite** — _"The invite link … will stop working immediately."_
+
+## Switching workspaces
+
+If you belong to more than one workspace, the switcher in the top bar lists your memberships with your role in each and a check against the active one.
+
+<Note>
+  Switching repoints your session and then **reloads the app**. That is deliberate: it guarantees no data from the previous workspace is left in the page. Anything unsaved — a half-filled connection wizard, for instance — does not survive the switch.
+</Note>
 
 ## Seat limits
 
-Your plan sets the seat count. When you're out:
+Your plan sets the seat count. When you're out, opening the invite dialog shows:
 
 > **Seat limit reached** — Upgrade your plan to invite more members.
 
 Free up a seat by removing a member, or [upgrade](/account/billing).
 
 <Note>
-Seat enforcement is based on your **API plan**, which may allow fewer seats than the plan card advertised at checkout. If the numbers disagree, the enforced limit is the one you hit. Contact support if you were billed for seats you can't use.
+  Seat enforcement is based on the plan your workspace is provisioned with, which may allow fewer seats than the plan card advertised at checkout. If the numbers disagree, the enforced limit is the one you hit. Contact support if you were billed for seats you can't use.
 </Note>
 
 ## Invite errors
 
 | Message | Cause |
 | --- | --- |
-| *Invalid email address* | Malformed email. |
-| *Already on the team* | That address is already a member or has a pending invite. |
-| *Seat limit reached* | Your plan is full. |
-| *Invite failed* / *Update failed* / *Remove failed* / *Resend failed* | The request didn't reach the backend. Retry; accept the support report prompt if it keeps failing. |
+| _Enter a valid email address._ | Malformed email. Shown inline, beside the field. |
+| _This email is already on the team._ | That address is already a member or has a pending invite. |
+| _Seat limit reached_ | Your plan is full. |
+| _Invite failed_ / _Revoke failed_ | The request didn't reach the backend. Retry; accept the support report prompt if it keeps failing. |

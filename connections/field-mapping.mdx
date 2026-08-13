@@ -19,7 +19,7 @@ Exactly one mapped pair must be marked **Use as ID field**. Synclify uses it to 
 Synclify preselects `slug`, `name`, or `title` when one exists.
 
 <Warning>
-Without it you cannot continue: *"Identity strategy is required — Map at least one matching field, such as slug or name, before creating the connection."*
+  Without it you cannot continue: _"Identity strategy is required — Map at least one matching field, such as slug or name, before creating the connection."_
 </Warning>
 
 Pick a column that is unique per row and doesn't get rewritten. Changing an identity value in the source makes Synclify treat the row as a new record — it loses track of the existing Webflow item.
@@ -27,7 +27,7 @@ Pick a column that is unique per row and doesn't get rewritten. Changing an iden
 Identity-mapped fields have their direction locked.
 
 <Frame caption="Each pair shows its source column, its Field Owner, and the Webflow field. Here slug is the ID field, so its direction is locked.">
-  <img src="/images/field-mappings.png" alt="Field Mappings tab pairing Airtable columns with Webflow CMS fields, with a Field Owner column and the slug row marked as the ID field and labelled Identity record field" />
+  ![Field Mappings tab pairing Airtable columns with Webflow CMS fields, with a Field Owner column and the slug row marked as the ID field and labelled Identity record field](/images/field-mappings.png)
 </Frame>
 
 ## Type compatibility
@@ -44,7 +44,11 @@ Synclify sorts field types into four families and refuses to map across them:
 Mapping a text column into a number field blocks **Continue**.
 
 <Tip>
-This check is stricter than the backend's, deliberately. The backend only warns — so without this guard the connection would be created, then fail on every sync when Webflow rejects the value. Better to be stopped now.
+  Compatibility is resolved **per field pair from the backend**, which also decides which ownership directions each pair supports. The families below describe the usual outcome; the answer Synclify gives for a specific pair is the authoritative one.
+
+  Some pairs can be written one way but not read back. Those are flagged here, at the mapping step, and the **Two-way** option is disabled with the reason — rather than accepting the mapping and failing later at creation.
+
+  If compatibility can't be resolved, Synclify stops rather than guessing: _"Compatibility for this field pair could not be verified. Refresh the provider schema and try again."_
 </Tip>
 
 Fix a mismatch by remapping to a compatible field, or by changing the column type in Airtable.
@@ -58,7 +62,7 @@ Fix a mismatch by remapping to a compatible field, or by changing the column typ
 Add a mapping for any source column that auto-mapping missed. Remove any mapping you don't want synced — an internal Airtable column, a formula field, a notes column.
 
 <Warning>
-**Required Webflow fields cannot be removed.** Webflow rejects items missing them, so the mapping stays. If you see *"Required field cannot be removed"*, map something into it — or make the field optional in Webflow.
+  **Required Webflow fields cannot be removed.** Webflow rejects items missing them, so the mapping stays. If you see _"Required field cannot be removed"_, map something into it — or make the field optional in Webflow.
 </Warning>
 
 ## Per-field direction (two-way only)
@@ -69,9 +73,11 @@ On a two-way connection, each mapped field has its own direction. Click the togg
   <Accordion title="Airtable owns" icon="arrow-right">
     Source writes, Webflow doesn't. Webflow edits to this field are discarded on the next sync.
   </Accordion>
+
   <Accordion title="Webflow owns" icon="arrow-left">
     Webflow writes, source doesn't. The column is read but never applied.
   </Accordion>
+
   <Accordion title="Two Way" icon="arrows-left-right">
     Either side writes. Simultaneous edits to the same record raise a [conflict](/syncing/conflicts).
   </Accordion>
@@ -79,11 +85,11 @@ On a two-way connection, each mapped field has its own direction. Click the togg
 
 Two exceptions, both enforced:
 
-- **`slug` is always *Airtable owns*.** Webflow derives and validates slugs; two writers means broken URLs.
+- **`slug` is always _Airtable owns_.** Webflow derives and validates slugs; two writers means broken URLs.
 - **The identity field's direction cannot be changed.** A record renamed on both sides can't be matched.
 
 <Tip>
-A good default for two-way: everything *Airtable owns* except the handful of fields designers actually touch in Webflow — hero image, SEO title, a layout flag. You keep one-way discipline on copy without locking anyone out.
+  A good default for two-way: everything _Airtable owns_ except the handful of fields designers actually touch in Webflow — hero image, SEO title, a layout flag. You keep one-way discipline on copy without locking anyone out.
 </Tip>
 
 ## Changing a mapping later

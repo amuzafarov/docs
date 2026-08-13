@@ -20,11 +20,11 @@ Synclify sorts every field into one of four **type families** and requires both 
 A mapping within the same family is allowed. A mapping **across** families is blocked in the wizard — you can't continue until you fix it.
 
 <Warning>
-Blocking is why you'll see **Continue** disabled: *"This field expects a number, but the source column is a different type."* Map a compatible column, or change the column's type in Airtable.
+  Blocking is why you'll see **Continue** disabled: _"This field expects a number, but the source column is a different type."_ Map a compatible column, or change the column's type in Airtable.
 </Warning>
 
 <Note>
-The family check is deliberately stricter than the backend, which only *warns*. Without it, a bad mapping would create the connection and then fail on every sync. See [Field mapping](/connections/field-mapping#type-compatibility).
+  Compatibility is decided **per field pair by the backend**, including which ownership directions the pair allows. The families and tables on this page describe the typical outcome and are the right thing to plan against — but for any specific pair, the answer the app gives you at the mapping step is authoritative. Pairs that can be written but not read back are flagged there, with **Two-way** disabled and the reason shown. See [Field mapping](/connections/field-mapping#type-compatibility).
 </Note>
 
 ## Webflow field reference
@@ -41,11 +41,11 @@ Every Webflow CMS field type Synclify supports, and the Airtable columns that fe
 | **Email** | Text | Email | Must be a valid email string. |
 | **Link** | Text | URL, Button | Any web or video URL. |
 | **Phone** | Text | Phone number | — |
-| **Image** | Text* | A column holding a public image **URL** | See [Images](#images-and-references) below. |
-| **Multi-reference** | Text* | A column holding the referenced items' identifiers | See [References](#images-and-references) below. |
+| **Image** | Text\* | A column holding a public image **URL** | See [Images](#images-and-references) below. |
+| **Multi-reference** | Text\* | A column holding the referenced items' identifiers | See [References](#images-and-references) below. |
 
 <Note>
-**\*** Image and Multi-reference belong to the **text** family, so the wizard won't block a plain-text column mapped to them. But the family check can't see whether the *value* is a real image URL or a valid reference — that's on you. Test with a few records before syncing a whole table.
+  **\*** Image and Multi-reference belong to the **text** family, so the wizard won't block a plain-text column mapped to them. But the family check can't see whether the _value_ is a real image URL or a valid reference — that's on you. Test with a few records before syncing a whole table.
 </Note>
 
 ## Images and references
@@ -60,6 +60,7 @@ These fields pass the type check as text, but the source **value** has to be rig
     - Keep files reasonably sized — very large images can fail to upload.
     - A private or expiring URL won't fetch.
   </Accordion>
+
   <Accordion title="Multi-reference" icon="diagram-project">
     The source column must contain the **identifiers of the items being referenced** in the target Webflow collection — not their display names.
 

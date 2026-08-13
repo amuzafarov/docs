@@ -8,33 +8,71 @@ icon: "circle-question"
   <Accordion title="Which sources can I sync?">
     Airtable today. Google Sheets and Notion are on the roadmap — they appear in the app marked **Coming soon** or aren't selectable yet. Webflow is always the destination.
   </Accordion>
+
   <Accordion title="How fast do changes sync?">
     Usually seconds. Realtime sync is included on every plan — Synclify watches your source and runs a sync as soon as it detects a change. Optional [polling](/connections/sync-settings) is a fallback for anything webhooks miss.
   </Accordion>
+
   <Accordion title="Can I edit content in both Airtable and Webflow?">
     Yes, on a two-way connection. You control it field by field with [per-field ownership](/how-synclify-works#per-field-ownership) — copy owned by Airtable, visuals owned by Webflow, for example. Simultaneous edits to the same field raise a [conflict](/syncing/conflicts) you resolve.
   </Accordion>
+
   <Accordion title="Will Synclify overwrite my existing Webflow content?">
     Not without your say-so. [Guided setup](/connections/guided-setup) pairs existing records, asks what to do with unmatched ones, surfaces conflicts, and shows a full preview before the first write. Webflow items with no source row can be kept untouched.
   </Accordion>
+
   <Accordion title="Will deleting an Airtable row delete the Webflow item?">
     Only if you turned on **Delete orphaned records** (off by default). With it off, the Webflow item stays. See [Sync settings](/connections/sync-settings).
   </Accordion>
+
   <Accordion title="Why can't I change the field mapping on a live connection?">
     Mappings are fixed once a connection is active. Create an [editable draft](/connections/edit-a-connection), change the mapping, review, and approve. Pausing the connection does **not** make it editable.
   </Accordion>
+
   <Accordion title="What's the fastest sync interval?">
     Polling has a 5-minute minimum, but you rarely need it — realtime already delivers changes in seconds. Tighter polling just burns API quota. See [Sync settings](/connections/sync-settings).
   </Accordion>
+
   <Accordion title="What should the ID field be?">
     A column that's unique per row and never rewritten — a slug, a name, or a dedicated ID. It's how Synclify matches rows to Webflow items. Changing an identity value makes Synclify see a brand-new record. See [Identity field](/how-synclify-works#the-identity-field).
   </Accordion>
+
   <Accordion title="Can I connect more than one Webflow site?">
-    Yes. Connect additional Webflow accounts and sites from [Data Sources](/data-sources/manage-data-sources). Each Webflow CMS collection can back one live connection at a time.
+    Yes. Connect additional Webflow accounts and sites from [Data Sources](/data-sources/manage-data-sources). Each Webflow CMS collection can back one live connection at a time — a claimed collection shows an **Already synced** badge in the wizard, and you free it by pausing or archiving the connection holding it.
   </Accordion>
+
   <Accordion title="How is my Webflow/Airtable access secured?">
     OAuth — you authorize on the provider's site and Synclify never sees your password. Webflow access is scoped to CMS read/write only. Details on the [Security](/security) page.
   </Accordion>
+
+  <Accordion title="Where do I see if anything is broken?">
+    [Workspace health](/monitoring/health) lists everything needing attention across every connection and connected account, worst first. The **Health** entry in the sidebar carries a badge with the count.
+  </Accordion>
+
+  <Accordion title="My run says it applied no changes. Is that a bug?">
+    Usually not. Synclify names the reason — most often _"Source-only rows were left out of Webflow, as configured."_ or _"Webflow-only items were left unmanaged, as configured."_, which are your own [guided setup](/connections/guided-setup) decisions being honoured. See [Sync history](/syncing/sync-history#why-a-run-applied-no-changes).
+  </Accordion>
+
+  <Accordion title="What's the difference between a conflict and a difference?">
+    A **conflict** is a value fight: both sides changed the same two-way field, and you choose which wins. A **difference** is a pairing or structural problem — records that don't line up — and deciding it records a decision without changing any data. See [Differences](/monitoring/differences).
+  </Accordion>
+
+  <Accordion title="Can I get a deleted record back?">
+    Within its retention window, yes — but restoring **re-links the copy that still exists** rather than recreating what the provider deleted. See [Deleted records](/monitoring/deleted-records).
+  </Accordion>
+
+  <Accordion title="How do I stop everything right now?">
+    Use a kill switch in [Security settings](/account/workspace-security#workspace-kill-switches). **Pause all syncing** blocks new runs and cancels in-flight ones; **Pause reverse syncing** is the surgical option when bad edits are flowing back into your source.
+  </Accordion>
+
+  <Accordion title="Can Synclify support see my data?">
+    Only if you let them, only for as long as you allow, and never silently. Access is a time-boxed grant you issue with a reason, it expires on its own, and everything they open is recorded. See [Support access](/account/workspace-security#support-access).
+  </Accordion>
+
+  <Accordion title="Who can see and do what?">
+    Five roles — Owner, Admin, Operator, Viewer, Support. See [Team](/account/team#roles).
+  </Accordion>
+
   <Accordion title="How do I get help?">
     When Synclify hits an error it offers a pre-filled support report — accept it. Or email [support@syncwebflow.com](mailto:support@syncwebflow.com). See [Troubleshooting](/troubleshooting) first for the common ones.
   </Accordion>

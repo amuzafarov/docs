@@ -7,7 +7,7 @@ icon: "pen"
 You cannot edit a live connection in place, and **pausing it does not make it editable**. Instead, Synclify gives you an editable draft: a copy you change freely, validate, preview, and then promote.
 
 <Warning>
-**Pausing is not editing.** Paused connections reject edits — the API returns errors. If you paused a connection hoping to change its mapping, that isn't the path. Create a draft.
+  **Pausing is not editing.** Paused connections reject edits — the API returns errors. If you paused a connection hoping to change its mapping, that isn't the path. Create a draft.
 </Warning>
 
 ## The draft flow
@@ -34,6 +34,42 @@ You cannot edit a live connection in place, and **pausing it does not make it ed
 
 Drafts survive page reloads and browser restarts. Come back and Synclify picks up where you left off.
 
+## Discarding a draft
+
+Changed your mind? **Discard draft** in the status dropdown throws the draft away and leaves the live connection exactly as it was.
+
+> **Discard this draft?** The active version keeps running unchanged. Unsaved draft edits, including its record pairings, are discarded.
+
+The buttons are **Keep draft** and **Discard draft**. On success: _"Draft discarded — The active version keeps running unchanged."_
+
+<Warning>
+  Discarding takes the **record pairings** with it, not just the field changes. If the draft went through pairing and record decisions, that work is gone and a future draft starts the review from scratch.
+</Warning>
+
+## Changing which table or collection syncs
+
+Editing a mapping assumes both sides stay put. When the source table moved or the collection was rebuilt, use **Change synced resources** instead.
+
+<Steps>
+  <Step title="Pick the side">
+    Source, destination, or both — then choose the replacement. The picker badges resources that are **Already synced** by another connection, and shows each one's parent and account.
+  </Step>
+  <Step title="Read what changes">
+    A plain-language review, not a confirm button: _"Read this before creating the draft — re-pointing a side is not a silent swap."_
+
+    - _"Your existing record pairings will be cleared and re-reviewed. Every record is matched again from scratch."_
+    - _"Field mappings are carried over. Fields that do not exist on the new resource will need remapping before activation."_
+    - _"The current connection keeps syncing until you activate the new version."_
+  </Step>
+  <Step title="Create draft version">
+    You land in the normal review-and-approve flow.
+  </Step>
+</Steps>
+
+<Note>
+  You can create a draft pointing at a resource another active connection already claims — but **activating** it will be refused until that connection is paused or archived. The dialog warns you before you start, so this is a choice rather than a surprise at the end.
+</Note>
+
 ## What validation checks
 
 The same guards as creation:
@@ -44,9 +80,9 @@ The same guards as creation:
 - Existing records still pair correctly under the new mapping.
 
 <Note>
-**Warnings do not block approval.** Anything reported as a warning — including *"dry-run preview is only available"* — lets you activate, with a toast. Only `error`, `failed`, or `invalid` statuses stop you.
+  **Warnings do not block approval.** Anything reported as a warning — including _"dry-run preview is only available"_ — lets you activate, with a toast. Only `error`, `failed`, or `invalid` statuses stop you.
 
-A warning still deserves a read. Warnings are how Synclify tells you a mapping is legal but probably not what you meant.
+  A warning still deserves a read. Warnings are how Synclify tells you a mapping is legal but probably not what you meant.
 </Note>
 
 ## Changing the identity field
@@ -63,15 +99,21 @@ Adding a column in Airtable does not add it to a live connection. Mappings are f
 
 Create a draft, map the new column, review, approve.
 
+## Dialogs and background refresh
+
+The connection page refreshes itself while you have it open. It **stands down while any dialog is open**, so a name you are halfway through typing into an archive or discard confirmation is never wiped by a background poll.
+
 ## Approval hiccups
 
 <AccordionGroup>
   <Accordion title="Approve failed, then succeeded on retry">
     If the preview was incomplete, Synclify re-runs the full preview and retries the approval once. No action needed.
   </Accordion>
+
   <Accordion title="'Connection is not active — Approve and activate the latest draft before syncing.'">
     You clicked **Sync now** while a draft is pending. Finish the review-and-approve flow first; **Sync now** only works on `active` connections.
   </Accordion>
+
   <Accordion title="Validation reports unpaired records after a mapping change">
     The message tells you: recheck the draft, and if it persists, resolve the records in Airtable or Webflow directly. Usually the new identity field's values don't actually match across the two sides.
   </Accordion>
@@ -80,7 +122,7 @@ Create a draft, map the new column, review, approve.
 ## A known limitation
 
 <Warning>
-Webhook-triggered syncs continue to fire against the live connection while you edit a draft. Pausing the connection is not a valid workaround, because paused connections can't be edited.
+  Webhook-triggered syncs continue to fire against the live connection while you edit a draft. Pausing the connection is not a valid workaround, because paused connections can't be edited.
 
-In practice: make your draft changes and approve them in one sitting rather than leaving a draft open for days.
+  In practice: make your draft changes and approve them in one sitting rather than leaving a draft open for days.
 </Warning>

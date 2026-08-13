@@ -13,12 +13,12 @@ Each account carries a status:
 | Status | Meaning | What to do |
 | --- | --- | --- |
 | `active` | Healthy. | Nothing. |
-| `degraded` | Reachable, but something is failing — commonly rate limits or webhook delivery. | Watch the connection's **Realtime** indicator. If it says *Polling fallback*, syncs still run, just on the schedule instead of instantly. |
+| `degraded` | Reachable, but something is failing — commonly rate limits or webhook delivery. | Watch the connection's **Realtime** indicator. If it says _Polling fallback_, syncs still run, just on the schedule instead of instantly. |
 | `reauth required` | The token expired or was revoked. **Syncs stop.** | Reconnect the account. |
 | `disconnected` | Not connected. | Reconnect, or remove. |
 
 <Note>
-The label is rendered from the raw status, so `reauth_required` displays as **reauth required**. It means the same thing.
+  The label is rendered from the raw status, so `reauth_required` displays as **reauth required**. It means the same thing.
 </Note>
 
 ## Reconnecting
@@ -36,29 +36,79 @@ Reconnect when:
 
 Synclify discovers your bases, tables, sites, and collections when you connect. Newly created resources appear after the account refreshes its resource list. If a table you just made is missing, reopen the account on the Data Sources page.
 
+The page paints immediately from a stored snapshot and then revalidates in the background, so it is fast on open. An account is only re-read live when it is unhealthy or its snapshot is stale — a freshly checked account costs no provider calls at all.
+
+If a provider refuses discovery, the account shows a banner carrying **the provider's own message** rather than an empty list. An Airtable account that has hit its monthly API limit, for example, says so in Airtable's words.
+
+## Webhook health
+
+Each account also reports whether its webhooks are delivering, with an explicit **Refresh check** — never automatic, because each check performs live provider inventory reads. See [Realtime health](/monitoring/realtime-health).
+
 ## Disconnecting an account
 
 <Warning>
-**You cannot disconnect an account that a connection depends on.** Synclify blocks it — the dialog title changes to **Archive connections first** and lists up to five of the blocking connections, each with its status.
+  **You cannot disconnect an account that a connection depends on.** Synclify blocks it — the dialog title changes to **Archive connections first** and lists up to five of the blocking connections, each with its status.
 </Warning>
 
 <Frame caption="Disconnect is blocked while connections still depend on the account.">
-  <img src="/images/disconnect-blocked.png" alt="Dialog titled Archive connections first, warning that disconnecting would break syncs, listing three connections that depend on the account" />
+  ![Dialog titled Archive connections first, warning that disconnecting would break syncs, listing three connections that depend on the account](/images/disconnect-blocked.png)
 </Frame>
 
-To disconnect:
+Disconnecting is a deliberately heavy flow. It fences the account immediately, revokes provider access where the provider supports it, and stops every sync from using those credentials — so it asks you to prove both intent and identity.
 
 <Steps>
-  <Step title="Delete dependent connections">
-    Every connection using the account must be deleted first — deleting moves them to the Archive, which no longer blocks. See [Delete and archive](/connections/archive-and-delete).
+  <Step title="Archive dependent connections">
+    Every connection using the account must be archived first. See [Delete and archive](/connections/archive-and-delete).
   </Step>
-  <Step title="Disconnect the account">
-    Return to **Data Sources**, open the account, and disconnect.
+  <Step title="Type the exact confirmation">
+    Not a checkbox. You type the confirmation string exactly as shown, so the action cannot be clicked through.
+  </Step>
+  <Step title="Prove it's you">
+    A step-up identity check. If you have two-factor on, it asks for an **Authenticator or recovery code**; otherwise for your **Current password**. The value is submitted once and is not kept in browser state.
+  </Step>
+  <Step title="Watch it through">
+    Progress is durable. Close the dialog or reload the page and reopening resumes at the operation's real status rather than starting again.
   </Step>
 </Steps>
 
-The error you'll see if you skip step one: *"Delete active connections before disconnecting this data source."*
+### If revocation needs another attempt
+
+When a disconnect lands in a state needing review, the dialog offers **Retry provider revocation** — and asks you to verify again: _"A fresh identity check is required before another revocation attempt."_ Confirm once more and **Authorize retry**.
+
+<AccordionGroup>
+  <Accordion title="Active connections still use this account. Archive them before disconnecting.">
+    The blocking case above. Archive them and return.
+  </Accordion>
+
+  <Accordion title="A provider write is still unresolved. Wait for it to settle, then retry this request.">
+    A write is in flight. Disconnecting mid-write is exactly what the fence exists to prevent.
+  </Accordion>
+
+  <Accordion title="Verification expired or was already used. Verify your identity again.">
+    Step-up proofs are single-use and short-lived. Start the verification again.
+  </Accordion>
+
+  <Accordion title="Confirmation did not match. Return and type the exact confirmation.">
+    Character for character, including case.
+  </Accordion>
+
+  <Accordion title="This request conflicts with an earlier attempt. Close this dialog and start a new disconnect request.">
+    Close and start fresh rather than retrying in place.
+  </Accordion>
+
+  <Accordion title="No verification factor is available.">
+    _"Set a password or enroll two-factor authentication in Security settings."_ You cannot step up without a factor to step up with — see [Security settings](/account/workspace-security).
+  </Accordion>
+
+  <Accordion title="Too many verification attempts.">
+    Wait before trying again.
+  </Accordion>
+</AccordionGroup>
+
+<Note>
+  Retrying the **same** request is safe. Requests carry an idempotency key, so a retry resumes the existing operation rather than starting a second one.
+</Note>
 
 ## When the page won't load
 
-*"Data sources unavailable"* with a retry button means Synclify couldn't reach the backend. Retry. If it persists, Synclify will offer to send a support report — accept it, since it attaches the failing request details.
+_"Data sources unavailable"_ with a retry button means Synclify couldn't reach the backend. Retry. If it persists, Synclify will offer to send a support report — accept it, since it attaches the failing request details.
